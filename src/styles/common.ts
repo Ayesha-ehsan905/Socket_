@@ -2,13 +2,18 @@ import type * as Stitches from "@stitches/react";
 
 export const defaultTokens = {
   colors: {
-    // generic colors
-    white: "#ffffff",
+    primary: "#2B2B2B",
+    error: "#F04438",
+    white: "#FFFFFF",
+    beige: "#FEF7E6",
+    grey1: "#F1EDED",
+    green: "#45AB68",
+    red1: "#CB4C4C",
+    grey2: "#C8C8C8",
   },
   fonts: {
-    grotesk: "Space Grotesk",
-    inter: "Inter",
-    lexend: "'Lexend Deca', sans-serif",
+    Baloo: "Baloo",
+    Inter: "Inter",
   },
   fontSizes: {
     xs: "0.75rem",
@@ -22,6 +27,10 @@ export const defaultTokens = {
     "3xl": "2.25rem",
     "3xxl": "2.5rem",
     "4xl": "3rem",
+    10: "10px",
+    18: "18px",
+    14: "14px",
+    20: "20px",
   },
   fontWeights: {
     light: 300,
