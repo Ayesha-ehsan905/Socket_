@@ -1,4 +1,4 @@
-// import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import {
@@ -8,19 +8,23 @@ import {
   TournamentIcon,
 } from "../../../components/icons";
 import { styled } from "../../../styles";
+import { routes } from "../../../utilis/constant";
 
 const LeaderBoard = () => {
-  // const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   const LeaderBoardMenus = [
-    { name: "Home", icon: <HomeIcon /> },
-    { name: "1v1", icon: <OneOnOneIcon /> },
-    { name: "Tournament", icon: <TournamentIcon /> },
-    { name: "Profile", icon: <Profile /> },
+    { name: "Home", icon: HomeIcon, path: routes.dashboard },
+    { name: "1v1", icon: OneOnOneIcon },
+    { name: "Tournament", icon: TournamentIcon },
+    { name: "Profile", icon: Profile },
   ];
   return (
     <Box css={{ margin: "24px 16px 16px" }}>
-      <Box as="h2" css={{ fontSize: "$20" }}>
+      <Box
+        as="h2"
+        css={{ fontSize: "$20", fontWeight: "$bold", fontFamily: "$Gilmer" }}
+      >
         Leaderboard
       </Box>
       <Flex direction={"column"} wrap={"wrap"}>
@@ -66,17 +70,31 @@ const LeaderBoard = () => {
           justify={"between"}
           css={{ padding: "6px  23px" }}
         >
-          {LeaderBoardMenus.map((menu, index) => (
-            <Flex
-              direction={"column"}
-              align={"center"}
-              // css={{ padding: "6px  12px" }}
-              key={index}
-            >
-              {menu.icon}
-              <Box as="span">{menu.name}</Box>
-            </Flex>
-          ))}
+          {LeaderBoardMenus.map((menu, index) => {
+            const IconComponent = menu.icon;
+
+            const isActive = pathname === menu.path;
+            return (
+              <Flex
+                direction={"column"}
+                align={"center"}
+                // css={{ padding: "6px  12px" }}
+                key={index}
+              >
+                <IconComponent active={isActive} />
+                <Box
+                  as="span"
+                  css={{
+                    fontFamily: "$Gilmer",
+                    fontWeight: isActive ? "$bold" : "$semibold",
+                    color: isActive ? "$primary" : "$grey3",
+                  }}
+                >
+                  {menu.name}
+                </Box>
+              </Flex>
+            );
+          })}
         </Flex>
       </Box>
     </Box>

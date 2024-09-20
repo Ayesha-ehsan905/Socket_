@@ -10,10 +10,12 @@ export const defaultTokens = {
     green: "#45AB68",
     red1: "#CB4C4C",
     grey2: "#C8C8C8",
+    grey3: "#757575",
   },
   fonts: {
     Baloo: "Baloo",
     Inter: "Inter",
+    Gilmer: "Gilmer",
   },
   fontSizes: {
     xs: "0.75rem",

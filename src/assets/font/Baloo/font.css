@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "Baloo";
+  font-style: normal;
+  font-weight: 400;
+  src:
+    /* local("Baloo Regular"), */
+    url("./Baloo-Regular.ttf") format("truetype");
+}
+
