@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import {
@@ -9,16 +9,29 @@ import {
 } from "../../../components/icons";
 import { styled } from "../../../styles";
 import { routes } from "../../../utilis/constant";
+import { useSocket } from "../../../hooks/useSocket";
+import { SocketEvents } from "../../../utilis/enum";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
+  const { socket, connectSocket } = useSocket();
+
+  const navigate = useNavigate();
 
   const LeaderBoardMenus = [
     { name: "Home", icon: HomeIcon, path: routes.dashboard },
-    { name: "1v1", icon: OneOnOneIcon },
-    { name: "Tournament", icon: TournamentIcon },
-    { name: "Profile", icon: Profile },
+    { name: "1v1", icon: OneOnOneIcon, path: routes.matching_screen },
+    { name: "Tournament", icon: TournamentIcon, path: "" },
+    { name: "Profile", icon: Profile, path: "" },
   ];
+  const handleMenuClick = (path: string) => {
+    if (path === routes.matching_screen && pathname !== path) {
+      connectSocket();
+      // Emit the event only if it's the "1v1" menu and we're not already on the same path
+      socket.emit(SocketEvents.SEARCH_GAME, { chatId: 1 });
+    }
+    navigate(path);
+  };
   return (
     <Box css={{ margin: "24px 16px 16px" }}>
       <Box
@@ -74,24 +87,31 @@ const LeaderBoard = () => {
             const IconComponent = menu.icon;
 
             const isActive = pathname === menu.path;
+            const check = menu.name === "Profile";
             return (
               <Flex
                 direction={"column"}
                 align={"center"}
-                // css={{ padding: "6px  12px" }}
+                onClick={() => handleMenuClick(menu.path)}
                 key={index}
               >
                 <IconComponent active={isActive} />
-                <Box
-                  as="span"
-                  css={{
-                    fontFamily: "$Gilmer",
-                    fontWeight: isActive ? "$bold" : "$semibold",
-                    color: isActive ? "$primary" : "$grey3",
-                  }}
-                >
-                  {menu.name}
-                </Box>
+                {check ? (
+                  <Box as="a" href="/home.html">
+                    {menu.name}
+                  </Box>
+                ) : (
+                  <Box
+                    as="span"
+                    css={{
+                      fontFamily: "$Gilmer",
+                      fontWeight: isActive ? "$bold" : "$semibold",
+                      color: isActive ? "$primary" : "$grey3",
+                    }}
+                  >
+                    {menu.name}
+                  </Box>
+                )}
               </Flex>
             );
           })}

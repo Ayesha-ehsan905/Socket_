@@ -25,7 +25,7 @@ const SvgOneOnOne = (props: SVGProps<SVGSVGElement>) => (
         d="M13.7208 13.707L19.3403 19.2925M19.3403 13.707L13.7208 19.2925"
         stroke="#757575"
         strokeWidth="1.5"
-        stroke-linecap="round"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
