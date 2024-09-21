@@ -11,6 +11,7 @@ import { styled } from "../../../styles";
 import { routes } from "../../../utilis/constant";
 import { useSocket } from "../../../hooks/useSocket";
 import { SocketEvents } from "../../../utilis/enum";
+import { FixedBgWrapper } from "../../../styles/style";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
@@ -65,18 +66,7 @@ const LeaderBoard = () => {
           </LeaderBoardCss>
         ))}
       </Flex>
-      <Box
-        css={{
-          position: "fixed",
-          bottom: "16px", // Adjusted bottom margin to 16px
-          left: "16px", // Adjusted left margin to 16px
-          right: "16px", // Ensures it does not overflow the viewport
-          background: "$white",
-          textAlign: "center",
-          borderRadius: "12px",
-          boxSizing: "border-box",
-        }}
-      >
+      <FixedBgWrapper css={{ background: "$white" }}>
         <Flex
           direction={"row"}
           align={"center"}
@@ -116,7 +106,7 @@ const LeaderBoard = () => {
             );
           })}
         </Flex>
-      </Box>
+      </FixedBgWrapper>
     </Box>
   );
 };

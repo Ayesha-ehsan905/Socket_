@@ -11,6 +11,7 @@ export const defaultTokens = {
     red1: "#CB4C4C",
     grey2: "#C8C8C8",
     grey3: "#757575",
+    grey4: "#1F1F1F80",
   },
   fonts: {
     Baloo: "Baloo",

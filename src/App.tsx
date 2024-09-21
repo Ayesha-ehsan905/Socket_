@@ -8,7 +8,7 @@ import "./assets/font/Gilmer/font.css";
 const SplashScreen = lazy(() => import("./views/SplashScreen"));
 const Dashboard = lazy(() => import("./views/Dashboard"));
 const MatchingOpponent = lazy(() => import("./views/MatchingOpponent"));
-
+const OneVsOne = lazy(() => import("./views/OneVsOne"));
 function App() {
   globalStyles();
   return (
@@ -22,6 +22,7 @@ function App() {
               path={routes.matching_screen}
               element={<MatchingOpponent />}
             />
+            <Route path={routes.One_one} element={<OneVsOne />} />
           </Route>
         </Routes>
       </Suspense>

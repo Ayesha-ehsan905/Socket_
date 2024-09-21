@@ -6,14 +6,36 @@ import { styled } from "../../styles";
 import { SocketEvents } from "../../utilis/enum";
 import LoadingDots from "./component/LoadingDots";
 import { useAvatarProps } from "../../utilis/type";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../utilis/constant";
 
 const MatchingOpponent = () => {
   const { socket, disconnectSocketEvent } = useSocket();
-  const [gameRoomKey, setGameRoomKey] = useState("");
+  const [gameRoomKey, setGameRoomKey] = useState<null | string>(null);
+
+  const [fade, setFade] = useState(true);
+  const navigate = useNavigate();
+  //flow setup as socket not connected
   useEffect(() => {
-    // socket.emit(SocketEvents.SEARCH_GAME, { chatId: 1 });
-    // console.log("serarch game");
-    if (gameRoomKey === "") {
+    setTimeout(() => {
+      setGameRoomKey("test");
+    }, 5000);
+  });
+  useEffect(() => {
+    if (gameRoomKey) {
+      const timer = setTimeout(() => {
+        //wait for 3sec then fade false
+        setFade(false);
+        setTimeout(() => {
+          navigate(routes.One_one); //wait for 1 sec then navigate
+        }, 2000);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [gameRoomKey, navigate]);
+
+  useEffect(() => {
+    if (!gameRoomKey) {
       socket.on(SocketEvents.WAITING, (data) => {
         console.log("socketData:", data);
       });
@@ -28,13 +50,15 @@ const MatchingOpponent = () => {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameRoomKey]);
+  }, []);
   console.log("roomKey", gameRoomKey);
   return (
     <Box
       css={{
         width: "100vw",
         height: "100vh",
+        opacity: fade ? 1 : 0,
+        transition: "opacity 1s ease-in-out",
       }}
     >
       <MatchingOponentCard>
@@ -44,33 +68,26 @@ const MatchingOpponent = () => {
           justify={"center"}
           css={{ height: "100vh" }}
         >
-          <Flex
-            direction={"column"}
-            align={"center"}
-            justify={"between"}
-            css={{ height: "60vh" }}
-          >
-            {gameRoomKey ? (
-              <>
-                <UserAvatar label="Opponenet" image="/images/avatar.png" />
-                <Box as="span" css={{ fontSize: "56px", marginTop: "60px" }}>
-                  Get Ready
-                </Box>
-              </>
-            ) : (
-              <>
-                <UserAvatar
-                  label={<LoadingDots />}
-                  image="/images/Mask-group.png"
-                />
-                <Box as="span" css={{ fontSize: "120px", marginTop: "60px" }}>
-                  VS
-                </Box>
-              </>
-            )}
+          {gameRoomKey ? (
+            <>
+              <UserAvatar label="Opponenet" image="/images/avatar.png" />
+              <Box as="span" css={{ fontSize: "56px", margin: "60px 0" }}>
+                Get Ready
+              </Box>
+            </>
+          ) : (
+            <>
+              <UserAvatar
+                label={<LoadingDots />}
+                image="/images/Mask-group.png"
+              />
+              <Box as="span" css={{ fontSize: "120px", marginTop: "60px" }}>
+                VS
+              </Box>
+            </>
+          )}
 
-            <UserAvatar label={"You"} image="/images/avatar.png" />
-          </Flex>
+          <UserAvatar label={"You"} image="/images/avatar.png" />
         </Flex>
       </MatchingOponentCard>
     </Box>
@@ -90,7 +107,7 @@ const UserAvatar = (props: useAvatarProps) => {
     </Flex>
   );
 };
-const MatchingOponentCard = styled(Box, {
+export const MatchingOponentCard = styled(Box, {
   background: "url('/images/MatchingOponent.png')",
   width: "100vw",
   height: "100vh",
