@@ -10,10 +10,16 @@ export const useSocket = () => {
     }
   };
 
-  const disconnectSocket = (event: string) => {
+  const disconnectSocketEvent = (event: string) => {
     socket.off(event); // Remove specific event listeners
   };
+  const disconnectSocket = () => {
+    if (socket.connected) {
+      socket.disconnect();
+    }
+  };
 
+  // const;
   //   useEffect(() => {
   //     connectSocket();
 
@@ -25,6 +31,7 @@ export const useSocket = () => {
   return {
     socket,
     connectSocket,
+    disconnectSocketEvent,
     disconnectSocket,
   };
 };
