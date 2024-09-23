@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
+import { AvatarImg, FixedBgWrapper, VerticalLine } from "../../styles/style";
+import { BackgroundCard } from "../MatchingOpponent/MatchingOpponent";
 import {
-  AvatarImg,
-  FixedBgWrapper,
-  GridWrapper,
-  VerticalLine,
-} from "../../styles/style";
-import { MatchingOponentCard } from "../MatchingOpponent/MatchingOpponent";
-import { PaperIcon } from "../../components/icons";
+  PaperIcon,
+  RandomIcon,
+  ScissorIcon,
+  StoneIcon,
+} from "../../components/icons";
+import { styled } from "../../styles";
 
 const OneVsOne = () => {
   const [timeLeft, setTimeLeft] = useState(0); // Start at 0 seconds
@@ -32,95 +33,146 @@ const OneVsOne = () => {
         height: "100vh",
       }}
     >
-      <MatchingOponentCard>
-        <Flex
-          direction={"column"}
-          align={"center"}
-          justify={"center"}
-          css={{ height: "75vh" }}
-        >
+      <BackgroundCard
+        css={{ background: "url('/images/1v1 Round Start.png')" }}
+      >
+        <GameSection>
           <Flex
-            justify={"between"}
-            direction={"row"}
+            direction={"column"}
             align={"center"}
-            css={{
-              width: "100vw",
-              padding: "0 24px",
-              boxSizing: "border-box",
-            }}
+            justify={"center"}
+            css={{ height: "95vh" }}
           >
             <Flex
-              direction={"column"}
-              css={{ height: "100%", justifyContent: "center" }}
-            >
-              <VerticalLine
-                css={{
-                  height: "50%",
-                  position: "relative",
-                }}
-              >
-                <Box
-                  css={{
-                    position: "absolute",
-                    bottom: 0, // Start from the bottom
-                    height: `${heightPercentage}%`, // Adjust height
-                    background: "red",
-                    borderRadius: "24px",
-                    transition: "height 0.5s ease",
-                    width: "100%",
-                  }}
-                />
-              </VerticalLine>
-              <Box as="span" css={{ marginTop: "16px" }}>
-                {timeLeft}
-              </Box>
-            </Flex>
-            <Box as="h3" css={{ fontSize: "40px" }}>
-              Round One
-            </Box>
-            <Flex
-              direction={"column"}
+              justify={"between"}
+              direction={"row"}
               align={"center"}
               css={{
-                background: "$grey4",
-                width: "10px",
-                borderRadius: "20px",
+                width: "100vw",
+                padding: "0 24px",
+                boxSizing: "border-box",
               }}
             >
-              <AvatarImg src="/images/avatar.png" />
-              <Box css={{ height: "35vh" }} />
-              <AvatarImg src="/images/avatar.png" />
+              <Flex
+                direction={"column"}
+                css={{ height: "100%", justifyContent: "center" }}
+              >
+                <VerticalLine
+                  css={{
+                    height: "50%",
+                    position: "relative",
+                  }}
+                >
+                  <TimerBar css={{ height: `${heightPercentage}%` }} />
+                </VerticalLine>
+                <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
+                  {timeLeft}
+                </Box>
+              </Flex>
+              <Box as="h3" css={{ fontSize: "40px" }}>
+                Round One
+              </Box>
+              <Flex
+                direction={"column"}
+                align={"center"}
+                css={{
+                  background: "$grey4",
+                  width: "10px",
+                  borderRadius: "20px",
+                }}
+              >
+                <AvatarImg src="/images/avatar.png" />
+
+                <ProgressBar
+                  heightPercentage={heightPercentage}
+                  position={"top"}
+                />
+                <Box
+                  as="span"
+                  css={{ borderTop: "2px solid black", width: "20px" }}
+                />
+                <ProgressBar
+                  heightPercentage={heightPercentage}
+                  position={"bottom"}
+                />
+
+                <AvatarImg src="/images/avatar.png" />
+              </Flex>
             </Flex>
           </Flex>
+        </GameSection>
+      </BackgroundCard>
+
+      {/* Game Section */}
+      <FixedBgWrapper
+        css={{
+          bottom: "0px",
+          background: "url('/images/Scissor.png') no-repeat center top",
+          height: "300px",
+        }}
+      >
+        <Box />
+
+        <Flex
+          direction={"row"}
+          align={"center"}
+          justify={"center"}
+          css={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
+        >
+          <StoneIcon />
+          <Flex direction={"column"} css={{ gap: "2rem" }} align={"center"}>
+            <PaperIcon customColor={true} />
+            <RandomIcon customColor={false} />
+          </Flex>
+          <ScissorIcon />
         </Flex>
-      </MatchingOponentCard>
-      {/* end part */}
-      <FixedBgWrapper css={{ bottom: "0px" }}>
-        <GridWrapper>
-          <Box></Box>
-          <Flex justify={"center"} align={"center"}>
-            <PaperIcon />
-          </Flex>
-          <Box></Box>
-          <Flex justify={"center"} align={"center"}>
-            <PaperIcon />
-          </Flex>
-
-          <Box></Box>
-          <Flex justify={"center"} align={"center"}>
-            <PaperIcon />
-          </Flex>
-
-          <Box></Box>
-          <Flex justify={"center"} align={"center"}>
-            <PaperIcon />
-          </Flex>
-
-          <Box></Box>
-        </GridWrapper>
       </FixedBgWrapper>
     </Box>
   );
 };
+// opponent and your win bar
+const ProgressBar = ({
+  heightPercentage,
+  position,
+}: {
+  heightPercentage: number;
+  position: string;
+}) => {
+  return (
+    <Box
+      css={{
+        height: "17vh",
+        position: "relative",
+        width: "10px",
+        overflow: "hidden",
+      }}
+    >
+      <Box
+        css={{
+          position: "absolute",
+          [position]: 0,
+          height: `${heightPercentage}%`,
+          background: "$secondary",
+          transition: "height 0.5s ease",
+          width: "100%",
+          transformOrigin: position === "top" ? "top" : "bottom",
+        }}
+      />
+    </Box>
+  );
+};
 
+export const GameSection = styled(Box, {
+  background: "url('/images/Stone.png') no-repeat center top",
+  backgroundSize: "contain",
+  height: "300px",
+});
+const TimerBar = styled(Box, {
+  position: "absolute",
+  bottom: 0,
+  backgroundColor: "$secondary",
+  borderRadius: "24px",
+  transition: "height 0.5s ease",
+  width: "100%",
+});
 export default OneVsOne;

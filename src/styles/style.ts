@@ -12,10 +12,7 @@ export const VerticalLine = styled(Box, {
   background: "$grey4",
   width: "10px",
 });
-export const GridWrapper = styled(Box, {
-  display: "grid",
-  gridTemplateColumns: "repeat(3, 1fr)",
-});
+
 export const FixedBgWrapper = styled(Box, {
   position: "fixed",
   bottom: "16px",

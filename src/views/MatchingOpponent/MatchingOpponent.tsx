@@ -61,7 +61,7 @@ const MatchingOpponent = () => {
         transition: "opacity 1s ease-in-out",
       }}
     >
-      <MatchingOponentCard>
+      <BackgroundCard>
         <Flex
           direction={"column"}
           align={"center"}
@@ -70,7 +70,7 @@ const MatchingOpponent = () => {
         >
           {gameRoomKey ? (
             <>
-              <UserAvatar label="Opponenet" image="/images/avatar.png" />
+              <UserAvatar label="Opponent" image="/images/avatar.png" />
               <Box as="span" css={{ fontSize: "56px", margin: "60px 0" }}>
                 Get Ready
               </Box>
@@ -89,7 +89,7 @@ const MatchingOpponent = () => {
 
           <UserAvatar label={"You"} image="/images/avatar.png" />
         </Flex>
-      </MatchingOponentCard>
+      </BackgroundCard>
     </Box>
   );
 };
@@ -107,7 +107,7 @@ const UserAvatar = (props: useAvatarProps) => {
     </Flex>
   );
 };
-export const MatchingOponentCard = styled(Box, {
+export const BackgroundCard = styled(Box, {
   background: "url('/images/MatchingOponent.png')",
   width: "100vw",
   height: "100vh",

@@ -5,3 +5,6 @@ export { default as OneOnOneIcon } from "./One&One";
 export { default as TournamentIcon } from "./Tournament";
 export { default as Profile } from "./Profile";
 export { default as PaperIcon } from "./Paper";
+export { default as StoneIcon } from "./Stone";
+export { default as ScissorIcon } from "./Scissor";
+export { default as RandomIcon } from "./Random";
