@@ -3,3 +3,10 @@ export enum SocketEvents {
   SEARCH_GAME = "searchGame",
   GAME_START = "gameStart",
 }
+
+export enum UserMove {
+  SCISSOR = "Scissor",
+  STONE = "Stone",
+  PAPER = "Paper",
+  RANDOM = "Random",
+}

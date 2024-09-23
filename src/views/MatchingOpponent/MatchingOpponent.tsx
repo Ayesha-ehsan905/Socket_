@@ -70,7 +70,7 @@ const MatchingOpponent = () => {
         >
           {gameRoomKey ? (
             <>
-              <UserAvatar label="Opponent" image="/images/avatar.png" />
+              <UserAvatar label="Opponent" image="/images/avatar_1.png" />
               <Box as="span" css={{ fontSize: "56px", margin: "60px 0" }}>
                 Get Ready
               </Box>
@@ -87,7 +87,7 @@ const MatchingOpponent = () => {
             </>
           )}
 
-          <UserAvatar label={"You"} image="/images/avatar.png" />
+          <UserAvatar label={"You"} image="/images/avatar_1.png" />
         </Flex>
       </BackgroundCard>
     </Box>

@@ -10,9 +10,13 @@ import {
   StoneIcon,
 } from "../../components/icons";
 import { styled } from "../../styles";
+import { UserMove } from "../../utilis/enum";
+import WinOverLay from "./component/WinOverLay";
 
 const OneVsOne = () => {
-  const [timeLeft, setTimeLeft] = useState(0); // Start at 0 seconds
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [userSelectedMove, setUserSelectedMove] = useState<null | string>(null);
+  const [isWin, setIsWin] = useState(false); // New state for win condition
 
   useEffect(() => {
     if (timeLeft < 30) {
@@ -25,12 +29,19 @@ const OneVsOne = () => {
   }, [timeLeft]);
 
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
-
+  const handleUserMove = (userMove: string) => {
+    setUserSelectedMove(userMove);
+    if (userMove === UserMove.STONE) {
+      setIsWin(true); // Set win condition
+    }
+  };
   return (
     <Box
       css={{
         width: "100vw",
         height: "100vh",
+        position: "relative",
+        pointerEvents: isWin ? "none" : "auto",
       }}
     >
       <BackgroundCard
@@ -119,14 +130,27 @@ const OneVsOne = () => {
           justify={"center"}
           css={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
         >
-          <StoneIcon />
+          <StoneIcon
+            customColor={userSelectedMove === UserMove.STONE}
+            onClick={() => handleUserMove(UserMove.STONE)}
+          />
           <Flex direction={"column"} css={{ gap: "2rem" }} align={"center"}>
-            <PaperIcon customColor={true} />
-            <RandomIcon customColor={false} />
+            <PaperIcon
+              customColor={userSelectedMove === UserMove.PAPER}
+              onClick={() => handleUserMove(UserMove.PAPER)}
+            />
+            <RandomIcon
+              customColor={userSelectedMove === UserMove.RANDOM}
+              onClick={() => handleUserMove(UserMove.RANDOM)}
+            />
           </Flex>
-          <ScissorIcon />
+          <ScissorIcon
+            customColor={userSelectedMove === UserMove.SCISSOR}
+            onClick={() => handleUserMove(UserMove.SCISSOR)}
+          />
         </Flex>
       </FixedBgWrapper>
+      {isWin && <WinOverLay />}
     </Box>
   );
 };
@@ -175,4 +199,5 @@ const TimerBar = styled(Box, {
   transition: "height 0.5s ease",
   width: "100%",
 });
+
 export default OneVsOne;
