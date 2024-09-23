@@ -1,7 +1,7 @@
-import { Box } from "../../../components/elements/Box";
-import { Flex } from "../../../components/Flex/Flex";
-import { HomeBlackIcon } from "../../../components/icons";
-import { styled } from "../../../styles";
+import { HomeBlackIcon } from ".";
+import { styled } from "../../styles";
+import { Box } from "../elements/Box";
+import { Flex } from "../Flex/Flex";
 
 const WinOverLay = () => {
   return (

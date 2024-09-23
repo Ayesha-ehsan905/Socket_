@@ -10,14 +10,30 @@ import {
   StoneIcon,
 } from "../../components/icons";
 import { styled } from "../../styles";
-import { UserMove } from "../../utilis/enum";
+import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
+import { useLocation } from "react-router-dom";
+import { useSocket } from "../../hooks/useSocket";
 
+export type GameOverDTO = {
+  winner: number;
+  winnerRoundWon: number;
+  totalRounds: number;
+};
 const OneVsOne = () => {
+  const location = useLocation();
+  const gameRoomKey = location.state?.gameRoomKey;
+  const chatId = location.state?.chatId;
   const [timeLeft, setTimeLeft] = useState(0);
   const [userSelectedMove, setUserSelectedMove] = useState<null | string>(null);
-  const [isWin, setIsWin] = useState(false); // New state for win condition
-
+  const [gameOverResult, setGameOverResult] = useState<null | GameOverDTO>(
+    null
+  );
+  const [isGameOverModal, setisGameOverModal] = useState(false);
+  const [userWinnerId, setUserWinnerId] = useState<null | number | string>(
+    null
+  );
+  const { socket, disconnectSocketEvent } = useSocket();
   useEffect(() => {
     if (timeLeft < 30) {
       const timer = setInterval(() => {
@@ -27,13 +43,45 @@ const OneVsOne = () => {
       return () => clearInterval(timer);
     }
   }, [timeLeft]);
+  useEffect(() => {
+    if (userSelectedMove !== null) {
+      socket.on(SocketEvents.ROUND_RESULT, (data) => {
+        console.log(
+          "ROUND_RESULT:",
+          data?.winner,
+          "userMove:",
+          userSelectedMove
+        );
+        setUserWinnerId(data?.winner || data?.result);
+      });
+      socket.on(SocketEvents.GAME_OVER, (data) => {
+        console.log("GAME_OVER", data);
+        setisGameOverModal(true);
+        setGameOverResult(data);
+      });
 
+      return () => {
+        disconnectSocketEvent(SocketEvents.ROUND_RESULT);
+        disconnectSocketEvent(SocketEvents.GAME_OVER);
+      };
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userSelectedMove]);
+  console.log(gameOverResult, "gameOverResult");
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
   const handleUserMove = (userMove: string) => {
+    console.log(userMove, "current user move");
+    socket.emit(SocketEvents.PLAYER_MOVE, {
+      move: userMove,
+      room: gameRoomKey,
+      chatId,
+    });
     setUserSelectedMove(userMove);
-    if (userMove === UserMove.STONE) {
-      setIsWin(true); // Set win condition
-    }
+
+    // if (userMove === UserMove.STONE) {
+    //   setIsWin(true); // Set win condition
+    // }
   };
   return (
     <Box
@@ -41,7 +89,7 @@ const OneVsOne = () => {
         width: "100vw",
         height: "100vh",
         position: "relative",
-        pointerEvents: isWin ? "none" : "auto",
+        // pointerEvents: isWin ? "none" : "auto",
       }}
     >
       <BackgroundCard
@@ -81,7 +129,11 @@ const OneVsOne = () => {
                 </Box>
               </Flex>
               <Box as="h3" css={{ fontSize: "40px" }}>
-                Round One
+                {userWinnerId
+                  ? userWinnerId === chatId
+                    ? "You Won"
+                    : "You Lost"
+                  : " Round One"}
               </Box>
               <Flex
                 direction={"column"}
@@ -131,8 +183,8 @@ const OneVsOne = () => {
           css={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
         >
           <StoneIcon
-            customColor={userSelectedMove === UserMove.STONE}
-            onClick={() => handleUserMove(UserMove.STONE)}
+            customColor={userSelectedMove === UserMove.ROCK}
+            onClick={() => handleUserMove(UserMove.ROCK)}
           />
           <Flex direction={"column"} css={{ gap: "2rem" }} align={"center"}>
             <PaperIcon
@@ -150,7 +202,9 @@ const OneVsOne = () => {
           />
         </Flex>
       </FixedBgWrapper>
-      {isWin && <WinOverLay />}
+      {isGameOverModal && (
+        <WinOverLay gameOverRecord={gameOverResult} chatId={chatId} />
+      )}
     </Box>
   );
 };

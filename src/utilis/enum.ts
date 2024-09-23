@@ -1,12 +1,21 @@
 export enum SocketEvents {
-  WAITING = "waiting",
-  SEARCH_GAME = "searchGame",
-  GAME_START = "gameStart",
+  CONNECT = "CONNECT",
+  DISCONNECT = "DISCONNECT",
+  REGISTER_CHAT_ID = "REGISTER_CHAT_ID",
+  SEARCH_GAME = "SEARCH_GAME",
+  PLAYER_MOVE = "PLAYER_MOVE",
+  GAME_OVER = "GAME_OVER",
+  GAME_START = "GAME_START",
+  WAITING = "WAITING",
+  ERROR = "ERROR",
+  OPPONENT_MOVE = "OPPONENT_MOVE",
+  ROUND_RESULT = "ROUND_RESULT",
+  ROUND_START = "ROUND_START",
 }
 
 export enum UserMove {
-  SCISSOR = "Scissor",
-  STONE = "Stone",
-  PAPER = "Paper",
-  RANDOM = "Random",
+  PAPER = "PAPER",
+  SCISSOR = "SCISSOR",
+  ROCK = "ROCK",
+  RANDOM = "RANDOM",
 }

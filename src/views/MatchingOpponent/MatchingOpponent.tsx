@@ -16,18 +16,18 @@ const MatchingOpponent = () => {
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
   //flow setup as socket not connected
-  useEffect(() => {
-    setTimeout(() => {
-      setGameRoomKey("test");
-    }, 5000);
-  });
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setGameRoomKey("test");
+  //   }, 5000);
+  // });
   useEffect(() => {
     if (gameRoomKey) {
       const timer = setTimeout(() => {
         //wait for 3sec then fade false
         setFade(false);
         setTimeout(() => {
-          navigate(routes.One_one); //wait for 1 sec then navigate
+          navigate(routes.One_one, { state: { gameRoomKey, chatId: 1 } }); //wait for 1 sec then navigate
         }, 2000);
       }, 4000);
       return () => clearTimeout(timer);

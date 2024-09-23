@@ -4,8 +4,20 @@ import { Flex } from "../../../components/Flex/Flex";
 import { HomeBlackIcon, Replaycon } from "../../../components/icons";
 import { styled } from "../../../styles";
 import { routes } from "../../../utilis/constant";
+import { useSocket } from "../../../hooks/useSocket";
+import { SocketEvents } from "../../../utilis/enum";
+import { GameOverDTO } from "../OneVsOne";
 
-const WinOverLay = () => {
+export type WinOverLayDTO = {
+  gameOverRecord: GameOverDTO | null;
+  chatId: number;
+};
+const WinOverLay = (props: WinOverLayDTO) => {
+  const { gameOverRecord, chatId } = props;
+  const { socket } = useSocket();
+
+  const lostRounds =
+    (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.winnerRoundWon ?? 0);
   const navigate = useNavigate();
   return (
     <WinOverlay>
@@ -34,17 +46,27 @@ const WinOverLay = () => {
             </Box>
           </Flex>
           <Box as="span" css={{ fontSize: "24px" }}>
-            You Win
+            {gameOverRecord &&
+              (gameOverRecord?.winner === chatId ? "You Won" : "Opponent Won")}
           </Box>
           <Box as="span" css={{ fontSize: "64px" }}>
-            3 - 1
+            {gameOverRecord?.winner === chatId
+              ? //  you win vs opponenet lost count
+                `${gameOverRecord?.winnerRoundWon}- ${lostRounds}`
+              : // your lost vs opponenet win
+                `${lostRounds}-${gameOverRecord?.winnerRoundWon}`}
           </Box>
           <Flex direction={"row"} css={{ gap: "$4", margin: "40px 0" }}>
             <IconWrapper>
               <HomeBlackIcon onClick={() => navigate(routes.dashboard)} />
             </IconWrapper>
             <IconWrapper>
-              <Replaycon onClick={() => navigate(routes.matching_screen)} />
+              <Replaycon
+                onClick={() => {
+                  socket.emit(SocketEvents.SEARCH_GAME, { chatId: 1 });
+                  navigate(routes.matching_screen);
+                }}
+              />
             </IconWrapper>
           </Flex>
         </Flex>

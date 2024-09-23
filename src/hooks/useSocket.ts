@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 
-const socketUrl = "http://192.168.101.111:5000/";
-const socket = io(socketUrl, { autoConnect: false }); // Disable auto-connect
+const socketUrl = "https://dev-api.rps.pixelpaddle.com/";
+const socket = io(socketUrl, { autoConnect: true }); // Disable auto-connect
 
 export const useSocket = () => {
   const connectSocket = () => {
