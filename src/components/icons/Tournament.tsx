@@ -75,7 +75,7 @@ const SvgTournament = ({ active, ...props }: SvgProps) => (
           d="M9.90833 29.8335H23.2417V28.5002C23.2417 27.0335 22.0417 25.8335 20.575 25.8335H12.575C11.1083 25.8335 9.90833 27.0335 9.90833 28.5002V29.8335V29.8335Z"
           stroke="#757575"
           strokeWidth="1.5"
-          stroke-miterlimit="10"
+          strokeMiterlimit="10"
         />
         <path
           d="M8.57495 29.8335H24.575"

@@ -28,7 +28,7 @@ const SplashScreen = () => {
       <Box
         as="img"
         src="/images/Splash.png"
-        alt="dlt alert company logo"
+        alt="SplashScreen"
         css={{ width: "100vw", height: "100vh" }}
       />
     </Box>
