@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { useSocket } from "../../hooks/useSocket";
-import { styled } from "../../styles";
 import { SocketEvents } from "../../utilis/enum";
 import LoadingDots from "./component/LoadingDots";
 import { useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
+import { BackgroundCardCSS } from "../../styles/style";
 
 const MatchingOpponent = () => {
   const { socket, disconnectSocketEvent } = useSocket();
@@ -15,12 +15,7 @@ const MatchingOpponent = () => {
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
-  //flow setup as socket not connected
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setGameRoomKey("test");
-  //   }, 5000);
-  // });
+
   useEffect(() => {
     if (gameRoomKey) {
       const timer = setTimeout(() => {
@@ -61,7 +56,12 @@ const MatchingOpponent = () => {
         transition: "opacity 1s ease-in-out",
       }}
     >
-      <BackgroundCard>
+      <Box
+        css={{
+          ...BackgroundCardCSS,
+          background: "url('/images/MatchingOponent.png')",
+        }}
+      >
         <Flex
           direction={"column"}
           align={"center"}
@@ -89,7 +89,7 @@ const MatchingOpponent = () => {
 
           <UserAvatar label={"You"} image="/images/avatar_1.png" />
         </Flex>
-      </BackgroundCard>
+      </Box>
     </Box>
   );
 };
@@ -107,10 +107,5 @@ const UserAvatar = (props: useAvatarProps) => {
     </Flex>
   );
 };
-export const BackgroundCard = styled(Box, {
-  background: "url('/images/MatchingOponent.png')",
-  width: "100vw",
-  height: "100vh",
-});
 
 export default MatchingOpponent;

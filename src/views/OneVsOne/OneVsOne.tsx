@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
-import { AvatarImg, FixedBgWrapper, VerticalLine } from "../../styles/style";
-import { BackgroundCard } from "../MatchingOpponent/MatchingOpponent";
+import {
+  AvatarImg,
+  BackgroundCardCSS,
+  FixedBgWrapper,
+  VerticalLine,
+} from "../../styles/style";
 import {
   PaperIcon,
   RandomIcon,
@@ -92,8 +96,11 @@ const OneVsOne = () => {
         // pointerEvents: isWin ? "none" : "auto",
       }}
     >
-      <BackgroundCard
-        css={{ background: "url('/images/1v1 Round Start.png')" }}
+      <Box
+        css={{
+          ...BackgroundCardCSS,
+          background: "url('/images/1v1 Round Start.png')",
+        }}
       >
         <GameSection>
           <Flex
@@ -164,7 +171,7 @@ const OneVsOne = () => {
             </Flex>
           </Flex>
         </GameSection>
-      </BackgroundCard>
+      </Box>
 
       {/* Game Section */}
       <FixedBgWrapper

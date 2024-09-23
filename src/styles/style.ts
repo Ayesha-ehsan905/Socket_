@@ -22,3 +22,7 @@ export const FixedBgWrapper = styled(Box, {
   borderRadius: "12px",
   boxSizing: "border-box",
 });
+export const BackgroundCardCSS = {
+  width: "100vw",
+  height: "100vh",
+};
