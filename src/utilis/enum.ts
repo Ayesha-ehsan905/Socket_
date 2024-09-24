@@ -19,3 +19,7 @@ export enum UserMove {
   ROCK = "ROCK",
   RANDOM = "RANDOM",
 }
+export enum AlertEnum {
+  SUCCESS = "success",
+  ERROR = "error",
+}

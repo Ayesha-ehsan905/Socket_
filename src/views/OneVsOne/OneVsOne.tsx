@@ -18,6 +18,7 @@ import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
 import { useSocket } from "../../hooks/useSocket";
+import { WinnerRoundRecordDTO } from "../../utilis/type";
 
 export type GameOverDTO = {
   winner: number;
@@ -34,9 +35,8 @@ const OneVsOne = () => {
     null
   );
   const [isGameOverModal, setisGameOverModal] = useState(false);
-  const [userWinnerId, setUserWinnerId] = useState<null | number | string>(
-    null
-  );
+  const [winnerRoundRecord, setWinnerRoundRecord] =
+    useState<null | WinnerRoundRecordDTO>(null);
   const { socket, disconnectSocketEvent } = useSocket();
   const [roundCount, setRoundCount] = useState(1);
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
@@ -53,7 +53,9 @@ const OneVsOne = () => {
     if (userSelectedMove !== null) {
       socket.on(SocketEvents.ROUND_RESULT, (data) => {
         console.log("ROUND_RESULT", data);
-        setUserWinnerId(data?.winner || data?.result);
+        console.log("User", userSelectedMove);
+
+        setWinnerRoundRecord(data?.winner || data?.result);
         setRoundCount((prevCount) => prevCount + 1);
       });
       socket.on(SocketEvents.GAME_OVER, (data) => {
@@ -71,7 +73,7 @@ const OneVsOne = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userSelectedMove]);
   const handleUserMove = (userMove: string) => {
-    setUserWinnerId(null); ///reseting the winner id after every move
+    setWinnerRoundRecord(null); ///reseting the winner id after every move
     socket.emit(SocketEvents.PLAYER_MOVE, {
       move: userMove,
       room: gameRoomKey,
@@ -95,79 +97,88 @@ const OneVsOne = () => {
           background: "url('/images/1v1 Round Start.png')",
         }}
       >
-        <GameSection>
+        <Box
+          css={{
+            position: "fixed",
+            height: "200px",
+            top: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        >
+          <Box as="img" src="/images/Stone.png" css={{ height: "100%" }} />
+        </Box>
+        <Flex
+          direction={"column"}
+          align={"center"}
+          justify={"center"}
+          css={{ height: "95vh" }}
+        >
           <Flex
-            direction={"column"}
+            justify={"between"}
+            direction={"row"}
             align={"center"}
-            justify={"center"}
-            css={{ height: "95vh" }}
+            css={{
+              width: "100vw",
+              padding: "0 24px",
+              boxSizing: "border-box",
+            }}
           >
             <Flex
-              justify={"between"}
-              direction={"row"}
-              align={"center"}
-              css={{
-                width: "100vw",
-                padding: "0 24px",
-                boxSizing: "border-box",
-              }}
+              direction={"column"}
+              css={{ height: "100%", justifyContent: "center" }}
             >
-              <Flex
-                direction={"column"}
-                css={{ height: "100%", justifyContent: "center" }}
-              >
-                <VerticalLine
-                  css={{
-                    height: "50%",
-                    position: "relative",
-                  }}
-                >
-                  <TimerBar css={{ height: `${heightPercentage}%` }} />
-                </VerticalLine>
-                <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
-                  {timeLeft}
-                </Box>
-              </Flex>
-              <Box as="h3" css={{ fontSize: "40px" }}>
-                {gameOverResult
-                  ? "Game Over"
-                  : userWinnerId
-                  ? userWinnerId === "draw"
-                    ? "Draw"
-                    : userWinnerId === chatId
-                    ? "You Won"
-                    : "You Lost"
-                  : ` Round ${roundCount}`}
-              </Box>
-              <Flex
-                direction={"column"}
-                align={"center"}
+              <VerticalLine
                 css={{
-                  background: "$grey4",
-                  width: "10px",
-                  borderRadius: "20px",
+                  height: "50%",
+                  position: "relative",
                 }}
               >
-                <AvatarImg src="/images/avatar.png" />
+                <TimerBar css={{ height: `${heightPercentage}%` }} />
+              </VerticalLine>
+              <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
+                {timeLeft}
+              </Box>
+            </Flex>
+            <Box as="h3" css={{ fontSize: "40px" }}>
+              {gameOverResult
+                ? "Game Over"
+                : winnerRoundRecord
+                ? winnerRoundRecord?.isDraw
+                  ? "Draw"
+                  : winnerRoundRecord?.winner === chatId
+                  ? "You Won"
+                  : "You Lost"
+                : ` Round ${roundCount}`}
+            </Box>
+            <Flex
+              direction={"column"}
+              align={"center"}
+              css={{
+                background: "$grey4",
+                width: "10px",
+                borderRadius: "20px",
+              }}
+            >
+              <AvatarImg src="/images/avatar.png" />
 
-                <ProgressBar
-                  heightPercentage={heightPercentage}
-                  position={"top"}
-                />
-                <Box
-                  as="span"
-                  css={{ borderTop: "2px solid black", width: "20px" }}
-                />
-                <ProgressBar
-                  heightPercentage={heightPercentage}
-                  position={"bottom"}
-                />
+              <ProgressBar
+                heightPercentage={heightPercentage}
+                position={"top"}
+              />
+              <Box
+                as="span"
+                css={{ borderTop: "2px solid black", width: "20px" }}
+              />
+              <ProgressBar
+                heightPercentage={heightPercentage}
+                position={"bottom"}
+              />
 
-                <AvatarImg src="/images/avatar.png" />
-              </Flex>
+              <AvatarImg src="/images/avatar.png" />
             </Flex>
           </Flex>
-        </GameSection>
+        </Flex>
       </Box>
 
       {/* Game Section */}

@@ -4,39 +4,41 @@ import { Flex } from "../../components/Flex/Flex";
 import { useSocket } from "../../hooks/useSocket";
 import { SocketEvents } from "../../utilis/enum";
 import LoadingDots from "./component/LoadingDots";
-import { useAvatarProps } from "../../utilis/type";
+import { GameStartDTO, useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
 import { BackgroundCardCSS } from "../../styles/style";
 
 const MatchingOpponent = () => {
   const { socket, disconnectSocketEvent } = useSocket();
-  const [gameRoomKey, setGameRoomKey] = useState<null | string>(null);
+  const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartDTO>(null);
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (gameRoomKey) {
+    if (gameRoomInfo) {
       const timer = setTimeout(() => {
         //wait for 3sec then fade false
         setFade(false);
         setTimeout(() => {
-          navigate(routes.One_one, { state: { gameRoomKey, chatId: 1 } }); //wait for 1 sec then navigate
+          navigate(routes.One_one, {
+            state: { gameRoomKey: gameRoomInfo?.room, chatId: 1 },
+          }); //wait for 1 sec then navigate
         }, 2000);
       }, 4000);
       return () => clearTimeout(timer);
     }
-  }, [gameRoomKey, navigate]);
+  }, [gameRoomInfo, navigate]);
 
   useEffect(() => {
-    if (!gameRoomKey) {
+    if (!gameRoomInfo) {
       socket.on(SocketEvents.WAITING, (data) => {
         console.log("SocketEvents.WAITING:", data);
       });
       socket.on(SocketEvents.GAME_START, (data) => {
         console.log("gameStart", data);
-        setGameRoomKey(data?.room);
+        setGameRoomInfo(data);
       });
 
       return () => {
@@ -46,6 +48,10 @@ const MatchingOpponent = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const OpponentName =
+    gameRoomInfo &&
+    gameRoomInfo?.player1?.first_name + " " + gameRoomInfo?.player1?.last_name;
   return (
     <Box
       css={{
@@ -67,9 +73,9 @@ const MatchingOpponent = () => {
           justify={"center"}
           css={{ height: "100vh" }}
         >
-          {gameRoomKey ? (
+          {gameRoomInfo ? (
             <>
-              <UserAvatar label="Opponent" image="/images/avatar_1.png" />
+              <UserAvatar label={OpponentName} image="/images/avatar_1.png" />
               <Box as="span" css={{ fontSize: "56px", margin: "60px 0" }}>
                 Get Ready
               </Box>
