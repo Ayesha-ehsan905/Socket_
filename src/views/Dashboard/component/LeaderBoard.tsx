@@ -12,11 +12,13 @@ import { routes } from "../../../utilis/constant";
 import { useSocket } from "../../../hooks/useSocket";
 import { SocketEvents } from "../../../utilis/enum";
 import { FixedBgWrapper } from "../../../styles/style";
+import { useTelegram } from "../../../hooks/useTelegram";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
   const { socket, connectSocket } = useSocket();
-
+  const { chatId } = useTelegram();
+  console.log(chatId);
   const navigate = useNavigate();
 
   const LeaderBoardMenus = [
