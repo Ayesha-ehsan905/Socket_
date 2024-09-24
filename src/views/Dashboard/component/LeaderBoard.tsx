@@ -99,6 +99,7 @@ const LeaderBoard = () => {
                       fontFamily: "$Gilmer",
                       fontWeight: isActive ? "$bold" : "$semibold",
                       color: isActive ? "$primary" : "$grey3",
+                      letterSpacing: menu.name === "1v1" ? "3px" : 0,
                     }}
                   >
                     {menu.name}
