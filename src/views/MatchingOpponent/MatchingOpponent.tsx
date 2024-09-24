@@ -32,7 +32,7 @@ const MatchingOpponent = () => {
   useEffect(() => {
     if (!gameRoomKey) {
       socket.on(SocketEvents.WAITING, (data) => {
-        console.log("socketData:", data);
+        console.log("SocketEvents.WAITING:", data);
       });
       socket.on(SocketEvents.GAME_START, (data) => {
         console.log("gameStart", data);
@@ -46,7 +46,6 @@ const MatchingOpponent = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log("roomKey", gameRoomKey);
   return (
     <Box
       css={{

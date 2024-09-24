@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { socket_url } from "../utilis/constant";
 
-const socketUrl = socket_url;
+const socketUrl = socket_url; //for env
 const socket = io(socketUrl, { autoConnect: false }); // Disable auto-connect
 
 export const useSocket = () => {

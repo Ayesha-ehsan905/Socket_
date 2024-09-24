@@ -38,6 +38,8 @@ const OneVsOne = () => {
     null
   );
   const { socket, disconnectSocketEvent } = useSocket();
+  const [roundCount, setRoundCount] = useState(1);
+  const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
   useEffect(() => {
     if (timeLeft < 30) {
       const timer = setInterval(() => {
@@ -50,13 +52,9 @@ const OneVsOne = () => {
   useEffect(() => {
     if (userSelectedMove !== null) {
       socket.on(SocketEvents.ROUND_RESULT, (data) => {
-        console.log(
-          "ROUND_RESULT:",
-          data?.winner,
-          "userMove:",
-          userSelectedMove
-        );
+        console.log("ROUND_RESULT", data);
         setUserWinnerId(data?.winner || data?.result);
+        setRoundCount((prevCount) => prevCount + 1);
       });
       socket.on(SocketEvents.GAME_OVER, (data) => {
         console.log("GAME_OVER", data);
@@ -72,28 +70,23 @@ const OneVsOne = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userSelectedMove]);
-  console.log(gameOverResult, "gameOverResult");
-  const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
   const handleUserMove = (userMove: string) => {
-    console.log(userMove, "current user move");
+    setUserWinnerId(null); ///reseting the winner id after every move
     socket.emit(SocketEvents.PLAYER_MOVE, {
       move: userMove,
       room: gameRoomKey,
       chatId,
     });
     setUserSelectedMove(userMove);
-
-    // if (userMove === UserMove.STONE) {
-    //   setIsWin(true); // Set win condition
-    // }
   };
+
   return (
     <Box
       css={{
         width: "100vw",
         height: "100vh",
         position: "relative",
-        // pointerEvents: isWin ? "none" : "auto",
+        pointerEvents: isGameOverModal ? "none" : "auto",
       }}
     >
       <Box
@@ -136,11 +129,15 @@ const OneVsOne = () => {
                 </Box>
               </Flex>
               <Box as="h3" css={{ fontSize: "40px" }}>
-                {userWinnerId
-                  ? userWinnerId === chatId
+                {gameOverResult
+                  ? "Game Over"
+                  : userWinnerId
+                  ? userWinnerId === "draw"
+                    ? "Draw"
+                    : userWinnerId === chatId
                     ? "You Won"
                     : "You Lost"
-                  : " Round One"}
+                  : ` Round ${roundCount}`}
               </Box>
               <Flex
                 direction={"column"}
