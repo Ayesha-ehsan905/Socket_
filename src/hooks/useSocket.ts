@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
+import { socket_url } from "../utilis/constant";
 
-const socketUrl = "http://192.168.101.111:5000/";
+const socketUrl = socket_url; //for env
 const socket = io(socketUrl, { autoConnect: false }); // Disable auto-connect
 
 export const useSocket = () => {

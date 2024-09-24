@@ -71,7 +71,7 @@ const UserCard = () => {
             as="img"
             src="/images/Vector.png"
             css={{ width: "25px", height: "25px", alignSelf: "baseline" }}
-          ></Box>
+          />
         </Flex>
       </Flex>
     </UserCardBox>
