@@ -7,16 +7,14 @@ import { routes } from "../../../utilis/constant";
 import { useSocket } from "../../../hooks/useSocket";
 import { SocketEvents } from "../../../utilis/enum";
 import { GameOverDTO } from "../OneVsOne";
-import { useTelegram } from "../../../hooks/useTelegram";
 
-export type WinOverLayDTO = {
+export type WinOverLayProps = {
   gameOverRecord: GameOverDTO | null;
-  chatId?: number;
+  userChatId?: number | string; //current user chat id
 };
-const WinOverLay = (props: WinOverLayDTO) => {
-  const { gameOverRecord } = props;
+const WinOverLay = (props: WinOverLayProps) => {
+  const { gameOverRecord, userChatId } = props;
   const { socket } = useSocket();
-  const { chatId } = useTelegram();
 
   const lostRounds =
     (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.winnerRoundWon ?? 0);
@@ -49,10 +47,12 @@ const WinOverLay = (props: WinOverLayDTO) => {
           </Flex>
           <Box as="span" css={{ fontSize: "24px" }}>
             {gameOverRecord &&
-              (gameOverRecord?.winner === chatId ? "You Won" : "Opponent Won")}
+              (gameOverRecord?.winner === userChatId
+                ? "You Won"
+                : "Opponent Won")}
           </Box>
           <Box as="span" css={{ fontSize: "64px" }}>
-            {gameOverRecord?.winner === chatId
+            {gameOverRecord?.winner === userChatId
               ? //  you win vs opponenet lost count
                 `${gameOverRecord?.winnerRoundWon}- ${lostRounds}`
               : // your lost vs opponenet win
@@ -65,7 +65,7 @@ const WinOverLay = (props: WinOverLayDTO) => {
             <IconWrapper>
               <Replaycon
                 onClick={() => {
-                  socket.emit(SocketEvents.SEARCH_GAME, { chatId });
+                  socket.emit(SocketEvents.SEARCH_GAME, { userChatId });
                   navigate(routes.matching_screen);
                 }}
               />

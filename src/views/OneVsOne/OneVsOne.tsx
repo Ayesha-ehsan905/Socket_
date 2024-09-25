@@ -29,8 +29,7 @@ export type GameOverDTO = {
 const OneVsOne = () => {
   const location = useLocation();
   const gameRoomKey = location.state?.gameRoomKey;
-  const chatId = location.state?.chatId;
-  console.log(chatId, "from 1v1");
+  const user_chatId = location.state?.chatId;
 
   const [timeLeft, setTimeLeft] = useState(0);
   const [isGameOverModal, setisGameOverModal] = useState(false);
@@ -80,7 +79,7 @@ const OneVsOne = () => {
     socket.emit(SocketEvents.PLAYER_MOVE, {
       move: userMove,
       room: gameRoomKey,
-      chatId,
+      chatId: user_chatId,
     });
     setUserSelectedMove(userMove);
   };
@@ -88,7 +87,7 @@ const OneVsOne = () => {
   let opponentMove = "";
   //check if you are player1 then pick player 2 move
 
-  if (winnerRoundRecord?.player1?.chatId === chatId) {
+  if (winnerRoundRecord?.player1?.chatId === user_chatId) {
     opponentMove = winnerRoundRecord?.player2?.move as UserMove;
   } else {
     opponentMove = winnerRoundRecord?.player1?.move as UserMove;
@@ -170,7 +169,7 @@ const OneVsOne = () => {
                 : winnerRoundRecord
                 ? winnerRoundRecord?.isDraw
                   ? "Draw"
-                  : winnerRoundRecord?.winnerChatId === chatId
+                  : winnerRoundRecord?.winnerChatId === user_chatId
                   ? "You Won"
                   : "You Lost"
                 : ` Round ${roundCount}`}
@@ -243,7 +242,7 @@ const OneVsOne = () => {
         </Flex>
       </FixedBgWrapper>
       {isGameOverModal && (
-        <WinOverLay gameOverRecord={gameOverResult} chatId={chatId} />
+        <WinOverLay gameOverRecord={gameOverResult} userChatId={user_chatId} />
       )}
     </Box>
   );

@@ -7,24 +7,16 @@ import LoadingDots from "./component/LoadingDots";
 import { GameStartType, useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
+import { useTelegram } from "../../hooks/useTelegram";
 // import { BackgroundCardCSS } from "../../styles/style";
 
 const MatchingOpponent = () => {
   const { socket, disconnectSocketEvent } = useSocket();
   const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartType>(null);
+  const { chatId } = useTelegram(); //current user chat_id
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
-  // const chat_id = localStorage.getItem("chatId");
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const app = (window as any).Telegram?.WebApp;
-
-  app.ready();
-
-  // Check if initDataUnsafe and user exist
-  // const chatId = app.initDataUnsafe?.user.chat.id;
-  const user = app.initDataUnsafe?.user;
 
   useEffect(() => {
     if (gameRoomInfo) {
@@ -33,13 +25,13 @@ const MatchingOpponent = () => {
         setFade(false);
         setTimeout(() => {
           navigate(routes.One_one, {
-            state: { gameRoomKey: gameRoomInfo?.room, chatId: user?.id },
+            state: { gameRoomKey: gameRoomInfo?.room, chatId: chatId },
           }); //wait for 1 sec then navigate
         }, 2000);
       }, 4000);
       return () => clearTimeout(timer);
     }
-  }, [gameRoomInfo, navigate, user?.id]);
+  }, [chatId, gameRoomInfo, navigate]);
 
   useEffect(() => {
     if (!gameRoomInfo) {
@@ -65,7 +57,7 @@ const MatchingOpponent = () => {
 
   let OpponentName = "";
   // concate the oppositie player name
-  if (gameRoomInfo?.player1.chatId === user?.id) {
+  if (gameRoomInfo?.player1.chatId === chatId) {
     OpponentName =
       gameRoomInfo?.player2?.first_name +
       " " +
