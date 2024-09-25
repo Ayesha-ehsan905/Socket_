@@ -65,7 +65,7 @@ const WinOverLay = (props: WinOverLayProps) => {
             <IconWrapper>
               <Replaycon
                 onClick={() => {
-                  socket.emit(SocketEvents.SEARCH_GAME, { userChatId });
+                  socket.emit(SocketEvents.SEARCH_GAME, { chatId: userChatId });
                   navigate(routes.matching_screen);
                 }}
               />

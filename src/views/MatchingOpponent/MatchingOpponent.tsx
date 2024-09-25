@@ -8,7 +8,6 @@ import { GameStartType, useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
 import { useTelegram } from "../../hooks/useTelegram";
-// import { BackgroundCardCSS } from "../../styles/style";
 
 const MatchingOpponent = () => {
   const { socket, disconnectSocketEvent } = useSocket();
@@ -50,10 +49,6 @@ const MatchingOpponent = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // const OpponentName =
-  //   gameRoomInfo &&
-  //   gameRoomInfo?.player1?.first_name + " " + gameRoomInfo?.player1?.last_name;
 
   let OpponentName = "";
   // concate the oppositie player name

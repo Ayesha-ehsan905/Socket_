@@ -20,6 +20,7 @@ const LeaderBoard = () => {
   const { pathname } = useLocation();
   const { socket } = useSocket();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
+  //current user telegram chat id
   const { chatId } = useTelegram();
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,7 +52,6 @@ const LeaderBoard = () => {
         >
           Leaderboard
         </Box>
-        <div>user id:{chatId}</div>
 
         <Flex direction={"column"} wrap={"wrap"}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
@@ -89,7 +89,6 @@ const LeaderBoard = () => {
               const IconComponent = menu.icon;
 
               const isActive = pathname === menu.path;
-              const check = menu.name === "Profile";
               return (
                 <Flex
                   direction={"column"}
@@ -98,23 +97,17 @@ const LeaderBoard = () => {
                   key={index}
                 >
                   <IconComponent active={isActive} />
-                  {check ? (
-                    <Box as="a" href="/home.html">
-                      {menu.name}
-                    </Box>
-                  ) : (
-                    <Box
-                      as="span"
-                      css={{
-                        fontFamily: "$Gilmer",
-                        fontWeight: isActive ? "$bold" : "$semibold",
-                        color: isActive ? "$primary" : "$grey3",
-                        letterSpacing: menu.name === "1v1" ? "3px" : 0,
-                      }}
-                    >
-                      {menu.name}
-                    </Box>
-                  )}
+                  <Box
+                    as="span"
+                    css={{
+                      fontFamily: "$Gilmer",
+                      fontWeight: isActive ? "$bold" : "$semibold",
+                      color: isActive ? "$primary" : "$grey3",
+                      letterSpacing: menu.name === "1v1" ? "3px" : 0,
+                    }}
+                  >
+                    {menu.name}
+                  </Box>
                 </Flex>
               );
             })}
