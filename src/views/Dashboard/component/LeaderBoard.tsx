@@ -12,7 +12,6 @@ import { routes } from "../../../utilis/constant";
 import { useSocket } from "../../../hooks/useSocket";
 import { SocketEvents } from "../../../utilis/enum";
 import { FixedBgWrapper } from "../../../styles/style";
-// import { useTelegram } from "../../../hooks/useTelegram";
 import { useState } from "react";
 import Alert from "../../../components/Popup";
 import { useTelegram } from "../../../hooks/useTelegram";
@@ -36,16 +35,12 @@ const LeaderBoard = () => {
     { name: "Profile", icon: Profile, path: "" },
   ];
   const handleMenuClick = (path: string) => {
-    // if (chatId) {
     if (path === routes.matching_screen && pathname !== path) {
       // Emit the event only if it's the "1v1" menu and we're not already on the same path
       socket.emit(SocketEvents.REGISTER_CHAT_ID, user);
       socket.emit(SocketEvents.SEARCH_GAME, { chatId });
     }
     navigate(path);
-    // } else {
-    //   setOpenTelegramAlert(true);
-    // }
   };
   return (
     <>

@@ -109,7 +109,8 @@ const OneVsOne = () => {
         <Box
           css={{
             position: "fixed",
-            height: winnerRoundRecord ? "290px" : "100px",
+            // height: winnerRoundRecord ? "290px" : "100px",
+            height: "100px",
             top: 0,
             left: "36%",
           }}
@@ -202,7 +203,8 @@ const OneVsOne = () => {
         css={{
           bottom: "0px",
           background: `url(${userMoveImage}) no-repeat center top`,
-          height: winnerRoundRecord ? "350px" : "200px",
+          // height: winnerRoundRecord ? "350px" : "200px",
+          height: "200px",
         }}
       >
         <Box />
