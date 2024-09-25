@@ -38,7 +38,8 @@ const OneVsOne = () => {
   const [gameOverResult, setGameOverResult] = useState<null | GameOverDTO>(
     null
   );
-  const [winnerRoundRecord, setWinnerRoundRecord] = useState<null | any>();
+  const [winnerRoundRecord, setWinnerRoundRecord] =
+    useState<null | WinnerRoundRecordType>();
   const { socket, disconnectSocketEvent } = useSocket();
   const [roundCount, setRoundCount] = useState(1);
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%

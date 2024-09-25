@@ -48,9 +48,7 @@ const WinOverLay = (props: WinOverLayProps) => {
           </Flex>
           <Box as="span" css={{ fontSize: "24px" }}>
             {gameOverRecord &&
-              (gameOverRecord?.winner === userChatId
-                ? "You Won"
-                : "Opponent Won")}
+              (gameOverRecord?.winner === userChatId ? "You Win" : "You Loss")}
           </Box>
           <Box as="span" css={{ fontSize: "64px" }}>
             {gameOverRecord?.winner === userChatId
