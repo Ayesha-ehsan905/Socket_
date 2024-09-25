@@ -7,14 +7,16 @@ import { routes } from "../../../utilis/constant";
 import { useSocket } from "../../../hooks/useSocket";
 import { SocketEvents } from "../../../utilis/enum";
 import { GameOverDTO } from "../OneVsOne";
+import { useTelegram } from "../../../hooks/useTelegram";
 
 export type WinOverLayDTO = {
   gameOverRecord: GameOverDTO | null;
-  chatId: number;
+  chatId?: number;
 };
 const WinOverLay = (props: WinOverLayDTO) => {
-  const { gameOverRecord, chatId } = props;
+  const { gameOverRecord } = props;
   const { socket } = useSocket();
+  const { chatId } = useTelegram();
 
   const lostRounds =
     (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.winnerRoundWon ?? 0);
@@ -63,7 +65,7 @@ const WinOverLay = (props: WinOverLayDTO) => {
             <IconWrapper>
               <Replaycon
                 onClick={() => {
-                  socket.emit(SocketEvents.SEARCH_GAME, { chatId: 1 });
+                  socket.emit(SocketEvents.SEARCH_GAME, { chatId });
                   navigate(routes.matching_screen);
                 }}
               />
