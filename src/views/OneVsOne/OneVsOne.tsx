@@ -25,6 +25,7 @@ export type GameOverDTO = {
   winner: number;
   winnerRoundWon: number;
   totalRounds: number;
+  totalDraw: number;
 };
 const OneVsOne = () => {
   const location = useLocation();
@@ -37,8 +38,7 @@ const OneVsOne = () => {
   const [gameOverResult, setGameOverResult] = useState<null | GameOverDTO>(
     null
   );
-  const [winnerRoundRecord, setWinnerRoundRecord] =
-    useState<null | WinnerRoundRecordType>();
+  const [winnerRoundRecord, setWinnerRoundRecord] = useState<null | any>();
   const { socket, disconnectSocketEvent } = useSocket();
   const [roundCount, setRoundCount] = useState(1);
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
@@ -52,17 +52,19 @@ const OneVsOne = () => {
     }
   }, [timeLeft]);
   useEffect(() => {
-    if (userSelectedMove !== null) {
+    if (userSelectedMove) {
       socket.on(SocketEvents.ROUND_RESULT, (data) => {
         console.log("ROUND_RESULT", data);
         console.log("User", userSelectedMove);
 
-        setWinnerRoundRecord(data);
+        setWinnerRoundRecord(JSON.parse(data));
         setRoundCount((prevCount) => prevCount + 1);
       });
       socket.on(SocketEvents.GAME_OVER, (data) => {
         console.log("GAME_OVER", data);
-        setisGameOverModal(true);
+        setTimeout(() => {
+          setisGameOverModal(true);
+        }, 2000);
         setGameOverResult(data);
       });
 
@@ -156,16 +158,15 @@ const OneVsOne = () => {
                   position: "relative",
                 }}
               >
-                <TimerBar css={{ height: `${heightPercentage}%` }} />
+                {/* <TimerBar css={{ height: `${heightPercentage}%` }} /> */}
+                <TimerBar css={{ height: "20%" }} />
               </VerticalLine>
               <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
                 {timeLeft}
               </Box>
             </Flex>
             <Box as="h3" css={{ fontSize: "40px" }}>
-              {gameOverResult
-                ? "Game Over"
-                : winnerRoundRecord
+              {winnerRoundRecord
                 ? winnerRoundRecord?.isDraw
                   ? "Draw"
                   : winnerRoundRecord?.winnerChatId === user_chatId

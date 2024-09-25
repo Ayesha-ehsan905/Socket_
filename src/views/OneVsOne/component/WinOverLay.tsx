@@ -16,8 +16,9 @@ const WinOverLay = (props: WinOverLayProps) => {
   const { gameOverRecord, userChatId } = props;
   const { socket } = useSocket();
 
-  const lostRounds =
-    (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.winnerRoundWon ?? 0);
+  const totalRounds =
+    (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.totalDraw ?? 0);
+  const lostRounds = totalRounds - (gameOverRecord?.winnerRoundWon ?? 0);
   const navigate = useNavigate();
   return (
     <WinOverlay>
