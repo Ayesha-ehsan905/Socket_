@@ -12,7 +12,9 @@ import { useTelegram } from "../../hooks/useTelegram";
 const MatchingOpponent = () => {
   const { socket, disconnectSocketEvent } = useSocket();
   const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartType>(null);
+  const [OpponentName, setOpponentName] = useState<string>("");
   const { chatId } = useTelegram(); //current user chat_id
+  console.log(chatId, "chatid");
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
@@ -50,19 +52,23 @@ const MatchingOpponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  let OpponentName = "";
-  // concate the oppositie player name
-  if (gameRoomInfo?.player1.chatId === chatId) {
-    OpponentName =
-      gameRoomInfo?.player2?.first_name +
-      " " +
-      gameRoomInfo?.player2?.last_name;
-  } else {
-    OpponentName =
-      gameRoomInfo?.player1?.first_name +
-      " " +
-      gameRoomInfo?.player1?.last_name;
-  }
+  useEffect(() => {
+    // concate the oppositie player name
+    if (gameRoomInfo?.player1.chatId === chatId) {
+      const OpponentName =
+        gameRoomInfo?.player2?.first_name +
+        " " +
+        gameRoomInfo?.player2?.last_name;
+      setOpponentName(OpponentName);
+    } else {
+      const OpponentName =
+        gameRoomInfo?.player1?.first_name +
+        " " +
+        gameRoomInfo?.player1?.last_name;
+      setOpponentName(OpponentName);
+    }
+  }, [chatId, gameRoomInfo]);
+
   return (
     <Box
       css={{

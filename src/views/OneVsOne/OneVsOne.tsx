@@ -96,7 +96,6 @@ const OneVsOne = () => {
     userSelectedMove as UserMove, // Casting to UserMove
     opponentMove as UserMove
   );
-  console.log(userMoveImage, opponentMoveImage);
   return (
     <Box
       css={{
