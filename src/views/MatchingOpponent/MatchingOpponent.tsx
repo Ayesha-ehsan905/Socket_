@@ -14,7 +14,6 @@ const MatchingOpponent = () => {
   const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartType>(null);
   const [OpponentName, setOpponentName] = useState<string | null>(null);
   const { chatId } = useTelegram(); //current user chat_id
-  console.log(chatId, "chatid");
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
@@ -40,7 +39,7 @@ const MatchingOpponent = () => {
   useEffect(() => {
     // concate the oppositie player name
     if (gameRoomInfo) {
-      if (gameRoomInfo?.player1.chatId === chatId) {
+      if (gameRoomInfo?.player1.chatId === chatId?.toString()) {
         const OpponentName =
           gameRoomInfo?.player2?.first_name +
           " " +
