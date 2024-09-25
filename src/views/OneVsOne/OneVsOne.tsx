@@ -18,7 +18,7 @@ import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
 import { useSocket } from "../../hooks/useSocket";
-import { WinnerRoundRecordDTO } from "../../utilis/type";
+import { WinnerRoundRecordType } from "../../utilis/type";
 import { getSelectedImages } from "../../utilis/function";
 
 export type GameOverDTO = {
@@ -39,7 +39,7 @@ const OneVsOne = () => {
     null
   );
   const [winnerRoundRecord, setWinnerRoundRecord] =
-    useState<null | WinnerRoundRecordDTO>();
+    useState<null | WinnerRoundRecordType>();
   const { socket, disconnectSocketEvent } = useSocket();
   const [roundCount, setRoundCount] = useState(1);
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
@@ -85,10 +85,17 @@ const OneVsOne = () => {
     setUserSelectedMove(userMove);
   };
 
-  const opponentMove = winnerRoundRecord?.winner?.move as UserMove; // Casting to UserMove
+  let opponentMove = "";
+  //check if you are player1 then pick player 2 move
+
+  if (winnerRoundRecord?.player1?.chatId === chatId) {
+    opponentMove = winnerRoundRecord?.player2?.move as UserMove;
+  } else {
+    opponentMove = winnerRoundRecord?.player1?.move as UserMove;
+  }
   const { userMoveImage, opponentMoveImage } = getSelectedImages(
     userSelectedMove as UserMove, // Casting to UserMove
-    opponentMove
+    opponentMove as UserMove
   );
   console.log(userMoveImage, opponentMoveImage);
   return (
@@ -109,8 +116,8 @@ const OneVsOne = () => {
         <Box
           css={{
             position: "fixed",
-            // height: winnerRoundRecord ? "290px" : "100px",
-            height: "100px",
+            height: winnerRoundRecord ? "25vh" : "15vh",
+            // height: "100px",
             top: 0,
             left: "36%",
           }}
@@ -121,7 +128,7 @@ const OneVsOne = () => {
             css={{
               height: "100%",
               width: "100px",
-              transform: "rotate(180deg)",
+              transform: winnerRoundRecord ? "rotate(180deg)" : "",
             }}
           />
         </Box>
@@ -163,7 +170,7 @@ const OneVsOne = () => {
                 : winnerRoundRecord
                 ? winnerRoundRecord?.isDraw
                   ? "Draw"
-                  : winnerRoundRecord?.winner === chatId
+                  : winnerRoundRecord?.winnerChatId === chatId
                   ? "You Won"
                   : "You Lost"
                 : ` Round ${roundCount}`}
@@ -203,8 +210,8 @@ const OneVsOne = () => {
         css={{
           bottom: "0px",
           background: `url(${userMoveImage}) no-repeat center top`,
-          // height: winnerRoundRecord ? "350px" : "200px",
-          height: "200px",
+          height: winnerRoundRecord ? "35vh" : "20vh",
+          // height: "200px",
         }}
       >
         <Box />

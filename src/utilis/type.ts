@@ -5,20 +5,21 @@ export type useAvatarProps = {
   image?: string;
 };
 
-export type GameStartDTO = {
+export type GameStartType = {
   room: string;
-  player1: {
-    first_name: string;
-    last_name: string;
-  };
+  player1: Player;
+  player2: Player;
 };
-export type WinnerRoundRecordDTO = {
-  winner: {
-    chatId: string;
-    inGame: boolean;
-    roundsWon: number;
-    roundsPlayed: number;
-    move?: string; // Store player's move
-  };
+export type Player = {
+  move?: string;
+  first_name: string;
+  last_name: string;
+  chatId: number | string;
+};
+export type WinnerRoundRecordType = {
   isDraw: boolean;
+  player1: Player;
+  player2: Player;
+  winnerChatId: string;
+  looserChatId: string;
 };

@@ -4,14 +4,14 @@ import { Flex } from "../../components/Flex/Flex";
 import { useSocket } from "../../hooks/useSocket";
 import { SocketEvents } from "../../utilis/enum";
 import LoadingDots from "./component/LoadingDots";
-import { GameStartDTO, useAvatarProps } from "../../utilis/type";
+import { GameStartType, useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
 // import { BackgroundCardCSS } from "../../styles/style";
 
 const MatchingOpponent = () => {
   const { socket, disconnectSocketEvent } = useSocket();
-  const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartDTO>(null);
+  const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartType>(null);
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
@@ -59,9 +59,23 @@ const MatchingOpponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const OpponentName =
-    gameRoomInfo &&
-    gameRoomInfo?.player1?.first_name + " " + gameRoomInfo?.player1?.last_name;
+  // const OpponentName =
+  //   gameRoomInfo &&
+  //   gameRoomInfo?.player1?.first_name + " " + gameRoomInfo?.player1?.last_name;
+
+  let OpponentName = "";
+  // concate the oppositie player name
+  if (gameRoomInfo?.player1.chatId === user?.id) {
+    OpponentName =
+      gameRoomInfo?.player2?.first_name +
+      " " +
+      gameRoomInfo?.player2?.last_name;
+  } else {
+    OpponentName =
+      gameRoomInfo?.player1?.first_name +
+      " " +
+      gameRoomInfo?.player1?.last_name;
+  }
   return (
     <Box
       css={{
