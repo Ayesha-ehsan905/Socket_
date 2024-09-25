@@ -12,16 +12,27 @@ import { routes } from "../../../utilis/constant";
 import { useSocket } from "../../../hooks/useSocket";
 import { SocketEvents } from "../../../utilis/enum";
 import { FixedBgWrapper } from "../../../styles/style";
-import { useTelegram } from "../../../hooks/useTelegram";
+// import { useTelegram } from "../../../hooks/useTelegram";
 import { useState } from "react";
 import Alert from "../../../components/Popup";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
-  const { socket, connectSocket } = useSocket();
+  const { socket } = useSocket();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
-  const { chatId } = useTelegram();
+  // const { chatId } = useTelegram();
   const navigate = useNavigate();
+  // console.log(chatId, "chatid");
+
+  // const chat_id = chatId;
+  // console.log(chat_id, "from leaderboard");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const app = (window as any).Telegram?.WebApp;
+
+  app.ready();
+
+  // Check if initDataUnsafe and user exist
+  const chatId = app.initDataUnsafe?.user.chat.id;
 
   const LeaderBoardMenus = [
     { name: "Home", icon: HomeIcon, path: routes.dashboard },
@@ -32,9 +43,9 @@ const LeaderBoard = () => {
   const handleMenuClick = (path: string) => {
     // if (chatId) {
     if (path === routes.matching_screen && pathname !== path) {
-      connectSocket();
       // Emit the event only if it's the "1v1" menu and we're not already on the same path
-      socket.emit(SocketEvents.SEARCH_GAME, { chatId: 1 });
+      socket.emit(SocketEvents.REGISTER_CHAT_ID, { chatId });
+      socket.emit(SocketEvents.SEARCH_GAME, { chatId });
     }
     navigate(path);
     // } else {

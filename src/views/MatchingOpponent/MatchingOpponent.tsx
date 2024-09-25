@@ -15,6 +15,8 @@ const MatchingOpponent = () => {
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
+  const chat_id = localStorage.getItem("chatId");
+  // console.log(chat_id, "chat_id from matching");
 
   useEffect(() => {
     if (gameRoomInfo) {
@@ -23,13 +25,13 @@ const MatchingOpponent = () => {
         setFade(false);
         setTimeout(() => {
           navigate(routes.One_one, {
-            state: { gameRoomKey: gameRoomInfo?.room, chatId: 1 },
+            state: { gameRoomKey: gameRoomInfo?.room, chatId: chat_id },
           }); //wait for 1 sec then navigate
         }, 2000);
       }, 4000);
       return () => clearTimeout(timer);
     }
-  }, [gameRoomInfo, navigate]);
+  }, [chat_id, gameRoomInfo, navigate]);
 
   useEffect(() => {
     if (!gameRoomInfo) {

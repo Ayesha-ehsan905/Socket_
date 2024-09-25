@@ -19,6 +19,7 @@ import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
 import { useSocket } from "../../hooks/useSocket";
 import { WinnerRoundRecordDTO } from "../../utilis/type";
+import { getSelectedImages } from "../../utilis/function";
 
 export type GameOverDTO = {
   winner: number;
@@ -29,14 +30,25 @@ const OneVsOne = () => {
   const location = useLocation();
   const gameRoomKey = location.state?.gameRoomKey;
   const chatId = location.state?.chatId;
+  console.log(chatId, "from 1v1");
+
   const [timeLeft, setTimeLeft] = useState(0);
+  const [isGameOverModal, setisGameOverModal] = useState(false);
   const [userSelectedMove, setUserSelectedMove] = useState<null | string>(null);
   const [gameOverResult, setGameOverResult] = useState<null | GameOverDTO>(
     null
   );
-  const [isGameOverModal, setisGameOverModal] = useState(false);
   const [winnerRoundRecord, setWinnerRoundRecord] =
-    useState<null | WinnerRoundRecordDTO>(null);
+    useState<null | WinnerRoundRecordDTO>({
+      winner: {
+        chatId: "3",
+        inGame: false,
+        move: UserMove.PAPER,
+        roundsPlayed: 3,
+        roundsWon: 2,
+      },
+      isDraw: false,
+    });
   const { socket, disconnectSocketEvent } = useSocket();
   const [roundCount, setRoundCount] = useState(1);
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
@@ -55,7 +67,7 @@ const OneVsOne = () => {
         console.log("ROUND_RESULT", data);
         console.log("User", userSelectedMove);
 
-        setWinnerRoundRecord(data?.winner || data?.result);
+        setWinnerRoundRecord(data);
         setRoundCount((prevCount) => prevCount + 1);
       });
       socket.on(SocketEvents.GAME_OVER, (data) => {
@@ -82,6 +94,12 @@ const OneVsOne = () => {
     setUserSelectedMove(userMove);
   };
 
+  const opponentMove = winnerRoundRecord?.winner?.move as UserMove; // Casting to UserMove
+  const { userMoveImage, opponentMoveImage } = getSelectedImages(
+    userSelectedMove as UserMove, // Casting to UserMove
+    opponentMove
+  );
+  console.log(userMoveImage, opponentMoveImage);
   return (
     <Box
       css={{
@@ -100,19 +118,26 @@ const OneVsOne = () => {
         <Box
           css={{
             position: "fixed",
-            height: "200px",
+            height: winnerRoundRecord ? "290px" : "100px",
             top: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
+            left: "36%",
           }}
         >
-          <Box as="img" src="/images/Stone.png" css={{ height: "100%" }} />
+          <Box
+            as="img"
+            src={opponentMoveImage}
+            css={{
+              height: "100%",
+              width: "100px",
+              transform: "rotate(180deg)",
+            }}
+          />
         </Box>
         <Flex
           direction={"column"}
           align={"center"}
           justify={"center"}
-          css={{ height: "95vh" }}
+          css={{ height: "90vh" }}
         >
           <Flex
             justify={"between"}
@@ -185,8 +210,8 @@ const OneVsOne = () => {
       <FixedBgWrapper
         css={{
           bottom: "0px",
-          background: "url('/images/Scissor.png') no-repeat center top",
-          height: "300px",
+          background: `url(${userMoveImage}) no-repeat center top`,
+          height: winnerRoundRecord ? "350px" : "200px",
         }}
       >
         <Box />

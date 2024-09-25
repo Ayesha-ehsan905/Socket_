@@ -6,6 +6,7 @@ type AlertDTO = {
   text: string;
   severity: "success" | "error" | "info" | "warning";
   onClose?: (status: boolean) => void;
+  isClose?: boolean;
 };
 
 const Overlay = styled(Box, {
@@ -40,7 +41,7 @@ const CloseButton = styled("button", {
   cursor: "pointer",
 });
 
-const Alert = ({ open, text, severity, onClose }: AlertDTO) => {
+const Alert = ({ open, text, severity, onClose, isClose }: AlertDTO) => {
   const handleClose = () => {
     onClose?.(false);
   };
@@ -55,7 +56,7 @@ const Alert = ({ open, text, severity, onClose }: AlertDTO) => {
           left: "50%",
         }}
       >
-        <CloseButton onClick={handleClose}>&times;</CloseButton>
+        {!isClose && <CloseButton onClick={handleClose}>&times;</CloseButton>}
         <h3>{severity}</h3>
         <p>{text}</p>
       </SnackbarContainer>
