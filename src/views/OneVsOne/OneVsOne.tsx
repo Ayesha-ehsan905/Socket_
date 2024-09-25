@@ -39,16 +39,7 @@ const OneVsOne = () => {
     null
   );
   const [winnerRoundRecord, setWinnerRoundRecord] =
-    useState<null | WinnerRoundRecordDTO>({
-      winner: {
-        chatId: "3",
-        inGame: false,
-        move: UserMove.PAPER,
-        roundsPlayed: 3,
-        roundsWon: 2,
-      },
-      isDraw: false,
-    });
+    useState<null | WinnerRoundRecordDTO>();
   const { socket, disconnectSocketEvent } = useSocket();
   const [roundCount, setRoundCount] = useState(1);
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%

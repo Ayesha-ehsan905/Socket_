@@ -7,7 +7,7 @@ import LoadingDots from "./component/LoadingDots";
 import { GameStartDTO, useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
-import { BackgroundCardCSS } from "../../styles/style";
+// import { BackgroundCardCSS } from "../../styles/style";
 
 const MatchingOpponent = () => {
   const { socket, disconnectSocketEvent } = useSocket();
@@ -15,8 +15,16 @@ const MatchingOpponent = () => {
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
-  const chat_id = localStorage.getItem("chatId");
-  // console.log(chat_id, "chat_id from matching");
+  // const chat_id = localStorage.getItem("chatId");
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const app = (window as any).Telegram?.WebApp;
+
+  app.ready();
+
+  // Check if initDataUnsafe and user exist
+  // const chatId = app.initDataUnsafe?.user.chat.id;
+  const user = app.initDataUnsafe?.user;
 
   useEffect(() => {
     if (gameRoomInfo) {
@@ -25,13 +33,13 @@ const MatchingOpponent = () => {
         setFade(false);
         setTimeout(() => {
           navigate(routes.One_one, {
-            state: { gameRoomKey: gameRoomInfo?.room, chatId: chat_id },
+            state: { gameRoomKey: gameRoomInfo?.room, chatId: user?.id },
           }); //wait for 1 sec then navigate
         }, 2000);
       }, 4000);
       return () => clearTimeout(timer);
     }
-  }, [chat_id, gameRoomInfo, navigate]);
+  }, [gameRoomInfo, navigate, user?.id]);
 
   useEffect(() => {
     if (!gameRoomInfo) {
@@ -65,8 +73,8 @@ const MatchingOpponent = () => {
     >
       <Box
         css={{
-          ...BackgroundCardCSS,
-          background: "url('/images/MatchingOponent.png')",
+          background: "url('/images/MatchingOponent.png') ",
+          backgroundSize: "cover",
         }}
       >
         <Flex

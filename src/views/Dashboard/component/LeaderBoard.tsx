@@ -22,17 +22,15 @@ const LeaderBoard = () => {
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
   // const { chatId } = useTelegram();
   const navigate = useNavigate();
-  // console.log(chatId, "chatid");
 
-  // const chat_id = chatId;
-  // console.log(chat_id, "from leaderboard");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = (window as any).Telegram?.WebApp;
 
   app.ready();
 
   // Check if initDataUnsafe and user exist
-  const chatId = app.initDataUnsafe?.user.chat.id;
+  // const chatId = app.initDataUnsafe?.user.chat.id;
+  const user = app.initDataUnsafe?.user;
 
   const LeaderBoardMenus = [
     { name: "Home", icon: HomeIcon, path: routes.dashboard },
@@ -44,8 +42,8 @@ const LeaderBoard = () => {
     // if (chatId) {
     if (path === routes.matching_screen && pathname !== path) {
       // Emit the event only if it's the "1v1" menu and we're not already on the same path
-      socket.emit(SocketEvents.REGISTER_CHAT_ID, { chatId });
-      socket.emit(SocketEvents.SEARCH_GAME, { chatId });
+      socket.emit(SocketEvents.REGISTER_CHAT_ID, user);
+      socket.emit(SocketEvents.SEARCH_GAME, { chatId: user?.id });
     }
     navigate(path);
     // } else {
@@ -61,6 +59,8 @@ const LeaderBoard = () => {
         >
           Leaderboard
         </Box>
+        <div>user id:{user?.id}</div>
+
         <Flex direction={"column"} wrap={"wrap"}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
             <LeaderBoardCss key={num} css={{ mt: "15px" }}>
