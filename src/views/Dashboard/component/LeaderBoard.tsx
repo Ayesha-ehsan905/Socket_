@@ -15,21 +15,18 @@ import { FixedBgWrapper } from "../../../styles/style";
 // import { useTelegram } from "../../../hooks/useTelegram";
 import { useState } from "react";
 import Alert from "../../../components/Popup";
+import { useTelegram } from "../../../hooks/useTelegram";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
   const { socket } = useSocket();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
-  // const { chatId } = useTelegram();
+  const { chatId } = useTelegram();
   const navigate = useNavigate();
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = (window as any).Telegram?.WebApp;
-
   app.ready();
-
   // Check if initDataUnsafe and user exist
-  // const chatId = app.initDataUnsafe?.user.chat.id;
   const user = app.initDataUnsafe?.user;
 
   const LeaderBoardMenus = [
@@ -43,7 +40,7 @@ const LeaderBoard = () => {
     if (path === routes.matching_screen && pathname !== path) {
       // Emit the event only if it's the "1v1" menu and we're not already on the same path
       socket.emit(SocketEvents.REGISTER_CHAT_ID, user);
-      socket.emit(SocketEvents.SEARCH_GAME, { chatId: user?.id });
+      socket.emit(SocketEvents.SEARCH_GAME, { chatId });
     }
     navigate(path);
     // } else {
@@ -59,7 +56,7 @@ const LeaderBoard = () => {
         >
           Leaderboard
         </Box>
-        <div>user id:{user?.id}</div>
+        <div>user id:{chatId}</div>
 
         <Flex direction={"column"} wrap={"wrap"}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
