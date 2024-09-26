@@ -20,8 +20,8 @@ function App() {
     connectSocket();
 
     // Listen for socket error event
-    socket.on(SocketEvents.ERROR, (errorMessage: string) => {
-      setErrorAlert(errorMessage); // Set the error message to trigger the alert
+    socket.on(SocketEvents.ERROR, (data) => {
+      setErrorAlert(data?.message); // Set the error message to trigger the alert
     });
 
     return () => {
@@ -46,7 +46,7 @@ function App() {
       </Suspense>
       {errorAlert && (
         <Alert
-          isClose={true}
+          // isClose={true}
           open={!!errorAlert}
           onClose={() => setErrorAlert(null)}
           severity="error"

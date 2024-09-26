@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
-import {
-  AvatarImg,
-  BackgroundCardCSS,
-  FixedBgWrapper,
-  VerticalLine,
-} from "../../styles/style";
-import {
-  PaperIcon,
-  RandomIcon,
-  ScissorIcon,
-  StoneIcon,
-} from "../../components/icons";
+import { AvatarImg, FixedBgWrapper, VerticalLine } from "../../styles/style";
 import { styled } from "../../styles";
 import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
@@ -20,6 +9,7 @@ import { useLocation } from "react-router-dom";
 import { useSocket } from "../../hooks/useSocket";
 import { WinnerRoundRecordType } from "../../utilis/type";
 import { getSelectedImages } from "../../utilis/function";
+import GameSection from "./component/GameSection";
 
 export type GameOverDTO = {
   winner: number;
@@ -106,142 +96,101 @@ const OneVsOne = () => {
         height: "100vh",
         position: "relative",
         pointerEvents: isGameOverModal ? "none" : "auto",
+        background: "url('/images/1v1 Round Start.png')",
       }}
     >
-      <Box
+      <FixedBgWrapper
         css={{
-          ...BackgroundCardCSS,
-          background: "url('/images/1v1 Round Start.png')",
+          position: "fixed",
+          height: winnerRoundRecord ? "min(40vh, 35vh)" : "min(20vh,15vh)",
+          // height: "100px",
+          top: 0,
         }}
       >
         <Box
+          as="img"
+          src={opponentMoveImage}
           css={{
-            position: "fixed",
-            height: winnerRoundRecord ? "25vh" : "15vh",
-            // height: "100px",
-            top: 0,
-            left: "36%",
+            height: "100%",
+            transform: winnerRoundRecord ? "rotate(180deg)" : "",
           }}
-        >
-          <Box
-            as="img"
-            src={opponentMoveImage}
-            css={{
-              height: "100%",
-              width: "100px",
-              transform: winnerRoundRecord ? "rotate(180deg)" : "",
-            }}
-          />
-        </Box>
-        <Flex
-          direction={"column"}
-          align={"center"}
-          justify={"center"}
-          css={{ height: "90vh" }}
-        >
-          <Flex
-            justify={"between"}
-            direction={"row"}
-            align={"center"}
-            css={{
-              width: "100vw",
-              padding: "0 24px",
-              boxSizing: "border-box",
-            }}
-          >
-            <Flex
-              direction={"column"}
-              css={{ height: "100%", justifyContent: "center" }}
-            >
-              <VerticalLine
-                css={{
-                  height: "50%",
-                  position: "relative",
-                }}
-              >
-                {/* <TimerBar css={{ height: `${heightPercentage}%` }} /> */}
-                <TimerBar css={{ height: "20%" }} />
-              </VerticalLine>
-              <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
-                {timeLeft}
-              </Box>
-            </Flex>
-            <Box as="h3" css={{ fontSize: "40px" }}>
-              {winnerRoundRecord
-                ? winnerRoundRecord?.isDraw
-                  ? "Draw"
-                  : winnerRoundRecord?.winnerChatId === user_chatId
-                  ? "You Won"
-                  : "You Lost"
-                : ` Round ${roundCount}`}
-            </Box>
-            <Flex
-              direction={"column"}
-              align={"center"}
-              css={{
-                background: "$grey4",
-                width: "10px",
-                borderRadius: "20px",
-              }}
-            >
-              <AvatarImg src="/images/avatar.png" />
-
-              <ProgressBar
-                heightPercentage={heightPercentage}
-                position={"top"}
-              />
-              <Box
-                as="span"
-                css={{ borderTop: "2px solid black", width: "20px" }}
-              />
-              <ProgressBar
-                heightPercentage={heightPercentage}
-                position={"bottom"}
-              />
-
-              <AvatarImg src="/images/avatar.png" />
-            </Flex>
-          </Flex>
-        </Flex>
-      </Box>
-
-      {/* Game Section */}
-      <FixedBgWrapper
-        css={{
-          bottom: "0px",
-          background: `url(${userMoveImage}) no-repeat center top`,
-          height: winnerRoundRecord ? "35vh" : "20vh",
-          // height: "200px",
-        }}
+        />
+      </FixedBgWrapper>
+      <Flex
+        direction={"column"}
+        align={"center"}
+        justify={"center"}
+        css={{ height: "90vh" }}
       >
-        <Box />
-
         <Flex
+          justify={"between"}
           direction={"row"}
           align={"center"}
-          justify={"center"}
-          css={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
+          css={{
+            width: "100vw",
+            padding: "0 24px",
+            boxSizing: "border-box",
+          }}
         >
-          <StoneIcon
-            customColor={userSelectedMove === UserMove.ROCK}
-            onClick={() => handleUserMove(UserMove.ROCK)}
-          />
-          <Flex direction={"column"} css={{ gap: "2rem" }} align={"center"}>
-            <PaperIcon
-              customColor={userSelectedMove === UserMove.PAPER}
-              onClick={() => handleUserMove(UserMove.PAPER)}
-            />
-            <RandomIcon
-              customColor={userSelectedMove === UserMove.RANDOM}
-              onClick={() => handleUserMove(UserMove.RANDOM)}
-            />
+          <Flex
+            direction={"column"}
+            css={{ height: "100%", justifyContent: "center" }}
+          >
+            <VerticalLine
+              css={{
+                height: "50%",
+                position: "relative",
+              }}
+            >
+              {/* <TimerBar css={{ height: `${heightPercentage}%` }} /> */}
+              <TimerBar css={{ height: "20%" }} />
+            </VerticalLine>
+            <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
+              {timeLeft}
+            </Box>
           </Flex>
-          <ScissorIcon
-            customColor={userSelectedMove === UserMove.SCISSOR}
-            onClick={() => handleUserMove(UserMove.SCISSOR)}
-          />
+          <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>
+            {winnerRoundRecord
+              ? winnerRoundRecord?.isDraw
+                ? "Draw"
+                : winnerRoundRecord?.winnerChatId === user_chatId
+                ? "You Won"
+                : "You Lost"
+              : ` Round ${roundCount}`}
+          </Box>
+          <Flex
+            direction={"column"}
+            align={"center"}
+            css={{
+              background: "$grey4",
+              width: "10px",
+              borderRadius: "20px",
+            }}
+          >
+            <AvatarImg src="/images/avatar.png" />
+
+            <ProgressBar heightPercentage={heightPercentage} position={"top"} />
+            <Box
+              as="span"
+              css={{ borderTop: "2px solid black", width: "20px" }}
+            />
+            <ProgressBar
+              heightPercentage={heightPercentage}
+              position={"bottom"}
+            />
+
+            <AvatarImg src="/images/avatar.png" />
+          </Flex>
         </Flex>
-      </FixedBgWrapper>
+      </Flex>
+
+      {/* Game Section */}
+      <GameSection
+        userSelectedMove={userSelectedMove}
+        handleUserMove={handleUserMove}
+        userMoveImage={userMoveImage}
+        isWinnerRoundRecordExist={!!winnerRoundRecord}
+      />
       {isGameOverModal && (
         <WinOverLay gameOverRecord={gameOverResult} userChatId={user_chatId} />
       )}
@@ -280,11 +229,6 @@ const ProgressBar = ({
   );
 };
 
-export const GameSection = styled(Box, {
-  background: "url('/images/Stone.png') no-repeat center top",
-  backgroundSize: "contain",
-  height: "300px",
-});
 const TimerBar = styled(Box, {
   position: "absolute",
   bottom: 0,

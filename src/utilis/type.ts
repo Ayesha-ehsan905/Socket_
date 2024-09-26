@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { UserMove } from "./enum";
 
 export type useAvatarProps = {
   label: string | ReactNode;
@@ -22,4 +23,10 @@ export type WinnerRoundRecordType = {
   player2: Player;
   winnerChatId: string;
   looserChatId: string;
+};
+export type GameSectionProps = {
+  userMoveImage: string;
+  userSelectedMove: string | null;
+  handleUserMove: (move: UserMove) => void;
+  isWinnerRoundRecordExist: boolean;
 };

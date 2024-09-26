@@ -25,9 +25,12 @@ const LeaderBoard = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = (window as any).Telegram?.WebApp;
-  app.ready();
-  // Check if initDataUnsafe and user exist
-  const user = app.initDataUnsafe?.user;
+  if (app) {
+    app.ready();
+  }
+
+  // Safely access user data from Telegram WebApp
+  const user = app?.initDataUnsafe?.user;
 
   const LeaderBoardMenus = [
     { name: "Home", icon: HomeIcon, path: routes.dashboard },
