@@ -18,7 +18,7 @@ import { useTelegram } from "../../../hooks/useTelegram";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
-  const { socket } = useSocket();
+  const { socket, isSocketConnected, connectSocket } = useSocket();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
   //current user telegram chat id
   const { chatId } = useTelegram();
@@ -39,12 +39,13 @@ const LeaderBoard = () => {
     { name: "Profile", icon: Profile, path: "" },
   ];
   const handleMenuClick = (path: string) => {
-    if (path === routes.matching_screen && pathname !== path) {
-      // Emit the event only if it's the "1v1" menu and we're not already on the same path
+    if (path === routes.matching_screen) {
+      //if socket is not connected connect and then emit the event
+      if (!isSocketConnected) connectSocket();
       socket.emit(SocketEvents.REGISTER_CHAT_ID, user);
       socket.emit(SocketEvents.SEARCH_GAME, { chatId });
+      navigate(path);
     }
-    navigate(path);
   };
   return (
     <>
