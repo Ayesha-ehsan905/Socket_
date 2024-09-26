@@ -6,10 +6,10 @@ import { styled } from "../../styles";
 import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
-import { useSocket } from "../../hooks/useSocket";
 import { WinnerRoundRecordType } from "../../utilis/type";
 import { getSelectedImages } from "../../utilis/function";
 import GameSection from "./component/GameSection";
+import { useSocketContext } from "../../components/SocketContext/SocketContext";
 
 export type GameOverDTO = {
   winner: number;
@@ -30,7 +30,8 @@ const OneVsOne = () => {
   );
   const [winnerRoundRecord, setWinnerRoundRecord] =
     useState<null | WinnerRoundRecordType>();
-  const { socket, disconnectSocketEvent } = useSocket();
+  const { socket, disconnectSocketEvent, isSocketConnected } =
+    useSocketContext();
   const [roundCount, setRoundCount] = useState(1);
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
   useEffect(() => {
@@ -42,6 +43,8 @@ const OneVsOne = () => {
       return () => clearInterval(timer);
     }
   }, [timeLeft]);
+  console.log(isSocketConnected, "isSocketConnected");
+
   useEffect(() => {
     if (userSelectedMove) {
       socket.on(SocketEvents.ROUND_RESULT, (data) => {

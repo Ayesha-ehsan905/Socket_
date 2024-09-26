@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
-import { useSocket } from "../../hooks/useSocket";
 import { SocketEvents } from "../../utilis/enum";
 import LoadingDots from "./component/LoadingDots";
 import { GameStartType, useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
 import { useTelegram } from "../../hooks/useTelegram";
+import { useSocketContext } from "../../components/SocketContext/SocketContext";
 
 const MatchingOpponent = () => {
-  const { socket, disconnectSocketEvent } = useSocket();
+  const { socket, isSocketConnected, disconnectSocketEvent } =
+    useSocketContext();
   const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartType>(null);
   const [OpponentName, setOpponentName] = useState<string | null>(null);
   const { chatId } = useTelegram(); //current user chat_id
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
-
+  console.log(isSocketConnected, "isSocketConnected");
   useEffect(() => {
     if (!gameRoomInfo) {
       socket.on(SocketEvents.WAITING, (data) => {

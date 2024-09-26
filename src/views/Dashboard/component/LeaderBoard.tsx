@@ -9,16 +9,16 @@ import {
 } from "../../../components/icons";
 import { styled } from "../../../styles";
 import { routes } from "../../../utilis/constant";
-import { useSocket } from "../../../hooks/useSocket";
 import { SocketEvents } from "../../../utilis/enum";
 import { FixedBgWrapper } from "../../../styles/style";
 import { useState } from "react";
 import Alert from "../../../components/Popup";
 import { useTelegram } from "../../../hooks/useTelegram";
+import { useSocketContext } from "../../../components/SocketContext/SocketContext";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
-  const { socket, isSocketConnected, connectSocket } = useSocket();
+  const { socket, isSocketConnected, connectSocket } = useSocketContext();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
   //current user telegram chat id
   const { chatId } = useTelegram();
@@ -38,13 +38,18 @@ const LeaderBoard = () => {
     { name: "Tournament", icon: TournamentIcon, path: "" },
     { name: "Profile", icon: Profile, path: "" },
   ];
+  console.log("socket", isSocketConnected);
   const handleMenuClick = (path: string) => {
     if (path === routes.matching_screen) {
       //if socket is not connected connect and then emit the event
-      if (!isSocketConnected) connectSocket();
-      socket.emit(SocketEvents.REGISTER_CHAT_ID, user);
-      socket.emit(SocketEvents.SEARCH_GAME, { chatId });
-      navigate(path);
+      if (!isSocketConnected) {
+        connectSocket();
+      }
+      if (isSocketConnected) {
+        socket.emit(SocketEvents.REGISTER_CHAT_ID, user);
+        socket.emit(SocketEvents.SEARCH_GAME, { chatId });
+        navigate(path);
+      }
     }
   };
   return (

@@ -5,16 +5,16 @@ import { globalStyles } from "./styles";
 import { routes } from "./utilis/constant";
 import "./assets/font/Baloo/font.css";
 import "./assets/font/Gilmer/font.css";
-import { useSocket } from "./hooks/useSocket";
 import Alert from "./components/Popup";
 import { SocketEvents } from "./utilis/enum";
+import { useSocketContext } from "./components/SocketContext/SocketContext";
 const SplashScreen = lazy(() => import("./views/SplashScreen"));
 const Dashboard = lazy(() => import("./views/Dashboard"));
 const MatchingOpponent = lazy(() => import("./views/MatchingOpponent"));
 const OneVsOne = lazy(() => import("./views/OneVsOne"));
 function App() {
   globalStyles();
-  const { socket, connectSocket, disconnectSocketEvent } = useSocket();
+  const { socket, connectSocket, disconnectSocketEvent } = useSocketContext();
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
   useEffect(() => {
     connectSocket();
