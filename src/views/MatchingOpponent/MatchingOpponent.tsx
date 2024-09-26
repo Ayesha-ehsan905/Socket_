@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { useSocket } from "../../hooks/useSocket";
@@ -79,22 +79,23 @@ const MatchingOpponent = () => {
         transition: "opacity 1s ease-in-out",
       }}
     >
-      <Box
+      {/* <Box
         css={{
           background: "url('/images/MatchingOponent.png') ",
           backgroundSize: "cover",
         }}
-      >
+      > */}
+      <MatchingOponentLayout>
         <Flex
           direction={"column"}
           align={"center"}
           justify={"center"}
-          css={{ height: "100vh" }}
+          css={{ height: "100vh", position: "relative" }}
         >
           {gameRoomInfo ? (
             <>
               <UserAvatar label={OpponentName} image="/images/avatar_1.png" />
-              <Box as="span" css={{ fontSize: "56px", margin: "60px 0" }}>
+              <Box as="span" css={{ fontSize: "5vh", margin: "5vh 0" }}>
                 Get Ready
               </Box>
             </>
@@ -104,7 +105,7 @@ const MatchingOpponent = () => {
                 label={<LoadingDots />}
                 image="/images/Mask-group.png"
               />
-              <Box as="span" css={{ fontSize: "120px", marginTop: "60px" }}>
+              <Box as="span" css={{ fontSize: "11vh", margin: "5vh 0" }}>
                 VS
               </Box>
             </>
@@ -112,7 +113,8 @@ const MatchingOpponent = () => {
 
           <UserAvatar label={"You"} image="/images/avatar_1.png" />
         </Flex>
-      </Box>
+      </MatchingOponentLayout>
+      {/* </Box> */}
     </Box>
   );
 };
@@ -128,6 +130,28 @@ const UserAvatar = (props: useAvatarProps) => {
         {label}
       </Box>
     </Flex>
+  );
+};
+
+export const MatchingOponentLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <Box css={{ position: "relative" }}>
+      <Box
+        as="img"
+        css={{
+          zIndex: 0,
+          position: "absolute",
+          width: "100vw",
+          height: "100vh",
+        }}
+        src="/images/MatchingOponent.png"
+      />
+      <Box css={{ zIndex: 10 }}> {children}</Box>
+    </Box>
   );
 };
 

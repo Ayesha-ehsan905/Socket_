@@ -16,6 +16,13 @@ const GameSection = (props: GameSectionProps) => {
     handleUserMove,
     isWinnerRoundRecordExist,
   } = props;
+
+  const getRandomMove = () => {
+    const moves = [UserMove.ROCK, UserMove.PAPER, UserMove.SCISSOR];
+    const randomIndex = Math.floor(Math.random() * moves.length);
+    return moves[randomIndex];
+  };
+
   return (
     <FixedBgWrapper
       css={{
@@ -41,7 +48,7 @@ const GameSection = (props: GameSectionProps) => {
           />
           <RandomIcon
             customColor={userSelectedMove === UserMove.RANDOM}
-            onClick={() => handleUserMove(UserMove.RANDOM)}
+            onClick={() => handleUserMove(getRandomMove())}
           />
         </Flex>
         <ScissorIcon
