@@ -25,6 +25,8 @@ const OneVsOne = () => {
   const [roundRecord, setRoundRecord] = useState<RoundRecord | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isGameOverModal, setisGameOverModal] = useState(false);
+  const [opponetWinCount, setOpponetWinCount] = useState(0);
+  const [userWinCount, setUserWinCount] = useState(0);
 
   const [userSelectedMove, setUserSelectedMove] = useState<null | string>(null); //user move
   //game over result
@@ -32,6 +34,8 @@ const OneVsOne = () => {
     null
   );
 
+  console.log(opponetWinCount, "opponetWinCount");
+  console.log(userWinCount, "userWinCount");
   //each round winner record
   const [winnerRoundRecord, setWinnerRoundRecord] =
     useState<null | WinnerRoundRecordType>();
@@ -46,13 +50,27 @@ const OneVsOne = () => {
       return () => clearInterval(timer);
     }
   }, [timeLeft]);
-  console.log("socket  connection from Match", socket.connected);
 
   //call this for every new round
   useEffect(() => {
-    handleRoundRecord();
+    console.log("first time call");
+    socket.on(SocketEvents.ROUND_START, (data) => {
+      console.log(data, "round started");
+      setRoundRecord(data);
+    });
+    return () => {
+      socket.off(SocketEvents.ROUND_START);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (winnerRoundRecord && !winnerRoundRecord?.isDraw) {
+      if (winnerRoundRecord?.winnerChatId === user_chatId)
+        setUserWinCount((prev) => prev + 1);
+      else setOpponetWinCount((prev) => prev + 1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [winnerRoundRecord]);
 
   useEffect(() => {
     if (userSelectedMove) {
@@ -61,8 +79,17 @@ const OneVsOne = () => {
         console.log("User", userSelectedMove);
 
         setWinnerRoundRecord(JSON.parse(data));
+
+        // Delay calling the next event after 2 seconds (2000ms)
+        setTimeout(() => {
+          socket.on(SocketEvents.ROUND_START, (data) => {
+            console.log(data, "round started");
+            setRoundRecord(data);
+            setWinnerRoundRecord(null); //after reset the winner record
+          });
+        }, 2000); // Adjust the delay as per your requirement
       });
-      handleRoundRecord();
+
       socket.on(
         SocketEvents.GAME_OVER,
         (data: SetStateAction<GameOverDTO | null>) => {
@@ -77,11 +104,13 @@ const OneVsOne = () => {
       return () => {
         socket.off(SocketEvents.ROUND_RESULT);
         socket.off(SocketEvents.GAME_OVER);
+
+        // Clear the timeout when the component unmounts
       };
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userSelectedMove]);
+
   const handleUserMove = (userMove: string) => {
     setWinnerRoundRecord(null); ///reseting the winner id after every move
     socket.emit(SocketEvents.PLAYER_MOVE, {
@@ -92,14 +121,6 @@ const OneVsOne = () => {
     setUserSelectedMove(userMove);
   };
 
-  const handleRoundRecord = () => {
-    setTimeout(() => {
-      socket.on(SocketEvents.ROUND_START, (data) => {
-        console.log(data, "round started");
-        setRoundRecord(data);
-      });
-    }, 200);
-  };
   let opponentMove = "";
   //check if you are player1 then pick player 2 move
 
@@ -112,6 +133,7 @@ const OneVsOne = () => {
     userSelectedMove as UserMove, // Casting to UserMove
     opponentMove as UserMove
   );
+
   return (
     <Box
       css={{
@@ -165,8 +187,8 @@ const OneVsOne = () => {
                 position: "relative",
               }}
             >
-              {/* <TimerBar css={{ height: `${heightPercentage}%` }} /> */}
-              <TimerBar css={{ height: "20%" }} />
+              <TimerBar css={{ height: `${heightPercentage}%` }} />
+              {/* <TimerBar css={{ height: "20%" }} /> */}
             </VerticalLine>
             <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
               {timeLeft}
@@ -195,14 +217,23 @@ const OneVsOne = () => {
             }}
           >
             <AvatarImg src="/images/avatar.png" />
-
-            <ProgressBar heightPercentage={heightPercentage} position={"top"} />
+            {/* opponent win stake */}
+            <ProgressBar
+              heightPercentage={
+                (opponetWinCount / (roundRecord?.totalRounds ?? 0)) * 100
+              }
+              position={"top"}
+            />
             <Box
               as="span"
               css={{ borderTop: "2px solid black", width: "20px" }}
             />
+            {/* you win stake */}
+
             <ProgressBar
-              heightPercentage={heightPercentage}
+              heightPercentage={
+                (userWinCount / (roundRecord?.totalRounds ?? 0)) * 100
+              }
               position={"bottom"}
             />
 

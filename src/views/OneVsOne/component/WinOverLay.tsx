@@ -19,6 +19,7 @@ const WinOverLay = (props: WinOverLayProps) => {
   const totalRounds =
     (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.totalDraw ?? 0);
   const lostRounds = totalRounds - (gameOverRecord?.winnerRoundWon ?? 0);
+  const isMatchDraw = gameOverRecord?.totalDraw === gameOverRecord?.totalRounds;
   const navigate = useNavigate();
   return (
     <WinOverlay>
@@ -47,8 +48,11 @@ const WinOverLay = (props: WinOverLayProps) => {
             </Box>
           </Flex>
           <Box as="span" css={{ fontSize: "24px" }}>
-            {gameOverRecord &&
-              (gameOverRecord?.winner === userChatId ? "You Win" : "You Loss")}
+            {gameOverRecord && isMatchDraw
+              ? "Match Draw"
+              : gameOverRecord?.winner === userChatId
+              ? "You Win"
+              : "You Loss"}
           </Box>
           <Box as="span" css={{ fontSize: "64px" }}>
             {gameOverRecord?.winner === userChatId
