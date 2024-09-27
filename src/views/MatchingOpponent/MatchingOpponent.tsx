@@ -7,31 +7,27 @@ import { GameStartType, useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
 import { useTelegram } from "../../hooks/useTelegram";
-import { useSocketContext } from "../../components/SocketContext/SocketContext";
+import { useSocketContext } from "../../components/SocketContext/useSocketContext";
 
 const MatchingOpponent = () => {
-  const { socket, isSocketConnected, disconnectSocketEvent } =
-    useSocketContext();
+  const { socket } = useSocketContext();
   const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartType>(null);
   const [OpponentName, setOpponentName] = useState<string | null>(null);
   const { chatId } = useTelegram(); //current user chat_id
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
-  console.log(isSocketConnected, "isSocketConnected");
+  console.log("socket  connection from Matching opponenet", socket.connected);
+
   useEffect(() => {
     if (!gameRoomInfo) {
-      socket.on(SocketEvents.WAITING, (data) => {
-        console.log("SocketEvents.WAITING:", data);
-      });
       socket.on(SocketEvents.GAME_START, (data) => {
         console.log("gameStart", data);
         setGameRoomInfo(data);
       });
 
       return () => {
-        disconnectSocketEvent(SocketEvents.WAITING);
-        disconnectSocketEvent(SocketEvents.GAME_START);
+        socket.off(SocketEvents.GAME_START);
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,12 +76,6 @@ const MatchingOpponent = () => {
         transition: "opacity 1s ease-in-out",
       }}
     >
-      {/* <Box
-        css={{
-          background: "url('/images/MatchingOponent.png') ",
-          backgroundSize: "cover",
-        }}
-      > */}
       <MatchingOponentLayout>
         <Flex
           direction={"column"}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { AvatarImg, FixedBgWrapper, VerticalLine } from "../../styles/style";
@@ -6,10 +6,10 @@ import { styled } from "../../styles";
 import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
-import { WinnerRoundRecordType } from "../../utilis/type";
+import { RoundRecord, WinnerRoundRecordType } from "../../utilis/type";
 import { getSelectedImages } from "../../utilis/function";
 import GameSection from "./component/GameSection";
-import { useSocketContext } from "../../components/SocketContext/SocketContext";
+import { useSocketContext } from "../../components/SocketContext/useSocketContext";
 
 export type GameOverDTO = {
   winner: number;
@@ -21,18 +21,21 @@ const OneVsOne = () => {
   const location = useLocation();
   const gameRoomKey = location.state?.gameRoomKey;
   const user_chatId = location.state?.chatId;
-
+  // each round record
+  const [roundRecord, setRoundRecord] = useState<RoundRecord | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isGameOverModal, setisGameOverModal] = useState(false);
-  const [userSelectedMove, setUserSelectedMove] = useState<null | string>(null);
+
+  const [userSelectedMove, setUserSelectedMove] = useState<null | string>(null); //user move
+  //game over result
   const [gameOverResult, setGameOverResult] = useState<null | GameOverDTO>(
     null
   );
+
+  //each round winner record
   const [winnerRoundRecord, setWinnerRoundRecord] =
     useState<null | WinnerRoundRecordType>();
-  const { socket, disconnectSocketEvent, isSocketConnected } =
-    useSocketContext();
-  const [roundCount, setRoundCount] = useState(1);
+  const { socket } = useSocketContext();
   const heightPercentage = (timeLeft / 30) * 100; // Full height is 100%
   useEffect(() => {
     if (timeLeft < 30) {
@@ -43,28 +46,37 @@ const OneVsOne = () => {
       return () => clearInterval(timer);
     }
   }, [timeLeft]);
-  console.log(isSocketConnected, "isSocketConnected");
+  console.log("socket  connection from Match", socket.connected);
+
+  //call this for every new round
+  useEffect(() => {
+    handleRoundRecord();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (userSelectedMove) {
-      socket.on(SocketEvents.ROUND_RESULT, (data) => {
+      socket.on(SocketEvents.ROUND_RESULT, (data: string) => {
         console.log("ROUND_RESULT", data);
         console.log("User", userSelectedMove);
 
         setWinnerRoundRecord(JSON.parse(data));
-        setRoundCount((prevCount) => prevCount + 1);
       });
-      socket.on(SocketEvents.GAME_OVER, (data) => {
-        console.log("GAME_OVER", data);
-        setTimeout(() => {
-          setisGameOverModal(true);
-        }, 2000);
-        setGameOverResult(data);
-      });
+      handleRoundRecord();
+      socket.on(
+        SocketEvents.GAME_OVER,
+        (data: SetStateAction<GameOverDTO | null>) => {
+          console.log("GAME_OVER", data);
+          setTimeout(() => {
+            setisGameOverModal(true);
+          }, 2000);
+          setGameOverResult(data);
+        }
+      );
 
       return () => {
-        disconnectSocketEvent(SocketEvents.ROUND_RESULT);
-        disconnectSocketEvent(SocketEvents.GAME_OVER);
+        socket.off(SocketEvents.ROUND_RESULT);
+        socket.off(SocketEvents.GAME_OVER);
       };
     }
 
@@ -80,6 +92,14 @@ const OneVsOne = () => {
     setUserSelectedMove(userMove);
   };
 
+  const handleRoundRecord = () => {
+    setTimeout(() => {
+      socket.on(SocketEvents.ROUND_START, (data) => {
+        console.log(data);
+        setRoundRecord(data);
+      });
+    }, 200);
+  };
   let opponentMove = "";
   //check if you are player1 then pick player 2 move
 
@@ -153,13 +173,17 @@ const OneVsOne = () => {
             </Box>
           </Flex>
           <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>
-            {winnerRoundRecord
-              ? winnerRoundRecord?.isDraw
-                ? "Draw"
-                : winnerRoundRecord?.winnerChatId === user_chatId
-                ? "You Won"
-                : "You Lost"
-              : ` Round ${roundCount}`}
+            {
+              roundRecord
+                ? `Round NUmber` // Check if roundRecord exists, show the round number
+                : winnerRoundRecord //check if round record
+                ? winnerRoundRecord.isDraw
+                  ? "Draw" // If the game was a draw
+                  : winnerRoundRecord.winnerChatId === user_chatId
+                  ? "You Won" // If the user won the round
+                  : "You Lost" // If the user lost the round
+                : "Game Starting" // If no round record, indicate that the game is starting
+            }
           </Box>
           <Flex
             direction={"column"}

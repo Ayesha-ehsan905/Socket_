@@ -30,3 +30,8 @@ export type GameSectionProps = {
   handleUserMove: (move: UserMove) => void;
   isWinnerRoundRecordExist: boolean;
 };
+export type RoundRecord = {
+  roundTimeLimit: number;
+  totalRounds: number;
+  roundNo: number;
+};

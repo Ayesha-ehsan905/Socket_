@@ -14,23 +14,15 @@ import { FixedBgWrapper } from "../../../styles/style";
 import { useState } from "react";
 import Alert from "../../../components/Popup";
 import { useTelegram } from "../../../hooks/useTelegram";
-import { useSocketContext } from "../../../components/SocketContext/SocketContext";
+import { useSocketContext } from "../../../components/SocketContext/useSocketContext";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
-  const { socket, isSocketConnected, connectSocket } = useSocketContext();
+  const { socket, isSocketConnected } = useSocketContext();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
   //current user telegram chat id
   const { chatId } = useTelegram();
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const app = (window as any).Telegram?.WebApp;
-  if (app) {
-    app.ready();
-  }
-
-  // Safely access user data from Telegram WebApp
-  const user = app?.initDataUnsafe?.user;
 
   const LeaderBoardMenus = [
     { name: "Home", icon: HomeIcon, path: routes.dashboard },
@@ -38,18 +30,16 @@ const LeaderBoard = () => {
     { name: "Tournament", icon: TournamentIcon, path: "" },
     { name: "Profile", icon: Profile, path: "" },
   ];
-  console.log("socket", isSocketConnected);
+  console.log("socket  connection from leaderboard ", socket.connected);
   const handleMenuClick = (path: string) => {
     if (path === routes.matching_screen) {
       //if socket is not connected connect and then emit the event
       if (!isSocketConnected) {
-        connectSocket();
+        socket.connect();
       }
-      if (isSocketConnected) {
-        socket.emit(SocketEvents.REGISTER_CHAT_ID, user);
-        socket.emit(SocketEvents.SEARCH_GAME, { chatId });
-        navigate(path);
-      }
+      //ack and reply
+      socket.emit(SocketEvents.SEARCH_GAME, { chatId });
+      navigate(path);
     }
   };
   return (
