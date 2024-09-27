@@ -74,45 +74,49 @@ const OneVsOne = () => {
 
   useEffect(() => {
     if (userSelectedMove) {
+      // Listen to the ROUND_RESULT event after the user makes a move
       socket.on(SocketEvents.ROUND_RESULT, (data: string) => {
         console.log("ROUND_RESULT", data);
         console.log("User", userSelectedMove);
 
         setWinnerRoundRecord(JSON.parse(data));
 
-        // Delay calling the next event after 2 seconds (2000ms)
-        setTimeout(() => {
-          socket.on(SocketEvents.ROUND_START, (data) => {
+        // Delay the next round start by 2 seconds (to display winner/draw)
+        const delayNextRound = setTimeout(() => {
+          // Re-attach ROUND_START listener to handle the next round
+          socket.on(SocketEvents.ROUND_START, (data: RoundRecord) => {
             console.log(data, "round started");
             setRoundRecord(data);
-            setWinnerRoundRecord(null); //after reset the winner record
+            setWinnerRoundRecord(null); // Reset the winner record for the new round
           });
-        }, 2000); // Adjust the delay as per your requirement
+        }, 2000); // 2-second delay
+
+        // Clean up the timeout on component unmount
+        return () => clearTimeout(delayNextRound);
       });
 
+      // Listen to the GAME_OVER event
       socket.on(
         SocketEvents.GAME_OVER,
         (data: SetStateAction<GameOverDTO | null>) => {
           console.log("GAME_OVER", data);
           setTimeout(() => {
             setisGameOverModal(true);
-          }, 2000);
+          }, 2000); // Display game over modal after a delay
           setGameOverResult(data);
         }
       );
 
+      // Clean up event listeners when the component unmounts or userSelectedMove changes
       return () => {
         socket.off(SocketEvents.ROUND_RESULT);
         socket.off(SocketEvents.GAME_OVER);
-
-        // Clear the timeout when the component unmounts
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userSelectedMove]);
 
   const handleUserMove = (userMove: string) => {
-    setWinnerRoundRecord(null); ///reseting the winner id after every move
     socket.emit(SocketEvents.PLAYER_MOVE, {
       move: userMove,
       room: gameRoomKey,
