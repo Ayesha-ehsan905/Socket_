@@ -1,15 +1,15 @@
-import React, { createContext, useEffect, useState } from "react";
-import { SocketEvents } from "../../utilis/enum";
+import React, { createContext, useEffect } from "react";
+// import { SocketEvents } from "../../utilis/enum";
 import { io } from "socket.io-client";
 
 interface SocketContextProps {
   socket: typeof socket;
-  isSocketConnected: boolean;
+  // isSocketConnected: boolean;
   disconnectSocketEvent: (event: string) => void;
 }
 
-// const socketUrl = "http://192.168.101.96:5000/";
-const socketUrl = "https://dev-api.rps.pixelpaddle.com/";
+const socketUrl = "http://192.168.101.96:5000/";
+// const socketUrl = "https://dev-api.rps.pixelpaddle.com/";
 
 const socket = io(socketUrl, { autoConnect: true });
 export const SocketContext = createContext<SocketContextProps | undefined>(
@@ -19,7 +19,7 @@ export const SocketContext = createContext<SocketContextProps | undefined>(
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isSocketConnected, setIsSocketConnected] = useState(false);
+  // const [isSocketConnected, setIsSocketConnected] = useState(false);
 
   const disconnectSocketEvent = (event: string) => {
     socket.off(event); // Remove specific event listeners
@@ -29,17 +29,17 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!socket.connected) {
       socket.connect();
     }
-    socket.on(SocketEvents.CONNECT, (data) => {
-      if (data.message) {
-        setIsSocketConnected(true);
-        console.log("Socket connected successfully");
-      } else console.log("Socket  disconnected ");
-    });
+    // socket.on(SocketEvents.CONNECT, (data) => {
+    //   if (data.message) {
+    //     setIsSocketConnected(true);
+    //     console.log("Socket connected successfully", data);
+    //   } else console.log("Socket  disconnected ");
+    // });
 
-    socket.on(SocketEvents.DISCONNECT, () => {
-      setIsSocketConnected(false);
-      console.log("Socket connected successfully");
-    });
+    // socket.on(SocketEvents.DISCONNECT, () => {
+    //   setIsSocketConnected(false);
+    //   console.log("Socket  disconnected ");
+    // });
 
     return () => {
       socket.disconnect();
@@ -50,7 +50,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     <SocketContext.Provider
       value={{
         socket,
-        isSocketConnected,
+        // isSocketConnected,
         disconnectSocketEvent,
       }}
     >

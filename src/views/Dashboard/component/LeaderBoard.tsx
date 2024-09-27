@@ -18,7 +18,7 @@ import { useSocketContext } from "../../../components/SocketContext/useSocketCon
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
-  const { socket, isSocketConnected } = useSocketContext();
+  const { socket } = useSocketContext();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
   //current user telegram chat id
   const { chatId } = useTelegram();
@@ -34,7 +34,7 @@ const LeaderBoard = () => {
   const handleMenuClick = (path: string) => {
     if (path === routes.matching_screen) {
       //if socket is not connected connect and then emit the event
-      if (!isSocketConnected) {
+      if (socket.connected) {
         socket.connect();
       }
       //ack and reply

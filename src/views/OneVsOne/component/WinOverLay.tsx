@@ -4,9 +4,9 @@ import { Flex } from "../../../components/Flex/Flex";
 import { HomeBlackIcon, Replaycon } from "../../../components/icons";
 import { styled } from "../../../styles";
 import { routes } from "../../../utilis/constant";
-import { useSocket } from "../../../hooks/useSocket";
 import { SocketEvents } from "../../../utilis/enum";
 import { GameOverDTO } from "../OneVsOne";
+import { useSocketContext } from "../../../components/SocketContext/useSocketContext";
 
 export type WinOverLayProps = {
   gameOverRecord: GameOverDTO | null;
@@ -14,7 +14,7 @@ export type WinOverLayProps = {
 };
 const WinOverLay = (props: WinOverLayProps) => {
   const { gameOverRecord, userChatId } = props;
-  const { socket } = useSocket();
+  const { socket } = useSocketContext();
 
   const totalRounds =
     (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.totalDraw ?? 0);

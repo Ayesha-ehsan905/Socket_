@@ -17,7 +17,6 @@ const MatchingOpponent = () => {
 
   const [fade, setFade] = useState(true);
   const navigate = useNavigate();
-  console.log("socket  connection from Matching opponenet", socket.connected);
 
   useEffect(() => {
     if (!gameRoomInfo) {

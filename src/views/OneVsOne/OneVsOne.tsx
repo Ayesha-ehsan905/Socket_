@@ -95,7 +95,7 @@ const OneVsOne = () => {
   const handleRoundRecord = () => {
     setTimeout(() => {
       socket.on(SocketEvents.ROUND_START, (data) => {
-        console.log(data);
+        console.log(data, "round started");
         setRoundRecord(data);
       });
     }, 200);
@@ -175,7 +175,7 @@ const OneVsOne = () => {
           <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>
             {
               roundRecord
-                ? `Round NUmber` // Check if roundRecord exists, show the round number
+                ? `Round ${roundRecord?.roundNo}` // Check if roundRecord exists, show the round number
                 : winnerRoundRecord //check if round record
                 ? winnerRoundRecord.isDraw
                   ? "Draw" // If the game was a draw
