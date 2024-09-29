@@ -19,6 +19,7 @@ function App() {
 
   useEffect(() => {
     if (!socket.connected) setErrorAlert(true);
+    setErrorAlert(false);
     // Listen for socket disconnection event
     socket.on(SocketEvents.DISCONNECT, (data) => {
       console.log("Socket disconnected", data);

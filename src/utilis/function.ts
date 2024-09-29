@@ -17,3 +17,8 @@ export const getSelectedImages = (
     opponentMoveImage: moveImages[opponentMove] || "/images/fist.png", // Fallback image
   };
 };
+export const getRandomMove = () => {
+  const moves = [UserMove.ROCK, UserMove.PAPER, UserMove.SCISSOR];
+  const randomIndex = Math.floor(Math.random() * moves.length);
+  return moves[randomIndex];
+};

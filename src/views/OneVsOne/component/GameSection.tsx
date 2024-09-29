@@ -1,3 +1,4 @@
+import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import {
   PaperIcon,
@@ -7,6 +8,7 @@ import {
 } from "../../../components/icons";
 import { FixedBgWrapper } from "../../../styles/style";
 import { UserMove } from "../../../utilis/enum";
+import { getRandomMove } from "../../../utilis/function";
 import { GameSectionProps } from "../../../utilis/type";
 
 const GameSection = (props: GameSectionProps) => {
@@ -15,12 +17,12 @@ const GameSection = (props: GameSectionProps) => {
     userSelectedMove,
     handleUserMove,
     isWinnerRoundRecordExist,
+    isRoundStarted,
   } = props;
 
-  const getRandomMove = () => {
-    const moves = [UserMove.ROCK, UserMove.PAPER, UserMove.SCISSOR];
-    const randomIndex = Math.floor(Math.random() * moves.length);
-    return moves[randomIndex];
+  const moveIconStyles = {
+    pointerEvents: isRoundStarted ? "auto" : "none",
+    opacity: isRoundStarted ? 1 : 0.5, // Visual feedback for disabled state
   };
 
   return (
@@ -37,24 +39,29 @@ const GameSection = (props: GameSectionProps) => {
         justify="center"
         css={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
       >
-        <StoneIcon
-          customColor={userSelectedMove === UserMove.ROCK}
-          onClick={() => handleUserMove(UserMove.ROCK)}
-        />
+        <Box onClick={() => handleUserMove(UserMove.ROCK)} css={moveIconStyles}>
+          <StoneIcon customColor={userSelectedMove === UserMove.ROCK} />
+        </Box>
         <Flex direction="column" css={{ gap: "2rem" }} align="center">
-          <PaperIcon
-            customColor={userSelectedMove === UserMove.PAPER}
+          <Box
             onClick={() => handleUserMove(UserMove.PAPER)}
-          />
-          <RandomIcon
-            customColor={userSelectedMove === UserMove.RANDOM}
+            css={moveIconStyles}
+          >
+            <PaperIcon customColor={userSelectedMove === UserMove.PAPER} />
+          </Box>
+          <Box
             onClick={() => handleUserMove(getRandomMove())}
-          />
+            css={moveIconStyles}
+          >
+            <RandomIcon customColor={userSelectedMove === UserMove.RANDOM} />
+          </Box>
         </Flex>
-        <ScissorIcon
-          customColor={userSelectedMove === UserMove.SCISSOR}
+        <Box
           onClick={() => handleUserMove(UserMove.SCISSOR)}
-        />
+          css={moveIconStyles}
+        >
+          <ScissorIcon customColor={userSelectedMove === UserMove.SCISSOR} />
+        </Box>
       </Flex>
     </FixedBgWrapper>
   );

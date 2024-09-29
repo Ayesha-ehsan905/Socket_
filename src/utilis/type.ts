@@ -29,6 +29,7 @@ export type GameSectionProps = {
   userSelectedMove: string | null;
   handleUserMove: (move: UserMove) => void;
   isWinnerRoundRecordExist: boolean;
+  isRoundStarted: boolean;
 };
 export type RoundRecord = {
   roundTimeLimit: number;
