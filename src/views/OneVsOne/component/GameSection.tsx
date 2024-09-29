@@ -9,7 +9,7 @@ import {
 import { FixedBgWrapper } from "../../../styles/style";
 import { UserMove } from "../../../utilis/enum";
 import { getRandomMove } from "../../../utilis/function";
-import { GameSectionProps } from "../../../utilis/type";
+import { GameSectionProps } from "../type";
 
 const GameSection = (props: GameSectionProps) => {
   const {

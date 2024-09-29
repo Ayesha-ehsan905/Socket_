@@ -6,17 +6,11 @@ import { styled } from "../../styles";
 import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
-import { RoundRecord, WinnerRoundRecordType } from "../../utilis/type";
 import { getRandomMove, getSelectedImages } from "../../utilis/function";
 import GameSection from "./component/GameSection";
 import { useSocketContext } from "../../components/SocketContext/useSocketContext";
+import { GameOverDTO, RoundRecord, WinnerRoundRecordType } from "./type";
 
-export type GameOverDTO = {
-  winner: number;
-  winnerRoundWon: number;
-  totalRounds: number;
-  totalDraw: number;
-};
 const OneVsOne = () => {
   const { socket } = useSocketContext();
   const location = useLocation();

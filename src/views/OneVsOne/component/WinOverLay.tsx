@@ -5,13 +5,9 @@ import { HomeBlackIcon, Replaycon } from "../../../components/icons";
 import { styled } from "../../../styles";
 import { routes } from "../../../utilis/constant";
 import { SocketEvents } from "../../../utilis/enum";
-import { GameOverDTO } from "../OneVsOne";
 import { useSocketContext } from "../../../components/SocketContext/useSocketContext";
+import { WinOverLayProps } from "../type";
 
-export type WinOverLayProps = {
-  gameOverRecord: GameOverDTO | null;
-  userChatId?: number | string; //current user chat id
-};
 const WinOverLay = (props: WinOverLayProps) => {
   const { gameOverRecord, userChatId } = props;
   const { socket } = useSocketContext();

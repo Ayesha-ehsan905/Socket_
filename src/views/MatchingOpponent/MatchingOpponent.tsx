@@ -3,11 +3,11 @@ import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { SocketEvents } from "../../utilis/enum";
 import LoadingDots from "./component/LoadingDots";
-import { GameStartType, useAvatarProps } from "../../utilis/type";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
 import { useTelegram } from "../../hooks/useTelegram";
 import { useSocketContext } from "../../components/SocketContext/useSocketContext";
+import { GameStartType, useAvatarProps } from "./type";
 
 const MatchingOpponent = () => {
   const { socket } = useSocketContext();
