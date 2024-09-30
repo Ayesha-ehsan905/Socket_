@@ -5,12 +5,12 @@ import { HomeBlackIcon, Replaycon } from "../../../components/icons";
 import { styled } from "../../../styles";
 import { routes } from "../../../utilis/constant";
 import { SocketEvents } from "../../../utilis/enum";
-import { useSocketContext } from "../../../components/SocketContext/useSocketContext";
 import { WinOverLayProps } from "../type";
+import { useSocket } from "../../../components/contexts/SocketContext/useSocket";
 
 const WinOverLay = (props: WinOverLayProps) => {
   const { gameOverRecord, userChatId } = props;
-  const { socket } = useSocketContext();
+  const { socket } = useSocket();
 
   const totalRounds =
     (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.totalDraw ?? 0);

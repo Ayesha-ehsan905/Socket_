@@ -2,20 +2,46 @@ import { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
+import { axios } from "../../lib/axios";
+import { useAuth } from "../../components/contexts/AuthContext/useAuth";
+import { useTelegram } from "../../hooks/useTelegram";
 
 const SplashScreen = () => {
+  const { setUserData } = useAuth();
   const [fade, setFade] = useState(true);
+  const [isApiResponseFetched, setIsApiResponseFetched] = useState(false);
   const navigate = useNavigate();
+  const { chatId } = useTelegram();
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setFade(false);
-      setTimeout(() => {
-        navigate(routes.dashboard);
-      }, 1000);
-    }, 3000);
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.post("users/auth", {
+          chatId: chatId?.toString(),
+        });
+        if (response) {
+          setIsApiResponseFetched(true);
+          console.log(response.data?.data);
+          setUserData(response?.data?.data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchProfileData();
+  }, [chatId, setUserData]);
 
-    return () => clearTimeout(timer);
-  }, [navigate]);
+  useEffect(() => {
+    if (isApiResponseFetched) {
+      const timer = setTimeout(() => {
+        setFade(false);
+        setTimeout(() => {
+          navigate(routes.dashboard);
+        }, 1000);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isApiResponseFetched, navigate]);
   return (
     <Box
       css={{

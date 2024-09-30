@@ -8,11 +8,11 @@ import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
 import { getSelectedImages } from "../../utilis/function";
 import GameSection from "./component/GameSection";
-import { useSocketContext } from "../../components/SocketContext/useSocketContext";
 import { GameOverDTO, RoundRecord, WinnerRoundRecordType } from "./type";
+import { useSocket } from "../../components/contexts/SocketContext/useSocket";
 
 const OneVsOne = () => {
-  const { socket } = useSocketContext();
+  const { socket } = useSocket();
   useEffect(() => {
     console.log("socket connection from 1v1:", socket.connected);
   }, [socket]);
