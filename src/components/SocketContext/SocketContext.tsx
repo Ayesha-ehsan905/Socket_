@@ -1,6 +1,5 @@
 import React, { createContext, useEffect } from "react";
 import { io } from "socket.io-client";
-import { returnTelegramID } from "../../utilis/function";
 
 interface SocketContextProps {
   socket: typeof socket;
@@ -8,11 +7,20 @@ interface SocketContextProps {
   disconnectSocketEvent: (event: string) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const app = (window as any).Telegram?.WebApp;
+
+if (app) app.ready();
+
+// Check if initDataUnsafe and user exist
+const chat_Id = app.initDataUnsafe?.user?.id;
+
+console.log(chat_Id, "id");
 // const socketUrl = "http://192.168.101.120:5000/";
 const socketUrl = "https://dev-api.rps.pixelpaddle.com/";
 const socket = io(socketUrl, {
   autoConnect: true,
-  query: { chatId: returnTelegramID() },
+  query: { chatId: chat_Id },
   // reconnection: true, // Enable reconnection (default is true)
   reconnectionAttempts: Infinity,
   // reconnectionDelay: 2000, // Time between reconnection attempts (in milliseconds)
