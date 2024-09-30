@@ -9,11 +9,13 @@ interface SocketContextProps {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const app = (window as any).Telegram?.WebApp;
-
-if (app) app.ready();
+let chat_Id;
+if (app) {
+  app.ready();
+  chat_Id = app.initDataUnsafe?.user?.id;
+}
 
 // Check if initDataUnsafe and user exist
-const chat_Id = app.initDataUnsafe?.user?.id;
 
 console.log(chat_Id, "id");
 // const socketUrl = "http://192.168.101.120:5000/";
