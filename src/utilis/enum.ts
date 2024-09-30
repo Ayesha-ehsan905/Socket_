@@ -10,6 +10,7 @@ export enum SocketEvents {
   OPPONENT_MOVE = "OPPONENT_MOVE",
   ROUND_RESULT = "ROUND_RESULT",
   ROUND_START = "ROUND_START",
+  READY_FOR_GAME = "READY_FOR_GAME",
 }
 
 export enum UserMove {
