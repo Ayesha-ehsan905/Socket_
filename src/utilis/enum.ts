@@ -11,6 +11,7 @@ export enum SocketEvents {
   ROUND_RESULT = "ROUND_RESULT",
   ROUND_START = "ROUND_START",
   READY_FOR_GAME = "READY_FOR_GAME",
+  ON_SCREEN = "ON_SCREEN",
 }
 
 export enum UserMove {
@@ -22,4 +23,9 @@ export enum UserMove {
 export enum AlertEnum {
   SUCCESS = "success",
   ERROR = "error",
+}
+export enum USER_SCREENS_ROUTES {
+  DASHBOARD = "DASHBOARD",
+  SEARCH = "SEARCH",
+  ONE_VS_ONE = "ONE_VS_ONE",
 }

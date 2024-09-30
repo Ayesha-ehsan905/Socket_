@@ -1,4 +1,5 @@
-import { UserMove } from "./enum";
+import { routes } from "./constant";
+import { USER_SCREENS_ROUTES, UserMove } from "./enum";
 
 export const getSelectedImages = (
   userMove: UserMove,
@@ -21,4 +22,9 @@ export const getRandomMove = () => {
   const moves = [UserMove.ROCK, UserMove.PAPER, UserMove.SCISSOR];
   const randomIndex = Math.floor(Math.random() * moves.length);
   return moves[randomIndex];
+};
+export const getCurrentPath = (path: string) => {
+  if (path === routes.dashboard) return USER_SCREENS_ROUTES.DASHBOARD;
+  if (path === routes.matching_screen) return USER_SCREENS_ROUTES.SEARCH;
+  if (path === routes.One_one) return USER_SCREENS_ROUTES.ONE_VS_ONE;
 };
