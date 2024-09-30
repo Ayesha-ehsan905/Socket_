@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,10 +15,10 @@ import { useSocketContext } from "./components/SocketContext/useSocketContext";
 import { getCurrentPath } from "./utilis/function";
 import { SocketEvents } from "./utilis/enum";
 import { useTelegram } from "./hooks/useTelegram";
-const SplashScreen = lazy(() => import("./views/SplashScreen"));
-const Dashboard = lazy(() => import("./views/Dashboard"));
-const MatchingOpponent = lazy(() => import("./views/MatchingOpponent"));
-const OneVsOne = lazy(() => import("./views/OneVsOne"));
+import SplashScreen from "./views/SplashScreen";
+import Dashboard from "./views/Dashboard";
+import MatchingOpponent from "./views/MatchingOpponent";
+import OneVsOne from "./views/OneVsOne";
 function App() {
   globalStyles();
   // const { socket } = useSocketContext();
@@ -44,21 +44,19 @@ function App() {
   return (
     <>
       <Router>
-        <Suspense fallback={<div>Loading...</div>}>
-          <PathLogger />
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<SplashScreen />} />
-              <Route path={routes.dashboard} element={<Dashboard />} />
-              <Route
-                path={routes.matching_screen}
-                element={<MatchingOpponent />}
-              />
+        <PathLogger />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<SplashScreen />} />
+            <Route path={routes.dashboard} element={<Dashboard />} />
+            <Route
+              path={routes.matching_screen}
+              element={<MatchingOpponent />}
+            />
 
-              <Route path={routes.One_one} element={<OneVsOne />} />
-            </Route>
-          </Routes>
-        </Suspense>
+            <Route path={routes.One_one} element={<OneVsOne />} />
+          </Route>
+        </Routes>
         {errorAlert && (
           <Alert
             isClose={true}
