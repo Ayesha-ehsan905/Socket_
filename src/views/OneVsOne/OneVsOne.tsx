@@ -6,7 +6,7 @@ import { styled } from "../../styles";
 import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
-import { getRandomMove, getSelectedImages } from "../../utilis/function";
+import { getSelectedImages } from "../../utilis/function";
 import GameSection from "./component/GameSection";
 import { useSocketContext } from "../../components/SocketContext/useSocketContext";
 import { GameOverDTO, RoundRecord, WinnerRoundRecordType } from "./type";
@@ -21,7 +21,7 @@ const OneVsOne = () => {
   const user_chatId = location.state?.chatId;
   // each round record
   const [roundRecord, setRoundRecord] = useState<RoundRecord | null>(null);
-  const [roundTimeLeft, setRoundTimeLeft] = useState(0);
+  // const [roundTimeLeft, setRoundTimeLeft] = useState(0);
   const [isGameOverModal, setisGameOverModal] = useState(false);
   const [opponnentWinCount, setOpponnentWinCount] = useState(0);
   const [userWinCount, setUserWinCount] = useState(0);
@@ -33,34 +33,33 @@ const OneVsOne = () => {
   const [gameOverResult, setGameOverResult] = useState<null | GameOverDTO>(
     null
   );
-  console.log(opponnentWinCount, "opponetWinCount");
-  console.log(userWinCount, "userWinCount");
   //each round winner record
   const [winnerRoundRecord, setWinnerRoundRecord] =
     useState<null | WinnerRoundRecordType>();
 
   //milliseconds->sec
-  const totalTimeForRound =
-    (roundRecord && roundRecord.roundTimeLimit / 1000) ?? 0;
+  // const totalTimeForRound =
+  //   (roundRecord && roundRecord.roundTimeLimit / 1000) ?? 0;
 
-  const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
+  // const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
+  const heightPercentageTimeBar = (100 / 100) * 100; // Full height is 100%
 
   // Timer logic
-  useEffect(() => {
-    if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
-      if (roundTimeLeft < totalTimeForRound) {
-        const timer = setInterval(() => {
-          setRoundTimeLeft((prev) => prev + 1);
-        }, 1000);
+  // useEffect(() => {
+  //   if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
+  //     if (roundTimeLeft < totalTimeForRound) {
+  //       const timer = setInterval(() => {
+  //         setRoundTimeLeft((prev) => prev + 1);
+  //       }, 1000);
 
-        return () => clearInterval(timer);
-      } else {
-        console.log("time up");
-        handleUserMove(getRandomMove());
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roundRecord, roundTimeLeft, totalTimeForRound]);
+  //       return () => clearInterval(timer);
+  //     } else {
+  //       console.log("time up");
+  //       handleUserMove(getRandomMove());
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [roundRecord, roundTimeLeft, totalTimeForRound]);
 
   // ready for game
   useEffect(() => {
@@ -136,6 +135,7 @@ const OneVsOne = () => {
   };
 
   const handleUserMove = (userMove: string) => {
+    setIsRoundStarted(false);
     socket.emit(SocketEvents.PLAYER_MOVE, {
       move: userMove,
       room: gameRoomKey,
@@ -214,7 +214,8 @@ const OneVsOne = () => {
               <TimerBar css={{ height: `${heightPercentageTimeBar}%` }} />
             </VerticalLine>
             <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
-              {roundTimeLeft}
+              {/* {roundTimeLeft} */}
+              {30}
             </Box>
           </Flex>
           <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>
