@@ -21,7 +21,7 @@ const LeaderBoard = () => {
   const { socket } = useSocketContext();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
   //current user telegram chat id
-  const { chatId, theme } = useTelegram();
+  const { chatId } = useTelegram();
   const navigate = useNavigate();
 
   const LeaderBoardMenus = [
@@ -52,35 +52,6 @@ const LeaderBoard = () => {
         >
           Leaderboard
         </Box>
-        <h2>Telegram Theme Parameters</h2>
-        {theme ? (
-          <div
-            style={{
-              border: "1px solid #ccc",
-              padding: "20px",
-              borderRadius: "10px",
-            }}
-          >
-            <p>
-              <strong>Background Color:</strong>{" "}
-              {theme.bg_color || "Not provided"}
-            </p>
-            <p>
-              <strong>Button Color:</strong>{" "}
-              {theme.button_color || "Not provided"}
-            </p>
-            <p>
-              <strong>Text Color:</strong> {theme.text_color || "Not provided"}
-            </p>
-            <p>
-              <strong>Secondary Background:</strong>{" "}
-              {theme.secondary_bg_color || "Not provided"}
-            </p>
-            {/* Add more theme parameters if needed */}
-          </div>
-        ) : (
-          <p>No theme data available.</p>
-        )}
 
         <Flex direction={"column"} wrap={"wrap"}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (

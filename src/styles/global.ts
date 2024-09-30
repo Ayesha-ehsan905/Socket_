@@ -7,5 +7,6 @@ export const globalStyles = globalCss({
     overflowX: "hidden",
     overflowY: "scroll",
     fontFamily: "$Baloo",
+    background: "$white",
   },
 });
