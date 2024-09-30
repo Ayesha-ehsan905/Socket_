@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-
+interface ThemeParams {
+  bg_color?: string;
+  button_color?: string;
+  text_color?: string;
+  secondary_bg_color?: string;
+  // Add other theme properties as needed
+}
 export const useTelegram = () => {
   const [chatId, setChatId] = useState<number | null>();
+  const [theme, setTheme] = useState<ThemeParams | undefined>(undefined);
 
   useEffect(() => {
     // Check if chatId is already in localStorage
@@ -17,6 +24,8 @@ export const useTelegram = () => {
         if (app) {
           app.ready();
 
+          const themeParams = app.themeParams;
+          setTheme(themeParams);
           // Check if initDataUnsafe and user exist
           const chat_Id = app.initDataUnsafe?.user?.id;
           if (chat_Id) {
@@ -31,5 +40,6 @@ export const useTelegram = () => {
 
   return {
     chatId,
+    theme,
   };
 };

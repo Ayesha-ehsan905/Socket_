@@ -36,16 +36,17 @@ const MatchingOpponent = () => {
     // concate the oppositie player name
     if (gameRoomInfo) {
       if (gameRoomInfo?.player1.chatId === chatId?.toString()) {
-        const OpponentName =
-          gameRoomInfo?.player2?.first_name +
-          " " +
-          gameRoomInfo?.player2?.last_name;
+        const firstName = gameRoomInfo?.player2?.first_name;
+
+        const lastName = gameRoomInfo?.player2?.last_name;
+        const OpponentName = lastName ? `${firstName} ${lastName}` : firstName;
+
         setOpponentName(OpponentName);
       } else {
-        const OpponentName =
-          gameRoomInfo?.player1?.first_name +
-          " " +
-          gameRoomInfo?.player1?.last_name;
+        const firstName = gameRoomInfo?.player1?.first_name;
+
+        const lastName = gameRoomInfo?.player1?.last_name;
+        const OpponentName = lastName ? `${firstName} ${lastName}` : firstName;
         setOpponentName(OpponentName);
       }
     }
