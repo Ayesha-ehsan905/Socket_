@@ -28,3 +28,13 @@ export const getCurrentPath = (path: string) => {
   if (path === routes.matching_screen) return USER_SCREENS_ROUTES.SEARCH;
   if (path === routes.One_one) return USER_SCREENS_ROUTES.ONE_VS_ONE;
 };
+export const returnTelegramID = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const app = (window as any).Telegram?.WebApp;
+
+  if (app) app.ready();
+
+  // Check if initDataUnsafe and user exist
+  const chat_Id = app.initDataUnsafe?.user?.id;
+  return chat_Id;
+};

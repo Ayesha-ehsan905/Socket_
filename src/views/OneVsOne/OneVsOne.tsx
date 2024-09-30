@@ -13,6 +13,9 @@ import { GameOverDTO, RoundRecord, WinnerRoundRecordType } from "./type";
 
 const OneVsOne = () => {
   const { socket } = useSocketContext();
+  useEffect(() => {
+    console.log("socket connection from 1v1:", socket.connected);
+  }, [socket]);
   const location = useLocation();
   const gameRoomKey = location.state?.gameRoomKey;
   const user_chatId = location.state?.chatId;
@@ -44,7 +47,7 @@ const OneVsOne = () => {
 
   // Timer logic
   useEffect(() => {
-    if (roundRecord && roundRecord.roundTimeLimit > 0) {
+    if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
       if (roundTimeLeft < totalTimeForRound) {
         const timer = setInterval(() => {
           setRoundTimeLeft((prev) => prev + 1);
@@ -53,9 +56,10 @@ const OneVsOne = () => {
         return () => clearInterval(timer);
       } else {
         console.log("time up");
-        setUserSelectedMove(getRandomMove());
+        handleUserMove(getRandomMove());
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundRecord, roundTimeLeft, totalTimeForRound]);
 
   // ready for game
@@ -70,29 +74,31 @@ const OneVsOne = () => {
   // Initial round setup
   useEffect(() => {
     console.log("first time call");
-    setTimeout(() => {
-      socket.on(SocketEvents.ROUND_START, handleRoundStart);
-    }, 3000);
+    socket.on(SocketEvents.ROUND_START, handleRoundStart);
+    socket.on(SocketEvents.ROUND_RESULT, handleRoundResult);
+    socket.on(SocketEvents.GAME_OVER, handleGameOver);
 
     return () => {
       socket.off(SocketEvents.ROUND_START);
+      socket.off(SocketEvents.ROUND_RESULT);
+      socket.off(SocketEvents.GAME_OVER);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Listen for ROUND_RESULT and GAME_OVER events
-  useEffect(() => {
-    if (userSelectedMove) {
-      socket.on(SocketEvents.ROUND_RESULT, handleRoundResult);
-      socket.on(SocketEvents.GAME_OVER, handleGameOver);
+  // useEffect(() => {
+  //   if (userSelectedMove) {
+  //     socket.on(SocketEvents.ROUND_RESULT, handleRoundResult);
+  //     socket.on(SocketEvents.GAME_OVER, handleGameOver);
 
-      return () => {
-        socket.off(SocketEvents.ROUND_RESULT);
-        socket.off(SocketEvents.GAME_OVER);
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userSelectedMove]);
+  //     return () => {
+  //       socket.off(SocketEvents.ROUND_RESULT);
+  //       socket.off(SocketEvents.GAME_OVER);
+  //     };
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [userSelectedMove]);
 
   // Check round results
   useEffect(() => {
@@ -105,10 +111,13 @@ const OneVsOne = () => {
   }, [winnerRoundRecord]);
   // Handle round start
   const handleRoundStart = (data: RoundRecord) => {
-    console.log("Round started", data);
-    setWinnerRoundRecord(null);
-    setRoundRecord(data);
-    setIsRoundStarted(true);
+    console.log("inside handleRoundStart");
+    setTimeout(() => {
+      console.log("Round started", data);
+      setWinnerRoundRecord(null);
+      setRoundRecord(data);
+      setIsRoundStarted(true);
+    }, 3000);
   };
   // Handle round result
 
@@ -117,11 +126,7 @@ const OneVsOne = () => {
     setRoundRecord(null); // Reset round
     setWinnerRoundRecord(JSON.parse(data));
     setIsRoundStarted(false);
-
-    setTimeout(
-      () => socket.on(SocketEvents.ROUND_START, handleRoundStart),
-      3000
-    ); // Delay next round
+    socket.on(SocketEvents.ROUND_START, handleRoundStart);
   };
   // Handle game over
   const handleGameOver = (data: SetStateAction<GameOverDTO | null>) => {
