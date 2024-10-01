@@ -12,9 +12,10 @@ const UserCard = () => {
           as="h4"
           css={{
             fontWeight: "$normal",
-            fontSize: "$18",
+            fontSize: "22px",
             lineHeight: "28.33px",
             color: "$primary",
+            margin: "21px 0",
           }}
         >
           Rock, Paper, Scissors
@@ -24,6 +25,7 @@ const UserCard = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            mr: "$2",
           }}
         >
           <Box>
@@ -37,6 +39,7 @@ const UserCard = () => {
                   fontFamily: "$Inter",
                   fontSize: "$10",
                   color: "$white",
+                  fontWeight: "$bold",
                 }}
               >
                 12
@@ -97,15 +100,17 @@ export default UserCard;
 export const UserCardBox = styled(Box, {
   padding: "16px",
   borderRadius: "0px 0px 20px 20px",
-  boxShadow: "0px 4px 8px -2px #1018281A",
+  boxShadow: "0px 4px 8px -2px #1018284A",
 });
 const Badge = styled(Box, {
   background: "$error",
-  width: "25px",
-  height: "25px",
+  width: "20px",
+  height: "20px",
   borderRadius: "50%",
-  textAlign: "center",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
   position: "absolute",
   bottom: "0",
-  right: "-13px",
+  right: "-8px",
 });
