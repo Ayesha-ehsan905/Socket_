@@ -148,9 +148,9 @@ const OneVsOne = () => {
   const handleRoundStart = (data: RoundRecord) => {
     console.log("inside handleRoundStart");
     setRoundTimeLeft(0); //timer reset
-    setOpponentMoveImage(null); //rest the opponent image
-    setUserMoveImage(null); //reset the usermove image
     setTimeout(() => {
+      setOpponentMoveImage(null); //rest the opponent image
+      setUserMoveImage(null); //reset the usermove image
       console.log("Round started", data);
       setWinnerRoundRecord(null);
       setRoundRecord(data);
@@ -236,7 +236,7 @@ const OneVsOne = () => {
           src={opponentMoveImage ? opponentMoveImage : ""}
           css={{
             height: "100%",
-            transform: winnerRoundRecord ? "rotate(180deg)" : "",
+            transform: "rotate(180deg)",
           }}
         />
         {disconnectedUserChatId && (
