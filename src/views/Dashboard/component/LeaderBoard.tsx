@@ -55,11 +55,7 @@ const LeaderBoard = () => {
           Leaderboard
         </Box>
 
-        <Flex
-          direction={"column"}
-          wrap={"wrap"}
-          css={{ maxHeight: "85vh", overflowY: "scroll" }}
-        >
+        <Flex direction={"column"} wrap={"wrap"}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
             <LeaderBoardCss key={num} css={{ mt: "15px" }}>
               <Flex direction={"row"} justify={"between"} align={"center"}>
