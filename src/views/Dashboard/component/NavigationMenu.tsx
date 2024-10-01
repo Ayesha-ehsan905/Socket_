@@ -25,12 +25,17 @@ const NavigationMenu = () => {
   };
 
   return (
-    <FixedBgWrapper css={{ background: "$white" }}>
+    <FixedBgWrapper
+      css={{
+        background: "$white",
+        boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 16px 0px",
+      }}
+    >
       <Flex
         direction={"row"}
         align={"center"}
         justify={"between"}
-        css={{ padding: "6px  23px", height: "4.5rem" }}
+        css={{ padding: "6px  23px", height: "3.75rem" }}
       >
         {LeaderBoardMenus.map((menu, index) => {
           const IconComponent = menu.icon;
@@ -41,6 +46,7 @@ const NavigationMenu = () => {
               direction={"column"}
               align={"center"}
               onClick={() => handleMenuClick(menu.path)}
+              css={{ opacity: menu.path === "/" ? 0.3 : 1 }}
               key={index}
             >
               <IconComponent active={isActive} />
