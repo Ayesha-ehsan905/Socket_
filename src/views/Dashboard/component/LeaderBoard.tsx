@@ -14,14 +14,19 @@ const LeaderBoard = () => {
       <Box css={{ margin: "24px 16px 16px" }}>
         <Box
           as="h2"
-          css={{ fontSize: "$20", fontWeight: "$bold", fontFamily: "$Gilmer" }}
+          css={{
+            fontSize: "$20",
+            fontWeight: "$bold",
+            fontFamily: "$Gilmer",
+            margin: "16px 0 8px",
+          }}
         >
           Leaderboard
         </Box>
 
         <Flex direction={"column"} wrap={"wrap"}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-            <LeaderBoardCss key={num} css={{ mt: "15px" }}>
+            <LeaderBoardCss key={num} css={{ mt: "8px" }}>
               <Flex direction={"row"} justify={"between"} align={"center"}>
                 <Flex justify={"center"} css={{ columnGap: "$3" }}>
                   <Box as="img" src="/images/avatar.png" />
