@@ -13,12 +13,12 @@ import { SocketEvents } from "../../../utilis/enum";
 import { FixedBgWrapper } from "../../../styles/style";
 import { useState } from "react";
 import Alert from "../../../components/Popup";
+import { useSocket } from "../../../components/contexts/SocketContext/useSocket";
 import { useTelegram } from "../../../hooks/useTelegram";
-import { useSocketContext } from "../../../components/SocketContext/useSocketContext";
 
 const LeaderBoard = () => {
   const { pathname } = useLocation();
-  const { socket } = useSocketContext();
+  const { socket } = useSocket();
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
   //current user telegram chat id
   const { chatId } = useTelegram();

@@ -1,12 +1,13 @@
 import React, { createContext, useEffect } from "react";
 import { io } from "socket.io-client";
+import { socket_url } from "../../../utilis/constant";
 
 interface SocketContextProps {
   socket: typeof socket;
   // isSocketConnected: boolean;
   disconnectSocketEvent: (event: string) => void;
 }
-
+//TODO:Need to use function instead of this
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const app = (window as any).Telegram?.WebApp;
 let chat_Id;
@@ -19,7 +20,7 @@ if (app) {
 
 console.log(chat_Id, "id");
 // const socketUrl = "http://192.168.101.120:5000/";
-const socketUrl = "https://dev-api.rps.pixelpaddle.com/";
+const socketUrl = socket_url;
 const socket = io(socketUrl, {
   autoConnect: true,
   query: { chatId: chat_Id },

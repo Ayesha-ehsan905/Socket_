@@ -6,11 +6,11 @@ import LoadingDots from "./component/LoadingDots";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
 import { useTelegram } from "../../hooks/useTelegram";
-import { useSocketContext } from "../../components/SocketContext/useSocketContext";
 import { GameStartType, useAvatarProps } from "./type";
+import { useSocket } from "../../components/contexts/SocketContext/useSocket";
 
 const MatchingOpponent = () => {
-  const { socket } = useSocketContext();
+  const { socket } = useSocket();
   const [gameRoomInfo, setGameRoomInfo] = useState<null | GameStartType>(null);
   const [OpponentName, setOpponentName] = useState<string | null>(null);
   const { chatId } = useTelegram(); //current user chat_id

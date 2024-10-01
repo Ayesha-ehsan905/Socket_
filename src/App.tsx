@@ -11,7 +11,6 @@ import { routes } from "./utilis/constant";
 import "./assets/font/Baloo/font.css";
 import "./assets/font/Gilmer/font.css";
 import Alert from "./components/Popup";
-import { useSocketContext } from "./components/SocketContext/useSocketContext";
 import { getCurrentPath } from "./utilis/function";
 import { SocketEvents } from "./utilis/enum";
 import { useTelegram } from "./hooks/useTelegram";
@@ -19,9 +18,10 @@ import SplashScreen from "./views/SplashScreen";
 import Dashboard from "./views/Dashboard";
 import MatchingOpponent from "./views/MatchingOpponent";
 import OneVsOne from "./views/OneVsOne";
+import { useSocket } from "./components/contexts/SocketContext/useSocket";
 function App() {
   globalStyles();
-  // const { socket } = useSocketContext();
+  // const { socket } = useSocket();
 
   const [errorAlert, setErrorAlert] = useState(false);
 
@@ -72,7 +72,7 @@ function App() {
 }
 const PathLogger = () => {
   const location = useLocation();
-  const { socket } = useSocketContext();
+  const { socket } = useSocket();
   const { chatId } = useTelegram();
   const userCurrentRoute = getCurrentPath(location.pathname);
   //emit current path

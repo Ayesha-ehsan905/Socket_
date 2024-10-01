@@ -2,8 +2,17 @@ import { styled } from "@stitches/react";
 import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import { AddIcon, NotificationIcon } from "../../../components/icons";
+import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 
 const UserCard = () => {
+  const { userData } = useAuth();
+  const firstName = userData?.user?.first_name;
+  const lastName = userData?.user?.last_name;
+  const userName = userData?.token
+    ? lastName
+      ? firstName + " " + lastName
+      : firstName
+    : "John Doe";
   return (
     <UserCardBox>
       <Flex direction={"row"} justify={"between"} wrap={"wrap"}>
@@ -53,7 +62,7 @@ const UserCard = () => {
         <Flex justify={"center"} css={{ columnGap: "$3" }}>
           <Box as="img" src="/images/avatar.png" />
           <Box as="span" css={{ fontSize: "$14", alignSelf: "center" }}>
-            John Doe
+            {userName}
           </Box>
         </Flex>
         <Flex

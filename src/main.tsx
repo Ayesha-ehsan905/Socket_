@@ -1,12 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import { SocketProvider } from "./components/SocketContext/SocketContext";
+import { SocketProvider } from "./components/contexts/SocketContext/SocketContext";
+import { AuthProvider } from "./components/contexts/AuthContext/AuthContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <SocketProvider>
-      <App />
-    </SocketProvider>
+    <AuthProvider>
+      <SocketProvider>
+        <App />
+      </SocketProvider>
+    </AuthProvider>
   </StrictMode>
 );
