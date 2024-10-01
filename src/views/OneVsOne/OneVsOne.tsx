@@ -213,7 +213,6 @@ const OneVsOne = () => {
   //   userMove as UserMove, // Casting to UserMove
   //   opponentMove as UserMove
   // );
-  console.log(!disconnectedUserChatId, "ass");
   return (
     <Box
       css={{
@@ -240,14 +239,16 @@ const OneVsOne = () => {
             transform: winnerRoundRecord ? "rotate(180deg)" : "",
           }}
         />
-        <Flex justify={"center"} direction={"column"} align={"center"}>
-          <Spinner />
-          <Box as="p">
-            {!disconnectedUserChatId && disconnectedUserChatId !== user_chatId
-              ? "Oppponnent  Disconnected"
-              : ""}
-          </Box>
-        </Flex>
+        {disconnectedUserChatId && (
+          <Flex justify={"center"} direction={"column"} align={"center"}>
+            <Spinner />
+            <Box as="p">
+              {disconnectedUserChatId !== user_chatId
+                ? "Oppponnent  Disconnected"
+                : ""}
+            </Box>
+          </Flex>
+        )}
       </FixedBgWrapper>
       <Flex
         direction={"column"}
