@@ -29,7 +29,10 @@ const GameSection = (props: GameSectionProps) => {
     <FixedBgWrapper
       css={{
         bottom: "0px",
-        background: `url(${userMoveImage}) no-repeat center top`,
+        // move round result
+        background: userMoveImage
+          ? `url(${userMoveImage}) no-repeat center top`
+          : "",
         height: isWinnerRoundRecordExist ? "min(45vh, 40vh)" : "min(30vh,25vh)",
       }}
     >

@@ -1,6 +1,7 @@
 import React, { createContext, useEffect } from "react";
 import { io } from "socket.io-client";
 import { socket_url } from "../../../utilis/constant";
+import { returnTelegramID } from "../../../utilis/function";
 
 interface SocketContextProps {
   socket: typeof socket;
@@ -9,24 +10,23 @@ interface SocketContextProps {
 }
 //TODO:Need to use function instead of this
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const app = (window as any).Telegram?.WebApp;
-let chat_Id;
-if (app) {
-  app.ready();
-  chat_Id = app.initDataUnsafe?.user?.id;
-}
+// const app = (window as any).Telegram?.WebApp;
+// let chat_Id;
+// if (app) {
+//   app.ready();
+//   chat_Id = app.initDataUnsafe?.user?.id;
+// }
 
-// Check if initDataUnsafe and user exist
+// // Check if initDataUnsafe and user exist
 
-console.log(chat_Id, "id");
-// const socketUrl = "http://192.168.101.120:5000/";
+// console.log(chat_Id, "id");
 const socketUrl = socket_url;
 const socket = io(socketUrl, {
   autoConnect: true,
-  query: { chatId: chat_Id },
+  query: { chatId: returnTelegramID() },
   // reconnection: true, // Enable reconnection (default is true)
   reconnectionAttempts: Infinity,
-  // reconnectionDelay: 2000, // Time between reconnection attempts (in milliseconds)
+  reconnectionDelay: 2000, // Time between reconnection attempts (in milliseconds)
 });
 export const SocketContext = createContext<SocketContextProps | undefined>(
   undefined

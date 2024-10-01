@@ -14,7 +14,7 @@ export type RoundRecord = {
   roundNo: number;
 };
 export type GameSectionProps = {
-  userMoveImage: string;
+  userMoveImage: string | null;
   userSelectedMove: string | null;
   handleUserMove: (move: UserMove) => void;
   isWinnerRoundRecordExist: boolean;

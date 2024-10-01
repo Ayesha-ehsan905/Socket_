@@ -41,7 +41,6 @@ function App() {
   //     socket.off(SocketEvents.DISCONNECT);
   //   };
   // }, [socket]);
-  console.log(errorAlert);
   return (
     <>
       <Router>

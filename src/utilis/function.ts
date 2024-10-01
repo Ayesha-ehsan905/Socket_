@@ -14,8 +14,8 @@ export const getSelectedImages = (
 
   // Return the selected images for both user and opponent
   return {
-    userMoveImage: moveImages[userMove] || "/images/Scissor.png", // Fallback image
-    opponentMoveImage: moveImages[opponentMove] || "/images/fist.png", // Fallback image
+    userMoveImage: moveImages[userMove], // Fallback image
+    opponentMoveImage: moveImages[opponentMove], // Fallback image
   };
 };
 export const getRandomMove = () => {
@@ -31,12 +31,12 @@ export const getCurrentPath = (path: string) => {
 export const returnTelegramID = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = (window as any).Telegram?.WebApp;
-
+  let chat_Id;
   if (app) {
     app.ready();
 
     // Check if initDataUnsafe and user exist
-    const chat_Id = app.initDataUnsafe?.user?.id;
+    chat_Id = app.initDataUnsafe?.user?.id;
     return chat_Id;
   }
 };

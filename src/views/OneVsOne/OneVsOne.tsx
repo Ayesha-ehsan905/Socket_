@@ -6,7 +6,7 @@ import { styled } from "../../styles";
 import { SocketEvents, UserMove } from "../../utilis/enum";
 import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
-import { getSelectedImages } from "../../utilis/function";
+import { getRandomMove, getSelectedImages } from "../../utilis/function";
 import GameSection from "./component/GameSection";
 import { GameOverDTO, RoundRecord, WinnerRoundRecordType } from "./type";
 import { useSocket } from "../../components/contexts/SocketContext/useSocket";
@@ -21,7 +21,7 @@ const OneVsOne = () => {
   const user_chatId = location.state?.chatId;
   // each round record
   const [roundRecord, setRoundRecord] = useState<RoundRecord | null>(null);
-  // const [roundTimeLeft, setRoundTimeLeft] = useState(0);
+  const [roundTimeLeft, setRoundTimeLeft] = useState(0);
   const [isGameOverModal, setisGameOverModal] = useState(false);
   const [opponnentWinCount, setOpponnentWinCount] = useState(0);
   const [userWinCount, setUserWinCount] = useState(0);
@@ -37,29 +37,42 @@ const OneVsOne = () => {
   const [winnerRoundRecord, setWinnerRoundRecord] =
     useState<null | WinnerRoundRecordType>();
 
+  //round move of both users
+
+  const [userMoveImage, setUserMoveImage] = useState<string | null>(null);
+  const [opponentMoveImage, setOpponentMoveImage] = useState<string | null>(
+    null
+  );
+
   //milliseconds->sec
-  // const totalTimeForRound =
-  //   (roundRecord && roundRecord.roundTimeLimit / 1000) ?? 0;
+  const totalTimeForRound =
+    (roundRecord && roundRecord.roundTimeLimit / 1000) ?? 0;
 
-  // const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
-  const heightPercentageTimeBar = (100 / 100) * 100; // Full height is 100%
+  const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
 
-  // Timer logic
-  // useEffect(() => {
-  //   if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
-  //     if (roundTimeLeft < totalTimeForRound) {
-  //       const timer = setInterval(() => {
-  //         setRoundTimeLeft((prev) => prev + 1);
-  //       }, 1000);
+  //timer Logic
+  useEffect(() => {
+    if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
+      if (roundTimeLeft < totalTimeForRound) {
+        console.log("inside the timer", roundTimeLeft);
 
-  //       return () => clearInterval(timer);
-  //     } else {
-  //       console.log("time up");
-  //       handleUserMove(getRandomMove());
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [roundRecord, roundTimeLeft, totalTimeForRound]);
+        const timer = setInterval(() => {
+          setRoundTimeLeft((prev) => {
+            if (prev + 1 >= totalTimeForRound) {
+              clearInterval(timer); // Stop the timer when limit is reached
+              console.log("time up");
+              handleUserMove(getRandomMove());
+              return totalTimeForRound; // Ensure time is capped at the limit
+            }
+            return prev + 1;
+          });
+        }, 1000);
+
+        return () => clearInterval(timer);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roundRecord, roundTimeLeft]);
 
   // ready for game
   useEffect(() => {
@@ -85,20 +98,6 @@ const OneVsOne = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Listen for ROUND_RESULT and GAME_OVER events
-  // useEffect(() => {
-  //   if (userSelectedMove) {
-  //     socket.on(SocketEvents.ROUND_RESULT, handleRoundResult);
-  //     socket.on(SocketEvents.GAME_OVER, handleGameOver);
-
-  //     return () => {
-  //       socket.off(SocketEvents.ROUND_RESULT);
-  //       socket.off(SocketEvents.GAME_OVER);
-  //     };
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [userSelectedMove]);
-
   // Check round results
   useEffect(() => {
     if (winnerRoundRecord && !winnerRoundRecord?.isDraw) {
@@ -108,9 +107,37 @@ const OneVsOne = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [winnerRoundRecord]);
+
+  useEffect(() => {
+    if (winnerRoundRecord) {
+      let opponentMove = "";
+      let userMove = "";
+
+      // Check if you are player1 then pick player 2's move and vice versa
+      if (winnerRoundRecord?.player1?.chatId === user_chatId) {
+        opponentMove = winnerRoundRecord?.player2?.move as UserMove;
+        userMove = winnerRoundRecord?.player1?.move as UserMove;
+      } else {
+        opponentMove = winnerRoundRecord?.player1?.move as UserMove;
+        userMove = winnerRoundRecord?.player2?.move as UserMove;
+      }
+
+      // Get the images based on moves
+      const { userMoveImage, opponentMoveImage } = getSelectedImages(
+        userMove as UserMove,
+        opponentMove as UserMove
+      );
+
+      setUserMoveImage(userMoveImage);
+      setOpponentMoveImage(opponentMoveImage);
+    }
+  }, [winnerRoundRecord, user_chatId]);
   // Handle round start
   const handleRoundStart = (data: RoundRecord) => {
     console.log("inside handleRoundStart");
+    setRoundTimeLeft(0); //timer reset
+    setOpponentMoveImage(null); //rest the opponent image
+    setUserMoveImage(null); //reset the usermove image
     setTimeout(() => {
       console.log("Round started", data);
       setWinnerRoundRecord(null);
@@ -123,6 +150,7 @@ const OneVsOne = () => {
   const handleRoundResult = (data: string) => {
     console.log("ROUND_RESULT", data);
     setRoundRecord(null); // Reset round
+    setUserSelectedMove(null); //reset user move
     setWinnerRoundRecord(JSON.parse(data));
     setIsRoundStarted(false);
     socket.on(SocketEvents.ROUND_START, handleRoundStart);
@@ -134,6 +162,7 @@ const OneVsOne = () => {
     setGameOverResult(data);
   };
 
+  //handle user Move
   const handleUserMove = (userMove: string) => {
     setIsRoundStarted(false);
     socket.emit(SocketEvents.PLAYER_MOVE, {
@@ -144,19 +173,22 @@ const OneVsOne = () => {
     setUserSelectedMove(userMove);
   };
 
-  let opponentMove = "";
-  //check if you are player1 then pick player 2 move and get the img
+  // let opponentMove = "";
+  // let userMove = "";
 
-  if (winnerRoundRecord?.player1?.chatId === user_chatId) {
-    opponentMove = winnerRoundRecord?.player2?.move as UserMove;
-  } else {
-    opponentMove = winnerRoundRecord?.player1?.move as UserMove;
-  }
-  const { userMoveImage, opponentMoveImage } = getSelectedImages(
-    userSelectedMove as UserMove, // Casting to UserMove
-    opponentMove as UserMove
-  );
+  // //check if you are player1 then pick player 2 move and get the img
 
+  // if (winnerRoundRecord?.player1?.chatId === user_chatId) {
+  //   opponentMove = winnerRoundRecord?.player2?.move as UserMove;
+  //   userMove = winnerRoundRecord?.player1?.move as UserMove;
+  // } else {
+  //   opponentMove = winnerRoundRecord?.player1?.move as UserMove;
+  //   userMove = winnerRoundRecord?.player2?.move as UserMove;
+  // }
+  // const { userMoveImage, opponentMoveImage } = getSelectedImages(
+  //   userMove as UserMove, // Casting to UserMove
+  //   opponentMove as UserMove
+  // );
   return (
     <Box
       css={{
@@ -171,13 +203,13 @@ const OneVsOne = () => {
         css={{
           position: "fixed",
           height: winnerRoundRecord ? "min(40vh, 35vh)" : "min(20vh,15vh)",
-          // height: "100px",
           top: 0,
         }}
       >
         <Box
           as="img"
-          src={opponentMoveImage}
+          //if we have opponnent move from round result
+          src={opponentMoveImage ? opponentMoveImage : ""}
           css={{
             height: "100%",
             transform: winnerRoundRecord ? "rotate(180deg)" : "",
@@ -214,8 +246,7 @@ const OneVsOne = () => {
               <TimerBar css={{ height: `${heightPercentageTimeBar}%` }} />
             </VerticalLine>
             <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
-              {/* {roundTimeLeft} */}
-              {30}
+              {roundTimeLeft}
             </Box>
           </Flex>
           <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>

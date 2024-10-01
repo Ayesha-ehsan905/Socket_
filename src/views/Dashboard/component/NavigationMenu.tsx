@@ -11,7 +11,7 @@ const NavigationMenu = () => {
   const { socket } = useSocket();
   const { chatId } = useTelegram();
   const navigate = useNavigate();
-
+  console.log("socket connection status from leaderboard:", socket.connected);
   const handleMenuClick = (path: string) => {
     if (path === routes.matching_screen) {
       //if socket is not connected connect and then emit the event

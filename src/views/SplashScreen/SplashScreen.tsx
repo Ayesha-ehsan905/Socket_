@@ -13,6 +13,7 @@ const SplashScreen = () => {
   const navigate = useNavigate();
   const { chatId } = useTelegram();
   useEffect(() => {
+    //user profile api integration
     const fetchProfileData = async () => {
       try {
         const response = await axios.post("users/auth", {
@@ -20,7 +21,7 @@ const SplashScreen = () => {
         });
         if (response) {
           setIsApiResponseFetched(true);
-          console.log(response.data?.data);
+          //set the user auth context
           setUserData(response?.data?.data);
         }
       } catch (err) {
