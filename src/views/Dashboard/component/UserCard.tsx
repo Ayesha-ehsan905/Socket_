@@ -5,14 +5,6 @@ import { AddIcon, NotificationIcon } from "../../../components/icons";
 import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 
 const UserCard = () => {
-  const { userData } = useAuth();
-  const firstName = userData?.user?.first_name;
-  const lastName = userData?.user?.last_name;
-  const userName = userData?.token
-    ? lastName
-      ? firstName + " " + lastName
-      : firstName
-    : "John Doe";
   return (
     <UserCardBox>
       <Flex direction={"row"} justify={"between"} wrap={"wrap"}>
@@ -53,42 +45,56 @@ const UserCard = () => {
           </Box>
         </Box>
       </Flex>
-      <Flex
-        direction={"row"}
-        justify={"between"}
-        wrap={"wrap"}
-        align={"center"}
-      >
-        <Flex justify={"center"} css={{ columnGap: "$3" }}>
-          <Box as="img" src="/images/avatar.png" />
-          <Box as="span" css={{ fontSize: "$14", alignSelf: "center" }}>
-            {userName}
-          </Box>
-        </Flex>
-        <Flex
-          css={{
-            borderRadius: "24px",
-            height: "fit-content",
-            background: "$beige",
-          }}
-        >
-          <AddIcon />
-          <Box as="span" css={{ p: "0 20px", textAlign: "center" }}>
-            50
-          </Box>
-          <Box
-            as="img"
-            src="/images/Vector.png"
-            css={{ width: "25px", height: "25px", alignSelf: "baseline" }}
-          />
-        </Flex>
-      </Flex>
+      <UserDetailCard />
     </UserCardBox>
   );
 };
 
+export const UserDetailCard = () => {
+  const { userData } = useAuth();
+  const firstName = userData?.user?.first_name;
+  const lastName = userData?.user?.last_name;
+  const userName = userData?.token
+    ? lastName
+      ? firstName + " " + lastName
+      : firstName
+    : "John Doe";
+  return (
+    <Flex
+      direction={"row"}
+      justify={"between"}
+      wrap={"wrap"}
+      align={"center"}
+      css={{ background: "$white", height: "100%", margin: "auto 0" }}
+    >
+      <Flex justify={"center"} css={{ columnGap: "$3" }}>
+        <Box as="img" src="/images/avatar.png" />
+        <Box as="span" css={{ fontSize: "$14", alignSelf: "center" }}>
+          {userName}
+        </Box>
+      </Flex>
+      <Flex
+        css={{
+          borderRadius: "24px",
+          height: "fit-content",
+          background: "$beige",
+        }}
+      >
+        <AddIcon />
+        <Box as="span" css={{ p: "0 20px", textAlign: "center" }}>
+          50
+        </Box>
+        <Box
+          as="img"
+          src="/images/Vector.png"
+          css={{ width: "25px", height: "25px", alignSelf: "baseline" }}
+        />
+      </Flex>
+    </Flex>
+  );
+};
 export default UserCard;
-const UserCardBox = styled(Box, {
+export const UserCardBox = styled(Box, {
   padding: "16px",
   borderRadius: "0px 0px 20px 20px",
   boxShadow: "0px 4px 8px -2px #1018281A",

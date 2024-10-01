@@ -5,6 +5,7 @@ export const defaultTokens = {
     primary: "#2B2B2B",
     error: "#F04438",
     white: "#FFFFFF",
+    white1: "#FFFCF6",
     beige: "#FEF7E6",
     grey1: "#F1EDED",
     green: "#45AB68",
@@ -12,7 +13,9 @@ export const defaultTokens = {
     grey2: "#C8C8C8",
     grey3: "#757575",
     grey4: "#1F1F1F80",
+    grey5: "#DCDCDC",
     secondary: "#F9C034",
+    black: "#000000",
   },
   fonts: {
     Baloo: "Baloo",
@@ -35,6 +38,7 @@ export const defaultTokens = {
     18: "18px",
     14: "14px",
     20: "20px",
+    24: "24px",
   },
   fontWeights: {
     light: 300,
