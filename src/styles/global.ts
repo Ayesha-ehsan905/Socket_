@@ -4,7 +4,8 @@ export const globalStyles = globalCss({
   body: {
     margin: 0,
     padding: 0,
-    overflow: "hidden",
+    overflowX: "hidden",
+    overflowY: "scroll",
     fontFamily: "$Baloo",
     background: "$white",
   },
