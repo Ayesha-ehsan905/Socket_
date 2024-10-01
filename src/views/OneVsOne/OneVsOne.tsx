@@ -230,15 +230,17 @@ const OneVsOne = () => {
           top: 0,
         }}
       >
-        <Box
-          as="img"
-          //if we have opponnent move from round result
-          src={opponentMoveImage ? opponentMoveImage : ""}
-          css={{
-            height: "100%",
-            transform: "rotate(180deg)",
-          }}
-        />
+        {opponentMoveImage && (
+          <Box
+            as="img"
+            //if we have opponnent move from round result
+            src={opponentMoveImage}
+            css={{
+              height: "100%",
+              transform: "rotate(180deg)",
+            }}
+          />
+        )}
         {disconnectedUserChatId && (
           <Flex justify={"center"} direction={"column"} align={"center"}>
             <Spinner />
