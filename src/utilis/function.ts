@@ -36,7 +36,7 @@ export const returnTelegramID = () => {
     app.ready();
 
     // Check if initDataUnsafe and user exist
-    chat_Id = app.initDataUnsafe?.user?.id;
+    chat_Id = 6710706725;
     return chat_Id;
   }
 };

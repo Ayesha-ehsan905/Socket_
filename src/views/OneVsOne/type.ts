@@ -30,3 +30,6 @@ export type WinOverLayProps = {
   gameOverRecord: GameOverDTO | null;
   userChatId?: number | string; //current user chat id
 };
+export type UserDisconnectedProps = {
+  userChatId: string;
+};

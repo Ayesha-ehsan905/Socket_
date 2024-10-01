@@ -8,8 +8,14 @@ import WinOverLay from "./component/WinOverLay";
 import { useLocation } from "react-router-dom";
 import { getRandomMove, getSelectedImages } from "../../utilis/function";
 import GameSection from "./component/GameSection";
-import { GameOverDTO, RoundRecord, WinnerRoundRecordType } from "./type";
+import {
+  GameOverDTO,
+  RoundRecord,
+  UserDisconnectedProps,
+  WinnerRoundRecordType,
+} from "./type";
 import { useSocket } from "../../components/contexts/SocketContext/useSocket";
+import { Spinner } from "../../components/Loader/Spinner";
 
 const OneVsOne = () => {
   const { socket } = useSocket();
@@ -43,6 +49,9 @@ const OneVsOne = () => {
   const [opponentMoveImage, setOpponentMoveImage] = useState<string | null>(
     null
   );
+  //disconnected user chat id
+  const [disconnectedUserChatId, setDisconnectedUserChatId] =
+    useState<UserDisconnectedProps | null>(null);
 
   //milliseconds->sec
   const totalTimeForRound =
@@ -89,11 +98,14 @@ const OneVsOne = () => {
     socket.on(SocketEvents.ROUND_START, handleRoundStart);
     socket.on(SocketEvents.ROUND_RESULT, handleRoundResult);
     socket.on(SocketEvents.GAME_OVER, handleGameOver);
+    socket.on(SocketEvents.PLAYER_DISCONNECTED, handlePlayerDisconnected);
+    socket.on(SocketEvents.PLAYER_TIMEOUT, handlePlayerTimeout);
 
     return () => {
       socket.off(SocketEvents.ROUND_START);
       socket.off(SocketEvents.ROUND_RESULT);
       socket.off(SocketEvents.GAME_OVER);
+      socket.off(SocketEvents.PLAYER_DISCONNECTED);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -161,6 +173,18 @@ const OneVsOne = () => {
     setTimeout(() => setisGameOverModal(true), 2000); // Delay game over modal
     setGameOverResult(data);
   };
+  //player disconnected
+  const handlePlayerDisconnected = (data: UserDisconnectedProps | null) => {
+    console.log("user disconnected");
+    setDisconnectedUserChatId(data);
+    setIsRoundStarted(false);
+  };
+  //handle player time out
+  const handlePlayerTimeout = (data: GameOverDTO) => {
+    console.log("GAME_OVER", data);
+    setTimeout(() => setisGameOverModal(true), 2000); // Delay game over modal
+    setGameOverResult(data);
+  };
 
   //handle user Move
   const handleUserMove = (userMove: string) => {
@@ -189,6 +213,7 @@ const OneVsOne = () => {
   //   userMove as UserMove, // Casting to UserMove
   //   opponentMove as UserMove
   // );
+  console.log(!disconnectedUserChatId, "ass");
   return (
     <Box
       css={{
@@ -215,6 +240,14 @@ const OneVsOne = () => {
             transform: winnerRoundRecord ? "rotate(180deg)" : "",
           }}
         />
+        <Flex justify={"center"} direction={"column"} align={"center"}>
+          <Spinner />
+          <Box as="p">
+            {!disconnectedUserChatId && disconnectedUserChatId !== user_chatId
+              ? "Oppponnent  Disconnected"
+              : ""}
+          </Box>
+        </Flex>
       </FixedBgWrapper>
       <Flex
         direction={"column"}
@@ -251,15 +284,16 @@ const OneVsOne = () => {
           </Flex>
           <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>
             {
-              roundRecord
-                ? `Round ${roundRecord?.roundNo}` // Check if roundRecord exists, show the round number
-                : winnerRoundRecord //check if round record
-                ? winnerRoundRecord.isDraw
-                  ? "Draw" // If the game was a draw
-                  : winnerRoundRecord.winnerChatId === user_chatId
-                  ? "You Won" // If the user won the round
-                  : "You Lost" // If the user lost the round
-                : "Game Starting" // If no round record, indicate that the game is starting
+              !disconnectedUserChatId &&
+                (roundRecord
+                  ? `Round ${roundRecord?.roundNo}` // Check if roundRecord exists, show the round number
+                  : winnerRoundRecord //check if round record
+                  ? winnerRoundRecord.isDraw
+                    ? "Draw" // If the game was a draw
+                    : winnerRoundRecord.winnerChatId === user_chatId
+                    ? "You Won" // If the user won the round
+                    : "You Lost" // If the user lost the round
+                  : "Game Starting") // If no round record, indicate that the game is starting
             }
           </Box>
           <Flex
