@@ -3,8 +3,9 @@ import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import {
   HomeIcon,
+  MarketplaceIcon,
   OneOnOneIcon,
-  Profile,
+  ProfileIcon,
   TournamentIcon,
 } from "../../../components/icons";
 import { styled } from "../../../styles";
@@ -28,7 +29,8 @@ const LeaderBoard = () => {
     { name: "Home", icon: HomeIcon, path: routes.dashboard },
     { name: "1v1", icon: OneOnOneIcon, path: routes.matching_screen },
     { name: "Tournament", icon: TournamentIcon, path: "" },
-    { name: "Profile", icon: Profile, path: "" },
+    { name: "MarketPlace", icon: MarketplaceIcon, path: "" },
+    { name: "Profile", icon: ProfileIcon, path: "" },
   ];
   console.log("socket  connection from leaderboard ", socket.connected);
   const handleMenuClick = (path: string) => {
@@ -53,7 +55,11 @@ const LeaderBoard = () => {
           Leaderboard
         </Box>
 
-        <Flex direction={"column"} wrap={"wrap"}>
+        <Flex
+          direction={"column"}
+          wrap={"wrap"}
+          css={{ maxHeight: "85vh", overflowY: "scroll" }}
+        >
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
             <LeaderBoardCss key={num} css={{ mt: "15px" }}>
               <Flex direction={"row"} justify={"between"} align={"center"}>
@@ -83,7 +89,7 @@ const LeaderBoard = () => {
             direction={"row"}
             align={"center"}
             justify={"between"}
-            css={{ padding: "6px  23px" }}
+            css={{ padding: "6px  23px", height: "4.5rem" }}
           >
             {LeaderBoardMenus.map((menu, index) => {
               const IconComponent = menu.icon;
@@ -97,17 +103,6 @@ const LeaderBoard = () => {
                   key={index}
                 >
                   <IconComponent active={isActive} />
-                  <Box
-                    as="span"
-                    css={{
-                      fontFamily: "$Gilmer",
-                      fontWeight: isActive ? "$bold" : "$semibold",
-                      color: isActive ? "$primary" : "$grey3",
-                      letterSpacing: menu.name === "1v1" ? "3px" : 0,
-                    }}
-                  >
-                    {menu.name}
-                  </Box>
                 </Flex>
               );
             })}
