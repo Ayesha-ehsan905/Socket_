@@ -26,3 +26,10 @@ export const BackgroundCardCSS = {
   width: "100vw",
   height: "100vh",
 };
+
+export const HeadingCss = {
+  fontSize: "$24",
+  fontFamily: "$Gilmer",
+  margin: "24px 0",
+  fontWeight: "$bold",
+};
