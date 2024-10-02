@@ -28,7 +28,7 @@ const NavigationMenu = () => {
     <FixedBgWrapper
       css={{
         background: "$white",
-        boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 16px 0px",
+        boxShadow: "rgba(0, 0, 0, 0.5) 0px 0px 16px 0px",
       }}
     >
       <Flex

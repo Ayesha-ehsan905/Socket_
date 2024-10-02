@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { styled } from "../../styles";
+import { HeadingCss, navBottomSpace } from "../../styles/style";
 import NavigationMenu from "../Dashboard/component/NavigationMenu";
 import { UserCardBox, UserDetailCard } from "../Dashboard/component/UserCard";
 import BackgroundOption from "./component/BackgroundOption";
@@ -21,17 +22,9 @@ const Marketplace = () => {
       <UserCardBox css={{ background: "$white", height: "88px" }}>
         <UserDetailCard />
       </UserCardBox>
-      <Box css={{ padding: "24px 16px 6.25rem 1rem" }}>
+      <Box css={{ ...navBottomSpace, padding: "24px 16px 24px 1rem" }}>
         <Flex direction={"row"} wrap={"wrap"}>
-          <Box
-            css={{
-              fontSize: "$24",
-              fontWeight: "$bold",
-              fontFamily: "$Gilmer",
-            }}
-          >
-            Marketplace
-          </Box>
+          <Box css={HeadingCss}>Marketplace</Box>
           <Box
             css={{
               fontSize: "$16",

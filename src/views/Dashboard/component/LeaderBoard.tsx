@@ -4,6 +4,7 @@ import { styled } from "../../../styles";
 import { useState } from "react";
 import Alert from "../../../components/Popup";
 import NavigationMenu from "./NavigationMenu";
+import { navBottomSpace } from "../../../styles/style";
 
 const LeaderBoard = () => {
   const [openTelegramAlert, setOpenTelegramAlert] = useState(false);
@@ -11,7 +12,7 @@ const LeaderBoard = () => {
 
   return (
     <>
-      <Box css={{ margin: "24px 16px 16px" }}>
+      <Box css={{ ...navBottomSpace, margin: "24px 16px 16px" }}>
         <Box
           as="h2"
           css={{
@@ -46,11 +47,11 @@ const LeaderBoard = () => {
                   </Box>
                 </Box>
               </Flex>
-              <NavigationMenu />
             </LeaderBoardCss>
           ))}
         </Flex>
       </Box>
+      <NavigationMenu />
       <Alert
         open={openTelegramAlert}
         onClose={() => setOpenTelegramAlert(false)}

@@ -41,14 +41,27 @@ const InputCard = styled("div", {
 interface InputFieldProps {
   label: string;
   value: string;
+  setValue?: (value: string) => void;
+  placeholder?: string;
 }
 
-const InputField = ({ label, value }: InputFieldProps) => {
+const InputField = ({
+  label,
+  value,
+  setValue,
+  placeholder,
+}: InputFieldProps) => {
   return (
     <InputWrapper>
       <StyledLabel htmlFor={label}>{label}</StyledLabel>
       <InputCard>
-        <StyledInput id={label} value={value} readOnly />
+        <StyledInput
+          id={label}
+          value={value}
+          placeholder={placeholder ?? ""}
+          readOnly={!setValue}
+          onChange={(e) => setValue?.(e.target.value)}
+        />
       </InputCard>
     </InputWrapper>
   );
