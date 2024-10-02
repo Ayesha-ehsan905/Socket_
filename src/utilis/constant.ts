@@ -13,11 +13,12 @@ export const routes = {
   matching_screen: "/matching-screen",
   One_one: "/1v1",
   marketplace: "/marketplace",
+  profile: "/profile",
 };
 export const LeaderBoardMenus = [
   { name: "Home", icon: HomeIcon, path: routes.dashboard },
   { name: "1v1", icon: OneOnOneIcon, path: routes.matching_screen },
   { name: "Tournament", icon: TournamentIcon, path: "/" },
   { name: "MarketPlace", icon: MarketplaceIcon, path: routes.marketplace },
-  { name: "Profile", icon: ProfileIcon, path: "/" },
+  { name: "Profile", icon: ProfileIcon, path: routes.profile },
 ];

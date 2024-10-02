@@ -3,9 +3,16 @@ import { Flex } from "../../components/Flex/Flex";
 import { styled } from "../../styles";
 import NavigationMenu from "../Dashboard/component/NavigationMenu";
 import { UserCardBox, UserDetailCard } from "../Dashboard/component/UserCard";
+import BackgroundOption from "./component/BackgroundOption";
+import HandGestures from "./component/HandGestures";
 import Tabs from "./component/Tabs";
 
 const Marketplace = () => {
+  const tabData = [
+    { label: "Hand Gestures", component: <HandGestures /> },
+    { label: "Backgrounds", component: <BackgroundOption /> },
+    // Add more tabs here as needed
+  ];
   return (
     <Box css={{ background: "$white1" }}>
       <UserCardBox css={{ background: "$white", height: "88px" }}>
@@ -36,7 +43,8 @@ const Marketplace = () => {
           </Box>
         </Flex>
         <Divder />
-        <Tabs />
+        {/* Add more tabs here as needed */}
+        <Tabs tabData={tabData} />
       </Box>
       <NavigationMenu />
     </Box>

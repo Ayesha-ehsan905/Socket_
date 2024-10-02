@@ -20,6 +20,7 @@ import MatchingOpponent from "./views/MatchingOpponent";
 import OneVsOne from "./views/OneVsOne";
 import { useSocket } from "./components/contexts/SocketContext/useSocket";
 import Marketplace from "./views/Marketplace";
+import Profile from "./views/Profile";
 function App() {
   globalStyles();
   // const { socket } = useSocket();
@@ -56,6 +57,7 @@ function App() {
 
             <Route path={routes.One_one} element={<OneVsOne />} />
             <Route path={routes.marketplace} element={<Marketplace />} />
+            <Route path={routes.profile} element={<Profile />} />
           </Route>
         </Routes>
         {errorAlert && (

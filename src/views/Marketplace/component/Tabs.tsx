@@ -2,40 +2,34 @@ import { styled } from "@stitches/react";
 import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import { useState } from "react";
-import HandGestures from "./HandGestures";
-import BackgroundOption from "./BackgroundOption";
 
-const Tabs = () => {
+import { TabsProps } from "../type";
+
+const Tabs = ({ tabData }: TabsProps) => {
   const [tabNumber, setTabNumber] = useState(0);
-
   return (
     <>
       <Flex
         direction={"row"}
         css={{ gap: "1rem", width: "100%", marginTop: "1rem" }}
       >
-        <TabsContainer
-          isActive={tabNumber === 0}
-          onClick={() => setTabNumber(0)}
-        >
-          <TabsText>Hand Gestures</TabsText>
-        </TabsContainer>
-        <TabsContainer
-          isActive={tabNumber === 1}
-          onClick={() => setTabNumber(1)}
-        >
-          <TabsText>Backgrounds</TabsText>
-        </TabsContainer>
+        {tabData.map((tab, index) => (
+          <TabsContainer
+            key={index}
+            isActive={tabNumber === index}
+            onClick={() => setTabNumber(index)}
+          >
+            <TabsText>{tab.label}</TabsText>
+          </TabsContainer>
+        ))}
       </Flex>
-      {tabNumber === 0 && <HandGestures />}
-      {tabNumber === 1 && <BackgroundOption />}
-      {/* Add content for the second tab if needed */}
+      <Box>{tabData[tabNumber].component}</Box>
     </>
   );
 };
 
 export const TabsContainer = styled(Box, {
-  height: "40px",
+  height: "28px",
   width: "100%",
   padding: "12px",
   display: "flex",
