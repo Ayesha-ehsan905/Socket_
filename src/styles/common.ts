@@ -14,6 +14,8 @@ export const defaultTokens = {
     grey3: "#757575",
     grey4: "#1F1F1F80",
     grey5: "#DCDCDC",
+    grey6: "#D9D9D9",
+    grey7: "#C8C8C8",
     secondary: "#F9C034",
     black: "#000000",
   },

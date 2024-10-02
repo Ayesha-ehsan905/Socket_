@@ -2,7 +2,7 @@ import React from "react";
 import { CSS, styled } from "@stitches/react";
 
 interface ButtonProps {
-  variant?: "filled" | "outlined";
+  variant?: "filled" | "outlined" | "disabled";
   children: React.ReactNode;
   onClick?: () => void;
   css?: CSS;
@@ -47,6 +47,10 @@ const StyledButton = styled("button", {
         "&:hover": {
           opacity: 0.9,
         },
+      },
+      disabled: {
+        backgroundColor: "$grey7",
+        pointerEvents: "none",
       },
     },
   },
