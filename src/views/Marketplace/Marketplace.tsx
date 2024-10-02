@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { styled } from "../../styles";
@@ -8,6 +9,8 @@ import HandGestures from "./component/HandGestures";
 import Tabs from "./component/Tabs";
 
 const Marketplace = () => {
+  const [tabNumber, setTabNumber] = useState(0);
+
   const tabData = [
     { label: "Hand Gestures", component: <HandGestures /> },
     { label: "Backgrounds", component: <BackgroundOption /> },
@@ -44,7 +47,11 @@ const Marketplace = () => {
         </Flex>
         <Divder />
         {/* Add more tabs here as needed */}
-        <Tabs tabData={tabData} />
+        <Tabs
+          tabData={tabData}
+          setTabNumber={setTabNumber}
+          tabNumber={tabNumber}
+        />
       </Box>
       <NavigationMenu />
     </Box>

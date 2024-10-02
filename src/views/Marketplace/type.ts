@@ -9,4 +9,6 @@ export type TabItem = {
 
 export type TabsProps = {
   tabData: TabItem[];
+  tabNumber: number;
+  setTabNumber: (value: number) => void;
 };

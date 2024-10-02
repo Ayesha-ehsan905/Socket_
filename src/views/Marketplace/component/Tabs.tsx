@@ -1,12 +1,11 @@
 import { styled } from "@stitches/react";
 import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
-import { useState } from "react";
 
 import { TabsProps } from "../type";
 
-const Tabs = ({ tabData }: TabsProps) => {
-  const [tabNumber, setTabNumber] = useState(0);
+const Tabs = (props: TabsProps) => {
+  const { tabData, tabNumber, setTabNumber } = props;
   return (
     <>
       <Flex
@@ -23,7 +22,7 @@ const Tabs = ({ tabData }: TabsProps) => {
           </TabsContainer>
         ))}
       </Flex>
-      <Box>{tabData[tabNumber].component}</Box>
+      <>{tabData[tabNumber].component}</>
     </>
   );
 };
