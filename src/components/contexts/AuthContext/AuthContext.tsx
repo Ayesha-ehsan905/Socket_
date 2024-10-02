@@ -13,6 +13,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       last_name: null,
       chatId: null,
     },
+    wallet: {
+      id: null,
+      address: null,
+      chainType: null,
+      created_at: null,
+      updated_at: null,
+    },
   });
   const updateUserData = (data: UserDTO) => {
     setUserData({

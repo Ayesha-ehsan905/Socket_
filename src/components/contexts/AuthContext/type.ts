@@ -8,11 +8,11 @@ export type UserDTO = {
     chatId: string | null;
   } | null;
   wallet: {
-    id: number;
-    address: string;
-    chainType: string;
-    created_at: string;
-    updated_at: string;
+    id: number | null;
+    address: string | null;
+    chainType: string | null;
+    created_at: string | null;
+    updated_at: string | null;
   } | null;
 };
 
