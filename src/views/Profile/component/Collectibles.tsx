@@ -9,9 +9,13 @@ import {
 } from "../../../styles/style";
 import { Divder } from "../../Marketplace/Marketplace";
 
-const Collectibles = () => {
-  const [showModal, setShowModal] = useState(false);
+interface ICollectiblesProps {
+  collectibles: object;
+}
 
+const Collectibles = ({ collectibles }: ICollectiblesProps) => {
+  const [showModal, setShowModal] = useState(false);
+  console.log(collectibles);
   return (
     <Box css={navBottomSpace}>
       <Divder />

@@ -8,14 +8,32 @@ import { styled } from "../../styles";
 import { BackgroundCardCSS } from "../../styles/style";
 import NavigationMenu from "../Dashboard/component/NavigationMenu";
 import { ClipboardIcon, TickIcon } from "../../components/icons";
+import { axios } from "../../lib/axios";
+import { endpoint } from "../../utilis/endpoints";
+import { useAuth } from "../../components/contexts/AuthContext/useAuth";
+import { UserDTO } from "../../components/contexts/AuthContext/type";
 
 const Profile = () => {
   const [tabNumber, setTabNumber] = useState(0);
+  const [userDetails, setUserDetails] = useState<UserDTO>();
+  const [userCollectibles, setUserCollectibles] = useState({});
   const [isCopied, setIsCopied] = useState(false);
+  const { userData } = useAuth();
 
   const tabData = [
-    { label: "Profile Details", component: <PersonalDetails /> },
-    { label: "Collectibles", component: <Collectibles /> },
+    {
+      label: "Profile Details",
+      component: (
+        <PersonalDetails
+          first_name={userDetails?.user?.first_name ?? ""}
+          last_name={userDetails?.user?.last_name ?? ""}
+        />
+      ),
+    },
+    {
+      label: "Collectibles",
+      component: <Collectibles collectibles={userCollectibles as object} />,
+    },
     // Add more tabs here as needed
   ];
 
@@ -26,6 +44,34 @@ const Profile = () => {
       }, 2000);
     }
   }, [isCopied]);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const config = {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        };
+
+        // Fetch both profile and collectibles in parallel
+        const [profileResponse, collectiblesResponse] = await Promise.all([
+          axios.get(endpoint.userProfile, config),
+          axios.get(endpoint.userCollectables, config),
+        ]);
+
+        // Set state after both requests are successful
+        setUserDetails({
+          ...profileResponse.data.data,
+          wallet: profileResponse.data.wallet,
+        });
+        setUserCollectibles(collectiblesResponse.data.data);
+      } catch (error) {
+        console.error("Error fetching profile or collectibles data:", error);
+      }
+    };
+
+    fetchProfileData();
+  }, [userData.token]);
+
   return (
     <>
       <Box css={{ ...BackgroundCardCSS, background: "$white1" }}>
@@ -65,7 +111,9 @@ const Profile = () => {
                       margin: "0",
                     }}
                   >
-                    0x6944C...DK239F0
+                    {userDetails?.user?.wallet
+                      ? userDetails?.user?.wallet
+                      : "0x6944C...DK239F0"}
                   </Box>
                   <Box
                     onClick={() => {
