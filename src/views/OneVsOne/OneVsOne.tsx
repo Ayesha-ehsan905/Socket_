@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { AvatarImg, FixedBgWrapper, VerticalLine } from "../../styles/style";
@@ -16,6 +16,7 @@ import {
 } from "./type";
 import { useSocket } from "../../components/contexts/SocketContext/useSocket";
 import { Spinner } from "../../components/Loader/Spinner";
+import Countdown from "./component/CountDownAnimation";
 
 const OneVsOne = () => {
   const { socket } = useSocket();
@@ -148,14 +149,14 @@ const OneVsOne = () => {
   const handleRoundStart = (data: RoundRecord) => {
     console.log("inside handleRoundStart");
     setRoundTimeLeft(0); //timer reset
-    setOpponentMoveImage(null); //rest the opponent image
-    setUserMoveImage(null); //reset the usermove image
     setTimeout(() => {
+      setOpponentMoveImage(null); //rest the opponent image
+      setUserMoveImage(null); //reset the usermove image
       console.log("Round started", data);
       setWinnerRoundRecord(null);
       setRoundRecord(data);
       setIsRoundStarted(true);
-    }, 3000);
+    }, 4000);
   };
   // Handle round result
 
@@ -168,7 +169,7 @@ const OneVsOne = () => {
     socket.on(SocketEvents.ROUND_START, handleRoundStart);
   };
   // Handle game over
-  const handleGameOver = (data: SetStateAction<GameOverDTO | null>) => {
+  const handleGameOver = (data: GameOverDTO | null) => {
     console.log("GAME_OVER", data);
     setTimeout(() => setisGameOverModal(true), 2000); // Delay game over modal
     setGameOverResult(data);
@@ -227,24 +228,26 @@ const OneVsOne = () => {
         css={{
           position: "fixed",
           height: winnerRoundRecord ? "min(40vh, 35vh)" : "min(20vh,15vh)",
-          top: 0,
+          top: disconnectedUserChatId ? "33px" : 0,
         }}
       >
-        <Box
-          as="img"
-          //if we have opponnent move from round result
-          src={opponentMoveImage ? opponentMoveImage : ""}
-          css={{
-            height: "100%",
-            transform: winnerRoundRecord ? "rotate(180deg)" : "",
-          }}
-        />
+        {opponentMoveImage && (
+          <Box
+            as="img"
+            //if we have opponnent move from round result
+            src={opponentMoveImage}
+            css={{
+              height: "100%",
+              transform: "rotate(180deg)",
+            }}
+          />
+        )}
         {disconnectedUserChatId && (
           <Flex justify={"center"} direction={"column"} align={"center"}>
             <Spinner />
             <Box as="p">
               {disconnectedUserChatId !== user_chatId
-                ? "Oppponnent  Disconnected"
+                ? "Opponnent  Disconnected"
                 : ""}
             </Box>
           </Flex>
@@ -286,15 +289,19 @@ const OneVsOne = () => {
           <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>
             {
               !disconnectedUserChatId &&
-                (roundRecord
-                  ? `Round ${roundRecord?.roundNo}` // Check if roundRecord exists, show the round number
-                  : winnerRoundRecord //check if round record
-                  ? winnerRoundRecord.isDraw
-                    ? "Draw" // If the game was a draw
-                    : winnerRoundRecord.winnerChatId === user_chatId
-                    ? "You Won" // If the user won the round
-                    : "You Lost" // If the user lost the round
-                  : "Game Starting") // If no round record, indicate that the game is starting
+                (roundRecord ? (
+                  `Round ${roundRecord?.roundNo}` // Check if roundRecord exists, show the round number
+                ) : winnerRoundRecord ? ( //check if round record
+                  winnerRoundRecord.isDraw ? (
+                    "Draw" // If the game was a draw
+                  ) : winnerRoundRecord.winnerChatId === user_chatId ? (
+                    "You Won" // If the user won the round
+                  ) : (
+                    "You Lost"
+                  ) // If the user lost the round
+                ) : (
+                  <Countdown />
+                )) // If no round record, indicate that the game is starting
             }
           </Box>
           <Flex
