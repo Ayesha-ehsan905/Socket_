@@ -6,7 +6,13 @@ export type UserDTO = {
     first_name: string | null;
     last_name: string | null;
     chatId: string | null;
-    wallet: string | null;
+  } | null;
+  wallet: {
+    id: number;
+    address: string;
+    chainType: string;
+    created_at: string;
+    updated_at: string;
   } | null;
 };
 

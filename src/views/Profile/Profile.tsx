@@ -12,11 +12,13 @@ import { axios } from "../../lib/axios";
 import { endpoint } from "../../utilis/endpoints";
 import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { UserDTO } from "../../components/contexts/AuthContext/type";
+import { truncateString } from "../../utilis/function";
+import { Collectible } from "../../utilis/type";
 
 const Profile = () => {
   const [tabNumber, setTabNumber] = useState(0);
   const [userDetails, setUserDetails] = useState<UserDTO>();
-  const [userCollectibles, setUserCollectibles] = useState({});
+  const [userCollectibles, setUserCollectibles] = useState<Collectible[]>();
   const [isCopied, setIsCopied] = useState(false);
   const { userData } = useAuth();
 
@@ -32,7 +34,9 @@ const Profile = () => {
     },
     {
       label: "Collectibles",
-      component: <Collectibles collectibles={userCollectibles as object} />,
+      component: (
+        <Collectibles collectibles={userCollectibles as Collectible[]} />
+      ),
     },
     // Add more tabs here as needed
   ];
@@ -59,9 +63,11 @@ const Profile = () => {
         ]);
 
         // Set state after both requests are successful
+
         setUserDetails({
-          ...profileResponse.data.data,
-          wallet: profileResponse.data.wallet,
+          token: userData.token,
+          user: profileResponse.data.data.user,
+          wallet: profileResponse.data.data.wallet,
         });
         setUserCollectibles(collectiblesResponse.data.data);
       } catch (error) {
@@ -111,14 +117,16 @@ const Profile = () => {
                       margin: "0",
                     }}
                   >
-                    {userDetails?.user?.wallet
-                      ? userDetails?.user?.wallet
-                      : "0x6944C...DK239F0"}
+                    {userDetails?.wallet?.address
+                      ? truncateString(userDetails?.wallet?.address, 5, 5)
+                      : "No Wallet Address"}
                   </Box>
                   <Box
                     onClick={() => {
                       setIsCopied(true);
-                      navigator.clipboard.writeText("0x6944C...DK239F0");
+                      navigator.clipboard.writeText(
+                        userDetails?.wallet?.address ?? ""
+                      );
                     }}
                   >
                     {isCopied ? <TickIcon /> : <ClipboardIcon />}

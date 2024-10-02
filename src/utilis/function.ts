@@ -40,3 +40,9 @@ export const returnTelegramID = () => {
     return chat_Id;
   }
 };
+
+export const truncateString = (str: string, start: number, end: number) => {
+  return str.length > start + end
+    ? str.slice(0, start) + "..." + str.slice(str.length - end)
+    : str;
+};

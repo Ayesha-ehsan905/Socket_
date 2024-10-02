@@ -8,14 +8,14 @@ import {
   navBottomSpace,
 } from "../../../styles/style";
 import { Divder } from "../../Marketplace/Marketplace";
+import { Collectible } from "../../../utilis/type";
 
 interface ICollectiblesProps {
-  collectibles: object;
+  collectibles: Collectible[];
 }
 
 const Collectibles = ({ collectibles }: ICollectiblesProps) => {
   const [showModal, setShowModal] = useState(false);
-  console.log(collectibles);
   return (
     <Box css={navBottomSpace}>
       <Divder />
@@ -24,40 +24,42 @@ const Collectibles = ({ collectibles }: ICollectiblesProps) => {
       </Box>
       {/*TODO: Integrate Api and map data here */}
       <Flex css={{ gap: "16px" }} direction={"column"}>
-        {[1, 2, 3].map(() => (
-          <Flex align={"center"} justify={"between"}>
-            <Flex css={{ gap: "16px" }} align={"center"}>
-              <Box css={CollectibleImageBoxStyles}>
+        {collectibles &&
+          collectibles.length > 0 &&
+          collectibles.map((collectible) => (
+            <Flex align={"center"} justify={"between"}>
+              <Flex css={{ gap: "16px" }} align={"center"}>
+                <Box css={CollectibleImageBoxStyles}>
+                  <Box
+                    as="img"
+                    css={{
+                      height: "100%",
+                      width: "100%",
+                      maxHeight: "120px",
+                      maxWidth: "94px",
+                    }}
+                    src={collectible?.image_url}
+                  />
+                </Box>
                 <Box
-                  as="img"
+                  as="h2"
                   css={{
-                    height: "100%",
-                    width: "100%",
-                    maxHeight: "120px",
-                    maxWidth: "94px",
+                    fontSize: "$18",
+                    fontFamily: "$Gilmer",
+                    margin: "24px 0",
                   }}
-                  src={"/images/Stone.png"}
-                />
-              </Box>
-              <Box
-                as="h2"
-                css={{
-                  fontSize: "$18",
-                  fontFamily: "$Gilmer",
-                  margin: "24px 0",
-                }}
+                >
+                  {collectible?.name}
+                </Box>
+              </Flex>
+              <Button
+                css={{ fontSize: "$16", padding: "12px" }}
+                onClick={() => setShowModal(true)}
               >
-                Arcade Machine
-              </Box>
+                Withdraw
+              </Button>
             </Flex>
-            <Button
-              css={{ fontSize: "$16", padding: "12px" }}
-              onClick={() => setShowModal(true)}
-            >
-              Withdraw
-            </Button>
-          </Flex>
-        ))}
+          ))}
       </Flex>
 
       {showModal && (
