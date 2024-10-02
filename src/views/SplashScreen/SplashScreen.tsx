@@ -36,6 +36,7 @@ const SplashScreen = () => {
       const timer = setTimeout(() => {
         setFade(false);
         setTimeout(() => {
+          document.body.style.overflow = "scroll";
           navigate(routes.dashboard);
         }, 1000);
       }, 3000);
