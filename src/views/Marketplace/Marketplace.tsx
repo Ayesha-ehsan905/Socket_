@@ -1,6 +1,7 @@
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { styled } from "../../styles";
+import NavigationMenu from "../Dashboard/component/NavigationMenu";
 import { UserCardBox, UserDetailCard } from "../Dashboard/component/UserCard";
 import Tabs from "./component/Tabs";
 
@@ -10,7 +11,7 @@ const Marketplace = () => {
       <UserCardBox css={{ background: "$white", height: "88px" }}>
         <UserDetailCard />
       </UserCardBox>
-      <Box css={{ padding: "24px 16px 16px 16px" }}>
+      <Box css={{ padding: "24px 16px 6.25rem 1rem" }}>
         <Flex direction={"row"} wrap={"wrap"}>
           <Box
             css={{
@@ -37,6 +38,7 @@ const Marketplace = () => {
         <Divder />
         <Tabs />
       </Box>
+      <NavigationMenu />
     </Box>
   );
 };
