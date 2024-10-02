@@ -5,6 +5,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSocket } from "../../../components/contexts/SocketContext/useSocket";
 import { useTelegram } from "../../../hooks/useTelegram";
 import { SocketEvents } from "../../../utilis/enum";
+import Tooltip from "../../../components/Tooltip/Tooltip";
+import { Box } from "../../../components/elements";
 
 const NavigationMenu = () => {
   const { pathname } = useLocation();
@@ -42,15 +44,24 @@ const NavigationMenu = () => {
 
           const isActive = pathname === menu.path;
           return (
-            <Flex
-              direction={"column"}
-              align={"center"}
-              onClick={() => handleMenuClick(menu.path)}
-              css={{ opacity: menu.path === "/" ? 0.3 : 1 }}
-              key={index}
-            >
-              <IconComponent active={isActive} />
-            </Flex>
+            <>
+              {menu.path === "/" ? (
+                <Tooltip content="Coming Soon">
+                  <Box css={{ opacity: "0.3" }}>
+                    <IconComponent active={isActive} />
+                  </Box>
+                </Tooltip>
+              ) : (
+                <Flex
+                  direction={"column"}
+                  align={"center"}
+                  onClick={() => handleMenuClick(menu.path)}
+                  key={index}
+                >
+                  <IconComponent active={isActive} />
+                </Flex>
+              )}{" "}
+            </>
           );
         })}
       </Flex>
