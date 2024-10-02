@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "../../../components/Modal/Modal";
 import { Flex } from "../../../components/Flex/Flex";
 import { Box, Button } from "../../../components/elements";
