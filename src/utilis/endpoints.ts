@@ -1,6 +1,6 @@
 export const endpoint = {
   userAuth: "users/auth",
   userProfile: "users/profile",
-  collectibles: "collectibles",
+  collectibles: "collectables/type",
   userCollectables: "collectables/user/collections",
 };

@@ -26,8 +26,8 @@ const Collectibles = ({ collectibles }: ICollectiblesProps) => {
       <Flex css={{ gap: "16px" }} direction={"column"}>
         {collectibles &&
           collectibles.length > 0 &&
-          collectibles.map((collectible) => (
-            <Flex align={"center"} justify={"between"}>
+          collectibles.map((collectible, index) => (
+            <Flex align={"center"} justify={"between"} key={index}>
               <Flex css={{ gap: "16px" }} align={"center"}>
                 <Box css={CollectibleImageBoxStyles}>
                   <Box

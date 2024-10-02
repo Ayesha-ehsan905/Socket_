@@ -182,7 +182,7 @@ const OneVsOne = () => {
   };
   //handle player time out
   const handlePlayerTimeout = (data: GameOverDTO) => {
-    console.log("GAME_OVER", data);
+    console.log("playerTimeout console", data);
     setTimeout(() => setisGameOverModal(true), 2000); // Delay game over modal
     setGameOverResult(data);
   };

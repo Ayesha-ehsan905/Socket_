@@ -2,16 +2,17 @@ import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import { MarketplaceCardProp } from "../type";
 const MarketPlaceCard = (props: MarketplaceCardProp) => {
-  const { imageUrl, isPadding } = props;
+  const { imageUrl, isPadding, name, price } = props;
   return (
     <Flex
       direction={"column"}
       css={{
         height: "100%",
-        width: "122px",
       }}
     >
-      <Box
+      <Flex
+        justify={"center"}
+        align={"center"}
         css={{
           borderRadius: "8px",
           height: "156px",
@@ -27,10 +28,11 @@ const MarketPlaceCard = (props: MarketplaceCardProp) => {
             width: "100%",
             maxHeight: "156px",
             maxWidth: "122px",
+            objectFit: "contain",
           }}
           src={imageUrl}
         />
-      </Box>
+      </Flex>
       <Flex direction={"column"} justify={"center"} align={"center"}>
         <Box
           css={{
@@ -38,17 +40,21 @@ const MarketPlaceCard = (props: MarketplaceCardProp) => {
             fontWeight: "$bold",
             fontFamily: "$Gilmer",
             color: "$primary",
-            margin: "13px 0 8px",
+            margin: "13px 0 0px",
           }}
         >
-          Human
+          {name}
         </Box>
 
-        <Flex css={{ gap: "4px", marginTop: "0.5rem" }}>
+        <Flex css={{ gap: "4px", marginTop: "0.5rem" }} align={"center"}>
           <Box
             as="img"
             src="/images/Vector.png"
-            css={{ width: "25px", height: "25px", alignSelf: "baseline" }}
+            css={{
+              width: "25px",
+              height: "25px",
+              alignSelf: "baseline",
+            }}
           />
           <Box
             as="span"
@@ -58,7 +64,7 @@ const MarketPlaceCard = (props: MarketplaceCardProp) => {
               color: "$primary",
             }}
           >
-            250
+            {price}
           </Box>
         </Flex>
       </Flex>

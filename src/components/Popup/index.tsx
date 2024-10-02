@@ -4,7 +4,7 @@ import { Box } from "../elements/Box";
 type AlertDTO = {
   open: boolean;
   text: string;
-  severity: "success" | "error" | "info" | "warning";
+  severity: "success" | "error";
   onClose?: (status: boolean) => void;
   isClose?: boolean;
 };
@@ -29,6 +29,8 @@ const SnackbarContainer = styled(Box, {
   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
   position: "relative",
   textAlign: "center",
+  width: "200px",
+  height: "20vh",
 });
 
 const CloseButton = styled("button", {
@@ -39,6 +41,18 @@ const CloseButton = styled("button", {
   background: "none",
   fontSize: "20px",
   cursor: "pointer",
+});
+const AlertHeading = styled("h3", {
+  // Variants for heading text color
+  variants: {
+    severity: {
+      success: { color: "$green" },
+      error: { color: "$error" },
+    },
+  },
+  defaultVariants: {
+    severity: "success",
+  },
 });
 
 const Alert = ({ open, text, severity, onClose, isClose }: AlertDTO) => {
@@ -57,7 +71,9 @@ const Alert = ({ open, text, severity, onClose, isClose }: AlertDTO) => {
         }}
       >
         {!isClose && <CloseButton onClick={handleClose}>&times;</CloseButton>}
-        <h3>{severity}</h3>
+        <AlertHeading severity={severity}>
+          {severity.toUpperCase()}
+        </AlertHeading>
         <p>{text}</p>
       </SnackbarContainer>
     </Overlay>

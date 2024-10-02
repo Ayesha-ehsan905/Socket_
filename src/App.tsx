@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import { Layout } from "./components/Layout/Layout";
 import { globalStyles } from "./styles";
@@ -21,30 +22,19 @@ import OneVsOne from "./views/OneVsOne";
 import { useSocket } from "./components/contexts/SocketContext/useSocket";
 import Marketplace from "./views/Marketplace";
 import Profile from "./views/Profile";
+import { useAuth } from "./components/contexts/AuthContext/useAuth";
+import { UserDTO } from "./components/contexts/AuthContext/type";
 function App() {
   globalStyles();
-  // const { socket } = useSocket();
+  const { userData } = useAuth();
 
   const [errorAlert, setErrorAlert] = useState(false);
 
-  // useEffect(() => {
-  //   if (!socket.connected) setErrorAlert(true);
-  //   setErrorAlert(false);
-  //   // Listen for socket disconnection event
-  //   socket.on(SocketEvents.DISCONNECT, (data) => {
-  //     console.log("Socket disconnected", data);
-  //     setErrorAlert(true);
-  //     // You can also handle reconnection logic here, or show a notification to the user
-  //   });
-
-  //   // Clean up the listener on component unmount
-  //   return () => {
-  //     socket.off(SocketEvents.DISCONNECT);
-  //   };
-  // }, [socket]);
   return (
     <>
       <Router>
+        {/*  AuthRedirect if token is null,app reload */}
+        <AuthRedirect userData={userData} /> {/* emit current path to socket */}
         <PathLogger />
         <Routes>
           <Route path="/" element={<Layout />}>
@@ -73,6 +63,18 @@ function App() {
     </>
   );
 }
+// New AuthRedirect Component
+const AuthRedirect = ({ userData }: { userData: UserDTO }) => {
+  const navigate = useNavigate(); // useNavigate can be used here because this component is inside Router
+
+  useEffect(() => {
+    if (!userData?.token) {
+      navigate("/"); // Redirect to the splash screen if token is missing
+    }
+  }, [userData, navigate]);
+
+  return null;
+};
 const PathLogger = () => {
   const location = useLocation();
   const { socket } = useSocket();

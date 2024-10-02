@@ -14,6 +14,7 @@ import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { UserDTO } from "../../components/contexts/AuthContext/type";
 import { truncateString } from "../../utilis/function";
 import { Collectible } from "../../utilis/type";
+import Alert from "../../components/Popup";
 
 const Profile = () => {
   const [tabNumber, setTabNumber] = useState(0);
@@ -21,6 +22,7 @@ const Profile = () => {
   const [userCollectibles, setUserCollectibles] = useState<Collectible[]>();
   const [isCopied, setIsCopied] = useState(false);
   const { userData } = useAuth();
+  const [apiError, setApiError] = useState("");
 
   const tabData = [
     {
@@ -71,6 +73,8 @@ const Profile = () => {
         });
         setUserCollectibles(collectiblesResponse.data.data);
       } catch (error) {
+        //api error handling
+        setApiError((error as Error)?.message);
         console.error("Error fetching profile or collectibles data:", error);
       }
     };
@@ -156,6 +160,16 @@ const Profile = () => {
 
         <NavigationMenu />
       </Box>
+      {/* Popup on api error */}
+
+      {apiError && (
+        <Alert
+          text={apiError}
+          open={!!apiError}
+          severity={"error"}
+          onClose={() => setApiError("")}
+        />
+      )}
     </>
   );
 };
