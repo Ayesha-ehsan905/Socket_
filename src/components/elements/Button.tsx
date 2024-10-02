@@ -30,23 +30,22 @@ const StyledButton = styled("button", {
   lineHeight: "20px",
   cursor: "pointer",
   border: "2px solid transparent",
+  color: "$black",
 
   // Base styling for button
   variants: {
     variant: {
       filled: {
-        backgroundColor: "#F6B234",
-        color: "#000",
+        backgroundColor: "$secondary",
         "&:hover": {
-          backgroundColor: "#e0a62f",
+          opacity: 0.9,
         },
       },
       outlined: {
         backgroundColor: "transparent",
-        color: "#333",
-        borderColor: "#d3d3d3",
+        borderColor: "$grey2",
         "&:hover": {
-          borderColor: "#bdbdbd",
+          opacity: 0.9,
         },
       },
     },

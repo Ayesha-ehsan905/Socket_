@@ -34,7 +34,7 @@ const Overlay = styled("div", {
 });
 
 const ModalContainer = styled("div", {
-  backgroundColor: "#FFFCF6", // white background for the modal
+  backgroundColor: "$white1", // white background for the modal
   borderRadius: "12px",
   width: "400px", // You can adjust width as needed
   maxHeight: "80vh",
@@ -47,5 +47,4 @@ const ModalContainer = styled("div", {
 
 const Content = styled("div", {
   fontSize: "16px",
-  color: "#555",
 });
