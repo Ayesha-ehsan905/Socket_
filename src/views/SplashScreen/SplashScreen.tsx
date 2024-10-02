@@ -7,6 +7,7 @@ import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { useTelegram } from "../../hooks/useTelegram";
 
 const SplashScreen = () => {
+  document.body.style.overflow = "hidden";
   const { setUserData } = useAuth();
   const [fade, setFade] = useState(true);
   const [isApiResponseFetched, setIsApiResponseFetched] = useState(false);
@@ -36,8 +37,8 @@ const SplashScreen = () => {
       const timer = setTimeout(() => {
         setFade(false);
         setTimeout(() => {
-          document.body.style.overflow = "scroll";
           navigate(routes.dashboard);
+          document.body.style.overflow = "scroll";
         }, 1000);
       }, 3000);
 
