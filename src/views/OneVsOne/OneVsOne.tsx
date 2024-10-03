@@ -53,6 +53,9 @@ const OneVsOne = () => {
   //disconnected user chat id
   const [disconnectedUserChatId, setDisconnectedUserChatId] =
     useState<UserDisconnectedProps | null>(null);
+  //reconnected user chat id
+  const [reconnectedUserChatId, setReconnectedUserChatId] =
+    useState<UserDisconnectedProps | null>(null);
 
   //milliseconds->sec
   const totalTimeForRound =
@@ -101,12 +104,15 @@ const OneVsOne = () => {
     socket.on(SocketEvents.GAME_OVER, handleGameOver);
     socket.on(SocketEvents.PLAYER_DISCONNECTED, handlePlayerDisconnected);
     socket.on(SocketEvents.PLAYER_TIMEOUT, handlePlayerTimeout);
+    socket.on(SocketEvents.GAME_RESUMED, handleGameResumed);
 
     return () => {
       socket.off(SocketEvents.ROUND_START);
       socket.off(SocketEvents.ROUND_RESULT);
       socket.off(SocketEvents.GAME_OVER);
       socket.off(SocketEvents.PLAYER_DISCONNECTED);
+      socket.on(SocketEvents.PLAYER_TIMEOUT, handlePlayerTimeout);
+      socket.on(SocketEvents.GAME_RESUMED, handleGameResumed);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -177,7 +183,10 @@ const OneVsOne = () => {
   //player disconnected
   const handlePlayerDisconnected = (data: UserDisconnectedProps | null) => {
     console.log("user disconnected");
+    setOpponentMoveImage(null);
     setDisconnectedUserChatId(data);
+    setRoundRecord(null);
+
     setIsRoundStarted(false);
   };
   //handle player time out
@@ -185,6 +194,11 @@ const OneVsOne = () => {
     console.log("playerTimeout console", data);
     setTimeout(() => setisGameOverModal(true), 2000); // Delay game over modal
     setGameOverResult(data);
+  };
+  const handleGameResumed = (data: UserDisconnectedProps | null) => {
+    console.log("user reconnected", data);
+    setRoundRecord(null);
+    setReconnectedUserChatId(data);
   };
 
   //handle user Move
@@ -198,22 +212,6 @@ const OneVsOne = () => {
     setUserSelectedMove(userMove);
   };
 
-  // let opponentMove = "";
-  // let userMove = "";
-
-  // //check if you are player1 then pick player 2 move and get the img
-
-  // if (winnerRoundRecord?.player1?.chatId === user_chatId) {
-  //   opponentMove = winnerRoundRecord?.player2?.move as UserMove;
-  //   userMove = winnerRoundRecord?.player1?.move as UserMove;
-  // } else {
-  //   opponentMove = winnerRoundRecord?.player1?.move as UserMove;
-  //   userMove = winnerRoundRecord?.player2?.move as UserMove;
-  // }
-  // const { userMoveImage, opponentMoveImage } = getSelectedImages(
-  //   userMove as UserMove, // Casting to UserMove
-  //   opponentMove as UserMove
-  // );
   return (
     <Box
       css={{
@@ -251,6 +249,13 @@ const OneVsOne = () => {
                 : ""}
             </Box>
           </Flex>
+        )}
+        {!roundRecord && reconnectedUserChatId && (
+          <Box as="p">
+            {reconnectedUserChatId !== user_chatId
+              ? "Opponnent  reconnecting..."
+              : ""}
+          </Box>
         )}
       </FixedBgWrapper>
       <Flex

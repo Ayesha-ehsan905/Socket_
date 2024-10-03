@@ -36,6 +36,7 @@ function App() {
         {/*  AuthRedirect if token is null,app reload */}
         <AuthRedirect userData={userData} /> {/* emit current path to socket */}
         <PathLogger />
+        <OpponnentReconnected />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<SplashScreen />} />
@@ -89,5 +90,22 @@ const PathLogger = () => {
   }, [chatId, location, socket, userCurrentRoute]);
 
   return null;
+};
+//game reconnection if required
+const OpponnentReconnected = () => {
+  const { socket } = useSocket();
+  const navigate = useNavigate();
+  useEffect(() => {
+    socket.on(SocketEvents.OPPONENT_RECONNECTED, handleOpponnentReconnected);
+    return () => {
+      socket.off(SocketEvents.OPPONENT_RECONNECTED);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleOpponnentReconnected = () => {
+    navigate(routes.One_one);
+  };
+  return <></>;
 };
 export default App;
