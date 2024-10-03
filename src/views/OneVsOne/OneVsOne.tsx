@@ -52,6 +52,9 @@ const OneVsOne = () => {
   const [winnerRoundRecord, setWinnerRoundRecord] =
     useState<null | WinnerRoundRecordType>();
 
+  //keep track of user ready or not
+  const [isReadyForGame, setIsReadyForGame] = useState(false);
+
   //round move of both users
 
   const [userMoveImage, setUserMoveImage] = useState<string | null>(null);
@@ -95,15 +98,15 @@ const OneVsOne = () => {
 
   // ready for game
   useEffect(() => {
-    console.log(gameRoomKey, "gameRoomKey", chatId);
-    if (chatId) {
+    if (chatId && !isReadyForGame) {
       socket.emit(SocketEvents.READY_FOR_GAME, {
         room: gameRoomKey,
         chatId: chatId,
       });
+      setIsReadyForGame(true);
+      console.log("asas", gameRoomKey);
     }
 
-    console.log("Ready for game", gameRoomKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId]);
   // Initial round setup
@@ -237,8 +240,6 @@ const OneVsOne = () => {
         background: "url('/images/1v1 Round Start.png')",
       }}
     >
-      <Box as="p">{chatId}</Box>
-      <Box as="p">{typeof chatId}</Box>
       <FixedBgWrapper
         css={{
           position: "fixed",
