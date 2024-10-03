@@ -49,5 +49,5 @@ export const truncateString = (str: string, start: number, end: number) => {
 };
 
 export const getFullName = (user: ILeaderBoardStats) => {
-  return `${user.user_first_name} ${user.user_last_name ?? ""}`;
+  return `${user.first_name} ${user.last_name ?? ""}`;
 };

@@ -18,17 +18,17 @@ export interface Collectible {
 }
 
 export interface ILeaderBoardStats {
-  totalLosses: string; // If it's a string, otherwise change it to number
-  user_chatId: string;
-  user_created_at: string; // Can be Date if you want to handle it as a Date object
-  user_first_name: string;
-  user_id: number;
-  user_is_blocked: boolean;
-  user_last_name: string | null; // Allow null values
-  user_mobile_number: string | null;
-  user_updated_at: string; // Can be Date if you want to handle it as a Date object
-  user_username: string | null;
-  totalWins: string; // If it's a string, otherwise change it to number
+  chatId: string;
+  created_at: string; // If you want to handle it as a Date, use Date instead of string
+  first_name: string;
+  id: number;
+  is_blocked: boolean;
+  last_name: string | null; // Nullable field
+  mobile_number: string | null; // Nullable field
+  totalLosses: number;
+  totalWins: number;
+  updated_at: string; // You can also use Date if necessary
+  username: string | null; // If it's a string, otherwise change it to number
 }
 
 export interface ErrorResponse {

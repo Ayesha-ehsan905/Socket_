@@ -20,9 +20,11 @@ import { AxiosError } from "axios";
 
 const Profile = () => {
   const [tabNumber, setTabNumber] = useState(0);
+  const [isFirstLoad, setIsFirstLoad] = useState(true); // Track initial load
   const [userDetails, setUserDetails] = useState<UserDTO>();
   const [userCollectibles, setUserCollectibles] = useState<Collectible[]>();
   const [isCopied, setIsCopied] = useState(false);
+  const [refetch, setRefetch] = useState(true);
   const { userData } = useAuth();
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false); // Add loading state
@@ -51,6 +53,7 @@ const Profile = () => {
         <Collectibles
           collectibles={userCollectibles as Collectible[]}
           isApiloading={loading}
+          setRefetch={setRefetch}
         />
       ),
     },
@@ -65,43 +68,67 @@ const Profile = () => {
     }
   }, [isCopied]);
 
+  // create functions to fetch profile and collectibles data
+
   useEffect(() => {
     const fetchProfileData = async () => {
-      setLoading(true); // Start loading,Api fetching
+      if (!refetch) return; // If refetch is false, exit
+
+      setLoading(true); // Start loading
+
       try {
         const config = {
           headers: { Authorization: `Bearer ${userData.token}` },
         };
 
-        // Fetch both profile and collectibles in parallel
-        const [profileResponse, collectiblesResponse] = await Promise.all([
-          axios.get(endpoint.userProfile, config),
-          axios.get(endpoint.userCollectables, config),
-        ]);
+        // Initialize variables to hold the API responses
+        let profileResponse, collectiblesResponse;
 
-        // Set state after both requests are successful
+        // First load: Call both profile and collectibles APIs
+        if (isFirstLoad) {
+          [profileResponse, collectiblesResponse] = await Promise.all([
+            axios.get(endpoint.userProfile, config),
+            axios.get(endpoint.userCollectables, config),
+          ]);
 
-        setUserDetails({
-          token: userData.token,
-          user: profileResponse.data.data.user,
-          wallet: profileResponse.data.data.wallet,
-        });
+          // Set user details state
+          setUserDetails({
+            token: userData.token,
+            user: profileResponse.data.data.user,
+            wallet: profileResponse.data.data.wallet,
+          });
+
+          // Set isFirstLoad to false after the initial load
+          setIsFirstLoad(false);
+        } else {
+          // On subsequent loads, only fetch the collectibles API
+          collectiblesResponse = await axios.get(
+            endpoint.userCollectables,
+            config
+          );
+        }
+
+        // Set user collectibles state
         setUserCollectibles(collectiblesResponse.data.data);
-        setLoading(false); // Start loading,Api fetching
+
+        setLoading(false); // Stop loading
+        setRefetch(false); // Reset refetch state
       } catch (error) {
-        //api error handling
+        // Handle API error
         const axiosError = error as AxiosError<ErrorResponse>;
         setApiError(
           axiosError?.response?.data?.message || "An unexpected error occurred"
         );
         console.error("Error fetching profile or collectibles data:", error);
-        setLoading(false); // Start loading,Api fetching
+
+        setLoading(false); // Stop loading
+        setRefetch(false); // Reset refetch state
       }
     };
 
     fetchProfileData();
-  }, [userData.token]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetch, userData.token]);
   return (
     <>
       <Box css={{ ...BackgroundCardCSS, background: "$white1" }}>
