@@ -26,6 +26,7 @@ const OneVsOne = () => {
   const location = useLocation();
   const gameRoomKey = location.state?.gameRoomKey;
   const user_chatId = location.state?.chatId;
+  const gameResumedRoundData = location.state?.roundData;
   // each round record
   const [roundRecord, setRoundRecord] = useState<RoundRecord | null>(null);
   const [roundTimeLeft, setRoundTimeLeft] = useState(0);
@@ -63,6 +64,13 @@ const OneVsOne = () => {
 
   const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
 
+  //is gameResumed then set the round record again ans start the round
+  useEffect(() => {
+    if (gameResumedRoundData) {
+      setRoundRecord(gameResumedRoundData);
+      setIsRoundStarted(true);
+    }
+  }, [gameResumedRoundData]);
   //timer Logic
   useEffect(() => {
     if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
@@ -182,6 +190,7 @@ const OneVsOne = () => {
   const handlePlayerDisconnected = (data: UserDisconnectedProps | null) => {
     console.log("user disconnected");
     setOpponentMoveImage(null);
+    setReconnectedUserChatId(null);
     setDisconnectedUserChatId(data);
     setRoundRecord(null);
 
