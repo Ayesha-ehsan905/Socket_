@@ -237,6 +237,7 @@ const OneVsOne = () => {
       }}
     >
       <Box as="p">{chatId}</Box>
+      <Box as="p">{typeof chatId}</Box>
       <FixedBgWrapper
         css={{
           position: "fixed",

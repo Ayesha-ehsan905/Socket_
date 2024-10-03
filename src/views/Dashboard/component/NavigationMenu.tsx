@@ -34,6 +34,8 @@ const NavigationMenu = () => {
         boxShadow: "rgba(0, 0, 0, 0.5) 0px 0px 16px 0px",
       }}
     >
+      <Box as="p">{chatId}</Box>
+      <Box as="p">{typeof chatId}</Box>
       <Flex
         direction={"row"}
         align={"center"}
