@@ -35,7 +35,8 @@ function App() {
     <>
       <Router>
         {/*  AuthRedirect if token is null,app reload */}
-        <AuthRedirect userData={userData} /> {/* emit current path to socket */}
+        {/* emit current path to socket */}
+        <AuthRedirect userData={userData} />
         <PathLogger />
         <GameResumed />
         <Routes>
