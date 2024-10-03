@@ -96,14 +96,16 @@ const OneVsOne = () => {
   // ready for game
   useEffect(() => {
     console.log(gameRoomKey, "gameRoomKey", chatId);
-
-    socket.emit(SocketEvents.READY_FOR_GAME, {
-      chatId: chatId,
-    });
+    if (chatId) {
+      socket.emit(SocketEvents.READY_FOR_GAME, {
+        room: gameRoomKey,
+        chatId: chatId,
+      });
+    }
 
     console.log("Ready for game", gameRoomKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [chatId]);
   // Initial round setup
   useEffect(() => {
     console.log("first time call");
