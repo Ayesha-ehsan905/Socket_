@@ -67,8 +67,6 @@ const OneVsOne = () => {
   useEffect(() => {
     if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
       if (roundTimeLeft < totalTimeForRound) {
-        console.log("inside the timer", roundTimeLeft);
-
         const timer = setInterval(() => {
           setRoundTimeLeft((prev) => {
             if (prev + 1 >= totalTimeForRound) {
@@ -104,15 +102,15 @@ const OneVsOne = () => {
     socket.on(SocketEvents.GAME_OVER, handleGameOver);
     socket.on(SocketEvents.PLAYER_DISCONNECTED, handlePlayerDisconnected);
     socket.on(SocketEvents.PLAYER_TIMEOUT, handlePlayerTimeout);
-    socket.on(SocketEvents.GAME_RESUMED, handleGameResumed);
+    socket.on(SocketEvents.OPPONENT_RECONNECTED, handleOpponentReconnected);
 
     return () => {
       socket.off(SocketEvents.ROUND_START);
       socket.off(SocketEvents.ROUND_RESULT);
       socket.off(SocketEvents.GAME_OVER);
       socket.off(SocketEvents.PLAYER_DISCONNECTED);
-      socket.on(SocketEvents.PLAYER_TIMEOUT, handlePlayerTimeout);
-      socket.on(SocketEvents.GAME_RESUMED, handleGameResumed);
+      socket.off(SocketEvents.PLAYER_TIMEOUT);
+      socket.off(SocketEvents.OPPONENT_RECONNECTED);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -195,10 +193,11 @@ const OneVsOne = () => {
     setTimeout(() => setisGameOverModal(true), 2000); // Delay game over modal
     setGameOverResult(data);
   };
-  const handleGameResumed = (data: UserDisconnectedProps | null) => {
+  const handleOpponentReconnected = (data: UserDisconnectedProps | null) => {
     console.log("user reconnected", data);
     setRoundRecord(null);
     setReconnectedUserChatId(data);
+    setDisconnectedUserChatId(null);
   };
 
   //handle user Move

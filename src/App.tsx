@@ -36,7 +36,7 @@ function App() {
         {/*  AuthRedirect if token is null,app reload */}
         <AuthRedirect userData={userData} /> {/* emit current path to socket */}
         <PathLogger />
-        <OpponnentReconnected />
+        <GameResumed />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<SplashScreen />} />
@@ -92,18 +92,21 @@ const PathLogger = () => {
   return null;
 };
 //game reconnection if required
-const OpponnentReconnected = () => {
+const GameResumed = () => {
   const { socket } = useSocket();
   const navigate = useNavigate();
   useEffect(() => {
-    socket.on(SocketEvents.OPPONENT_RECONNECTED, handleOpponnentReconnected);
+    console.log("game resumed reconnected");
+    socket.on(SocketEvents.GAME_RESUMED, handleGameResumed);
     return () => {
-      socket.off(SocketEvents.OPPONENT_RECONNECTED);
+      socket.off(SocketEvents.GAME_RESUMED);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleOpponnentReconnected = () => {
+  const handleGameResumed = () => {
+    console.log("handleGameResumed");
+
     navigate(routes.One_one);
   };
   return <></>;
