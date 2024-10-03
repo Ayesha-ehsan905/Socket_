@@ -8,19 +8,19 @@ import { endpoint } from "../../../utilis/endpoints";
 import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 import { axios } from "../../../lib/axios";
 import { AxiosError } from "axios";
-import { ErrorResponse } from "../../../utilis/type";
+import { Collectible, ErrorResponse } from "../../../utilis/type";
 
 interface IWithdrawModalProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
-  collectibleId: number;
+  collectable: Collectible;
   setRefetch?: (value: boolean) => void;
 }
 
 const WithdrawModal = ({
   setShowModal,
   showModal,
-  collectibleId,
+  collectable,
   setRefetch,
 }: IWithdrawModalProps) => {
   const [isWithdrawn, setIsWithdrawn] = useState(false);
@@ -62,8 +62,9 @@ const WithdrawModal = ({
                 width: "100%",
                 maxHeight: "120px",
                 maxWidth: "94px",
+                objectFit: "contain",
               }}
-              src={"/images/Stone.png"}
+              src={collectable?.image_url}
             />
           </Box>
           <Box
@@ -74,7 +75,7 @@ const WithdrawModal = ({
               margin: "12px 0 0",
             }}
           >
-            Cartoon Hand Set
+            {collectable?.name}
           </Box>
         </Flex>
         {!isWithdrawn && (
@@ -138,7 +139,7 @@ const WithdrawModal = ({
                 setShowModal(false);
                 setRefetch?.(true);
               } else {
-                withdrawCollectable(collectibleId);
+                withdrawCollectable(collectable?.id);
               }
             }}
           >

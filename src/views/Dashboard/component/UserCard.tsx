@@ -73,6 +73,7 @@ export const UserDetailCard = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        if (!userData.token) return;
         const config = {
           headers: { Authorization: `Bearer ${userData.token}` },
         };

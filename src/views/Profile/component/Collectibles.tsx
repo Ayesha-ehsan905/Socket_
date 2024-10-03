@@ -122,7 +122,7 @@ const Collectibles = ({
                 <WithdrawModal
                   setShowModal={setShowModal}
                   showModal={showModal}
-                  collectibleId={collectible?.id}
+                  collectable={collectible}
                   setRefetch={setRefetch}
                 />
               )}
