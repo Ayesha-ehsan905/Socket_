@@ -95,7 +95,7 @@ const OneVsOne = () => {
 
   // ready for game
   useEffect(() => {
-    console.log(gameRoomKey, "gameRoomKey");
+    console.log(gameRoomKey, "gameRoomKey", chatId);
 
     socket.emit(SocketEvents.READY_FOR_GAME, {
       room: gameRoomKey,
@@ -236,6 +236,7 @@ const OneVsOne = () => {
         background: "url('/images/1v1 Round Start.png')",
       }}
     >
+      <Box as="p">{chatId}</Box>
       <FixedBgWrapper
         css={{
           position: "fixed",
