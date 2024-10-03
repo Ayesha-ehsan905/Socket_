@@ -28,28 +28,24 @@ const WithdrawModal = ({
 
   const withdrawCollectable = async (collectibleId: number) => {
     try {
-      try {
-        const config = {
-          headers: { Authorization: `Bearer ${userData.token}` },
-        };
+      const config = {
+        headers: { Authorization: `Bearer ${userData.token}` },
+      };
 
-        // Api call to withdraw collectable
-        await axios.patch(
-          `${endpoint.withdrawCollectable}/${collectibleId}?address=${walletAddress}`,
-          {},
-          config
-        );
-        setIsWithdrawn(true);
-      } catch (error) {
-        //api error handling
-        const axiosError = error as AxiosError<ErrorResponse>;
-        setApiError(
-          axiosError?.response?.data?.message || "An unexpected error occurred"
-        );
-        console.error("Error Applying Collectable:", error);
-      }
-    } catch (e) {
-      console.log(e);
+      // Api call to withdraw collectable
+      await axios.patch(
+        `${endpoint.withdrawCollectable}/${collectibleId}?address=${walletAddress}`,
+        {},
+        config
+      );
+      setIsWithdrawn(true);
+    } catch (error) {
+      //api error handling
+      const axiosError = error as AxiosError<ErrorResponse>;
+      setApiError(
+        axiosError?.response?.data?.message || "An unexpected error occurred"
+      );
+      console.error("Error Applying Collectable:", error);
     }
   };
   return (

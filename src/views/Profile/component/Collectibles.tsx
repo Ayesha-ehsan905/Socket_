@@ -34,27 +34,23 @@ const Collectibles = ({
 
   const applyCollectible = async (collectibleId: number) => {
     try {
-      try {
-        const config = {
-          headers: { Authorization: `Bearer ${userData.token}` },
-        };
-        // Api call to apply collectable
-        await axios.patch(
-          `${endpoint.applyCollectable}/${collectibleId}`,
-          {},
-          config
-        );
-        setRefetch?.(true);
-      } catch (error) {
-        //api error handling
-        const axiosError = error as AxiosError<ErrorResponse>;
-        setApiError(
-          axiosError?.response?.data?.message || "An unexpected error occurred"
-        );
-        console.error("Error Applying Collectable:", error);
-      }
-    } catch (e) {
-      console.log(e);
+      const config = {
+        headers: { Authorization: `Bearer ${userData.token}` },
+      };
+      // Api call to apply collectable
+      await axios.patch(
+        `${endpoint.applyCollectable}/${collectibleId}`,
+        {},
+        config
+      );
+      setRefetch?.(true);
+    } catch (error) {
+      //api error handling
+      const axiosError = error as AxiosError<ErrorResponse>;
+      setApiError(
+        axiosError?.response?.data?.message || "An unexpected error occurred"
+      );
+      console.error("Error Applying Collectable:", error);
     }
   };
 
