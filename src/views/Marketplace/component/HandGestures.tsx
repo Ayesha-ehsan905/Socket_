@@ -7,10 +7,18 @@ import { ICollectiblesProps } from "../type";
 import { styled } from "../../../styles";
 import NoItemsFind from "../../../components/NoItemsFind/NoItemsFind";
 import APILoader from "../../../components/ApiLoader";
+import { Collectible } from "../../../utilis/type";
+import { RECORD_NOT_FOUND } from "../../../utilis/enum";
 
-const HandGestures = ({ collectibles, isApiloading }: ICollectiblesProps) => {
-  console.log(!collectibles, "collectibles");
+const HandGestures = ({
+  collectibles,
+  isApiloading,
+  isApiError,
+  setIsApiReFetched,
+}: ICollectiblesProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [userSelectedCollectible, setUserSelectedCollectible] =
+    useState<Collectible | null>(null);
   if (isApiloading) {
     return <APILoader />; //Show loader when api is fetching
   }
@@ -22,7 +30,12 @@ const HandGestures = ({ collectibles, isApiloading }: ICollectiblesProps) => {
           collectibles.length > 0 &&
           collectibles.map((collectible, index) => (
             <React.Fragment key={index}>
-              <Box onClick={() => setShowModal(true)}>
+              <Box
+                onClick={() => {
+                  setUserSelectedCollectible(collectible);
+                  setShowModal(true);
+                }}
+              >
                 <MarketPlaceCard
                   imageUrl={collectible.image_url}
                   name={collectible.name}
@@ -32,13 +45,18 @@ const HandGestures = ({ collectibles, isApiloading }: ICollectiblesProps) => {
               </Box>
             </React.Fragment>
           ))}
-        {collectibles && collectibles.length === 0 && (
-          <NoItemsFind text={"No Items Found"} />
+        {((collectibles && collectibles.length === 0) || isApiError) && (
+          <NoItemsFind text={RECORD_NOT_FOUND.ITEM_NOT_FOUND} />
         )}
       </GridWrapper>
 
       {showModal && (
-        <PurchaseModal showModal={showModal} setShowModal={setShowModal} />
+        <PurchaseModal
+          setIsApiReFetched={setIsApiReFetched}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          userSelectedCollectible={userSelectedCollectible}
+        />
       )}
     </Flex>
   );

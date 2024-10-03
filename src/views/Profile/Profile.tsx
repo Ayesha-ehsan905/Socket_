@@ -13,8 +13,10 @@ import { endpoint } from "../../utilis/endpoints";
 import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { UserDTO } from "../../components/contexts/AuthContext/type";
 import { truncateString } from "../../utilis/function";
-import { Collectible } from "../../utilis/type";
+import { Collectible, ErrorResponse } from "../../utilis/type";
 import Alert from "../../components/Popup";
+import { useLocation } from "react-router-dom";
+import { AxiosError } from "axios";
 
 const Profile = () => {
   const [tabNumber, setTabNumber] = useState(0);
@@ -24,6 +26,13 @@ const Profile = () => {
   const { userData } = useAuth();
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false); // Add loading state
+  const location = useLocation();
+  const tab_number = location.state?.tabNumber;
+  useEffect(() => {
+    if (tab_number) {
+      setTabNumber(tab_number);
+    }
+  }, [tab_number]);
 
   const tabData = [
     {
@@ -81,7 +90,10 @@ const Profile = () => {
         setLoading(false); // Start loading,Api fetching
       } catch (error) {
         //api error handling
-        setApiError((error as Error)?.message);
+        const axiosError = error as AxiosError<ErrorResponse>;
+        setApiError(
+          axiosError?.response?.data?.message || "An unexpected error occurred"
+        );
         console.error("Error fetching profile or collectibles data:", error);
         setLoading(false); // Start loading,Api fetching
       }

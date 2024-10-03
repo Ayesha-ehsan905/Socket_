@@ -3,4 +3,5 @@ export const endpoint = {
   userProfile: "users/profile",
   collectibles: "collectables/type",
   userCollectables: "collectables/user/collections",
+  collectiblesPurchased: "collectables/buy/",
 };
