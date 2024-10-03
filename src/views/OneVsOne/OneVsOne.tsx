@@ -98,7 +98,6 @@ const OneVsOne = () => {
     console.log(gameRoomKey, "gameRoomKey", chatId);
 
     socket.emit(SocketEvents.READY_FOR_GAME, {
-      room: gameRoomKey,
       chatId: chatId,
     });
 
