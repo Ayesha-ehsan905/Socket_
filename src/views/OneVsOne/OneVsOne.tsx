@@ -99,7 +99,7 @@ const OneVsOne = () => {
 
     socket.emit(SocketEvents.READY_FOR_GAME, {
       room: gameRoomKey,
-      chatId,
+      chatId: chatId,
     });
 
     console.log("Ready for game", gameRoomKey);
