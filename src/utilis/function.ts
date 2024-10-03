@@ -1,5 +1,6 @@
 import { routes } from "./constant";
 import { USER_SCREENS_ROUTES, UserMove } from "./enum";
+import { ILeaderBoardStats } from "./type";
 
 export const getSelectedImages = (
   userMove: UserMove,
@@ -45,4 +46,8 @@ export const truncateString = (str: string, start: number, end: number) => {
   return str.length > start + end
     ? str.slice(0, start) + "..." + str.slice(str.length - end)
     : str;
+};
+
+export const getFullName = (user: ILeaderBoardStats) => {
+  return `${user.user_first_name} ${user.user_last_name ?? ""}`;
 };

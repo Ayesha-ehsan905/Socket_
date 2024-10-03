@@ -4,15 +4,50 @@ import { Flex } from "../../../components/Flex/Flex";
 import { Box, Button } from "../../../components/elements";
 import { CollectibleImageBoxStyles } from "../../../styles/style";
 import InputField from "../../../components/InputFeild/InputFeild";
+import { endpoint } from "../../../utilis/endpoints";
+import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
+import { axios } from "../../../lib/axios";
+import { AxiosError } from "axios";
+import { ErrorResponse } from "../../../utilis/type";
 
 interface IWithdrawModalProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
+  collectibleId: number;
 }
 
-const WithdrawModal = ({ setShowModal, showModal }: IWithdrawModalProps) => {
+const WithdrawModal = ({
+  setShowModal,
+  showModal,
+  collectibleId,
+}: IWithdrawModalProps) => {
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
+  const [apiError, setApiError] = useState<string | null>(null);
+  const { userData } = useAuth();
+
+  const withdrawCollectable = async (collectibleId: number) => {
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${userData.token}` },
+      };
+
+      // Api call to withdraw collectable
+      await axios.patch(
+        `${endpoint.withdrawCollectable}/${collectibleId}?address=${walletAddress}`,
+        {},
+        config
+      );
+      setIsWithdrawn(true);
+    } catch (error) {
+      //api error handling
+      const axiosError = error as AxiosError<ErrorResponse>;
+      setApiError(
+        axiosError?.response?.data?.message || "An unexpected error occurred"
+      );
+      console.error("Error Applying Collectable:", error);
+    }
+  };
   return (
     <Modal show={showModal}>
       <Flex justify={"center"} align={"center"} direction={"column"}>
@@ -69,12 +104,20 @@ const WithdrawModal = ({ setShowModal, showModal }: IWithdrawModalProps) => {
               </Box>
             </Box>
           ) : (
-            <InputField
-              label="Wallet Address"
-              placeholder="Enter Wallet Address"
-              value={walletAddress}
-              setValue={setWalletAddress}
-            />
+            <Flex direction={"column"} css={{ width: "100%" }}>
+              <InputField
+                label="Wallet Address"
+                placeholder="Enter Wallet Address"
+                value={walletAddress}
+                setValue={setWalletAddress}
+              />
+              {apiError && (
+                <Box as="p" css={{ color: "$error", margin: "8px 0 0 " }}>
+                  {" "}
+                  {apiError}
+                </Box>
+              )}
+            </Flex>
           )}
         </Flex>
 
@@ -82,6 +125,7 @@ const WithdrawModal = ({ setShowModal, showModal }: IWithdrawModalProps) => {
           css={{
             gap: "10px",
             width: "100%",
+            mt: "20px",
           }}
         >
           <Button
@@ -91,7 +135,7 @@ const WithdrawModal = ({ setShowModal, showModal }: IWithdrawModalProps) => {
               if (isWithdrawn) {
                 setShowModal(false);
               } else {
-                setIsWithdrawn(true);
+                withdrawCollectable(collectibleId);
               }
             }}
           >
