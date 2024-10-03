@@ -25,6 +25,7 @@ const LeaderBoard = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        if (!userData.token) return;
         const config = {
           headers: { Authorization: `Bearer ${userData.token}` },
         };
