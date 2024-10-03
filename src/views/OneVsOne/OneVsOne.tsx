@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { Flex } from "../../components/Flex/Flex";
 import { AvatarImg, FixedBgWrapper, VerticalLine } from "../../styles/style";
@@ -17,8 +17,10 @@ import {
 import { useSocket } from "../../components/contexts/SocketContext/useSocket";
 import { Spinner } from "../../components/Loader/Spinner";
 import Countdown from "./component/CountDownAnimation";
+import { useTelegram } from "../../hooks/useTelegram";
 
 const OneVsOne = () => {
+  const { chatId } = useTelegram();
   const { socket } = useSocket();
   useEffect(() => {
     console.log("socket connection from 1v1:", socket.connected);
@@ -35,7 +37,9 @@ const OneVsOne = () => {
   const [isGameOverModal, setisGameOverModal] = useState(false);
   const [opponnentWinCount, setOpponnentWinCount] = useState(0);
   const [userWinCount, setUserWinCount] = useState(0);
-  const [gameRoomKey, setGameRoomKey] = useState<string | null>(null);
+  const gameRoomKey = useMemo(() => {
+    return game_room_key || game_resumed_game_key;
+  }, [game_room_key, game_resumed_game_key]);
   //if round is not started use cannot select the moves
   const [isRoundStarted, setIsRoundStarted] = useState(false);
 
@@ -67,10 +71,6 @@ const OneVsOne = () => {
 
   const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
 
-  useEffect(() => {
-    if (game_room_key || game_resumed_game_key)
-      setGameRoomKey(game_room_key || game_resumed_game_key);
-  }, [game_room_key, game_resumed_game_key]);
   //timer Logic
   useEffect(() => {
     if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
@@ -95,11 +95,14 @@ const OneVsOne = () => {
 
   // ready for game
   useEffect(() => {
+    console.log(gameRoomKey, "gameRoomKey");
+
     socket.emit(SocketEvents.READY_FOR_GAME, {
       room: gameRoomKey,
-      chatId: user_chatId,
+      chatId,
     });
-    console.log("Ready for game");
+
+    console.log("Ready for game", gameRoomKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // Initial round setup
@@ -218,7 +221,7 @@ const OneVsOne = () => {
     socket.emit(SocketEvents.PLAYER_MOVE, {
       move: userMove,
       room: gameRoomKey,
-      chatId: user_chatId,
+      chatId,
     });
     setUserSelectedMove(userMove);
   };
@@ -363,8 +366,8 @@ const OneVsOne = () => {
         isWinnerRoundRecordExist={!!winnerRoundRecord}
         isRoundStarted={isRoundStarted}
       />
-      {isGameOverModal && (
-        <WinOverLay gameOverRecord={gameOverResult} userChatId={user_chatId} />
+      {isGameOverModal && chatId && (
+        <WinOverLay gameOverRecord={gameOverResult} userChatId={chatId} />
       )}
     </Box>
   );
