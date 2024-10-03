@@ -6,12 +6,19 @@ import { Box } from "../../../components/elements";
 import { ICollectiblesProps } from "../type";
 import { GridWrapper } from "./HandGestures";
 import APILoader from "../../../components/ApiLoader";
+import NoItemsFind from "../../../components/NoItemsFind/NoItemsFind";
+import { Collectible } from "../../../utilis/type";
+import { RECORD_NOT_FOUND } from "../../../utilis/enum";
 
 const BackgroundOption = ({
   collectibles,
   isApiloading,
+  isApiError,
+  setIsApiReFetched,
 }: ICollectiblesProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [userSelectedCollectible, setUserSelectedCollectible] =
+    useState<Collectible | null>(null);
   if (isApiloading) {
     return <APILoader />; // Show loader when api is fetching
   }
@@ -23,7 +30,12 @@ const BackgroundOption = ({
             collectibles.length > 0 &&
             collectibles.map((collectible, index) => (
               <React.Fragment key={index}>
-                <Box onClick={() => setShowModal(true)}>
+                <Box
+                  onClick={() => {
+                    setUserSelectedCollectible(collectible);
+                    setShowModal(true);
+                  }}
+                >
                   <MarketPlaceCard
                     imageUrl={collectible.image_url}
                     name={collectible.name}
@@ -32,9 +44,18 @@ const BackgroundOption = ({
                 </Box>
               </React.Fragment>
             ))}
+          {((collectibles && collectibles.length === 0) || isApiError) && (
+            <NoItemsFind text={RECORD_NOT_FOUND.ITEM_NOT_FOUND} />
+          )}
         </GridWrapper>
+
         {showModal && (
-          <PurchaseModal showModal={showModal} setShowModal={setShowModal} />
+          <PurchaseModal
+            setIsApiReFetched={setIsApiReFetched}
+            showModal={showModal}
+            setShowModal={setShowModal}
+            userSelectedCollectible={userSelectedCollectible}
+          />
         )}
       </Flex>
     </>

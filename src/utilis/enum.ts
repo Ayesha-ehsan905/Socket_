@@ -35,3 +35,7 @@ export enum COLLECTABLE_TYPE {
   BACKGROUND = "BACKGROUND",
   HAND_GESTURE = "HAND_GESTURE",
 }
+
+export enum RECORD_NOT_FOUND {
+  ITEM_NOT_FOUND = "No Items Found",
+}

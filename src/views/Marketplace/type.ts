@@ -19,4 +19,6 @@ export type TabsProps = {
 export interface ICollectiblesProps {
   collectibles: Collectible[];
   isApiloading?: boolean;
+  isApiError?: boolean;
+  setIsApiReFetched?: (value: boolean) => void;
 }

@@ -7,4 +7,5 @@ export const endpoint = {
   userCollectables: "collectables/user/collections",
   withdrawCollectable: "collectables/withdraw",
   applyCollectable: "collectables/apply",
+  collectiblesPurchased: "collectables/buy/",
 };
