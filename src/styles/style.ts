@@ -24,7 +24,7 @@ export const FixedBgWrapper = styled(Box, {
 });
 export const BackgroundCardCSS = {
   width: "100vw",
-  height: "100vh",
+  minHeight: "100vh",
 };
 export const navBottomSpace = {
   paddingBottom: "6.25rem !important",

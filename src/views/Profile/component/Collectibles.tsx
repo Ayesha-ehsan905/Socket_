@@ -8,17 +8,56 @@ import {
   navBottomSpace,
 } from "../../../styles/style";
 import { Divder } from "../../Marketplace/Marketplace";
-import { Collectible } from "../../../utilis/type";
+import { Collectible, ErrorResponse } from "../../../utilis/type";
 import APILoader from "../../../components/ApiLoader";
 import NoItemsFind from "../../../components/NoItemsFind/NoItemsFind";
+import { endpoint } from "../../../utilis/endpoints";
+import { axios } from "../../../lib/axios";
+import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
+import Alert from "../../../components/Popup";
+import { AxiosError } from "axios";
 
 interface ICollectiblesProps {
   collectibles: Collectible[];
   isApiloading?: boolean;
+  setRefetch?: (value: boolean) => void;
 }
 
-const Collectibles = ({ collectibles, isApiloading }: ICollectiblesProps) => {
+const Collectibles = ({
+  collectibles,
+  isApiloading,
+  setRefetch,
+}: ICollectiblesProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const { userData } = useAuth();
+
+  const applyCollectible = async (collectibleId: number) => {
+    try {
+      try {
+        const config = {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        };
+        // Api call to apply collectable
+        await axios.patch(
+          `${endpoint.applyCollectable}/${collectibleId}`,
+          {},
+          config
+        );
+        setRefetch?.(true);
+      } catch (error) {
+        //api error handling
+        const axiosError = error as AxiosError<ErrorResponse>;
+        setApiError(
+          axiosError?.response?.data?.message || "An unexpected error occurred"
+        );
+        console.error("Error Applying Collectable:", error);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   if (isApiloading) return <APILoader />;
   return (
     <Box css={navBottomSpace}>
@@ -31,8 +70,12 @@ const Collectibles = ({ collectibles, isApiloading }: ICollectiblesProps) => {
         {collectibles &&
           collectibles.length > 0 &&
           collectibles.map((collectible, index) => (
-            <Flex align={"center"} justify={"between"} key={index}>
-              <Flex css={{ gap: "16px" }} align={"center"}>
+            <Flex
+              align={"center"}
+              css={{ gap: "16px", width: "100%" }}
+              key={index}
+            >
+              <Flex align={"center"}>
                 <Box css={CollectibleImageBoxStyles}>
                   <Box
                     as="img"
@@ -46,33 +89,60 @@ const Collectibles = ({ collectibles, isApiloading }: ICollectiblesProps) => {
                     src={collectible?.image_url}
                   />
                 </Box>
+              </Flex>
+              <Box>
                 <Box
                   as="h2"
                   css={{
                     fontSize: "$18",
                     fontFamily: "$Gilmer",
-                    margin: "24px 0",
+                    margin: "0 0 20px",
                   }}
                 >
                   {collectible?.name}
                 </Box>
-              </Flex>
-              <Button
-                css={{ fontSize: "$16", padding: "12px" }}
-                onClick={() => setShowModal(true)}
-              >
-                Withdraw
-              </Button>
+                <Flex css={{ gap: "16px" }}>
+                  <Button
+                    css={{ fontSize: "$16", padding: "12px" }}
+                    onClick={() => setShowModal(true)}
+                  >
+                    Withdraw
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    css={{
+                      fontSize: "$16",
+                      padding: "12px",
+                      pointerEvents: collectible?.is_applied ? "none" : "auto",
+                    }}
+                    onClick={() => applyCollectible(collectible?.id)}
+                  >
+                    {collectible?.is_applied ? "Applied" : "Apply"}
+                  </Button>
+                </Flex>
+              </Box>
+
+              {showModal && (
+                <WithdrawModal
+                  setShowModal={setShowModal}
+                  showModal={showModal}
+                  collectibleId={collectible?.id}
+                />
+              )}
             </Flex>
           ))}
         {collectibles && collectibles.length === 0 && (
           <NoItemsFind text={"No Collectibles Found"} />
         )}
+        {apiError && (
+          <Alert
+            text={apiError}
+            open={!!apiError}
+            severity={"error"}
+            onClose={() => setApiError("")}
+          />
+        )}
       </Flex>
-
-      {showModal && (
-        <WithdrawModal setShowModal={setShowModal} showModal={showModal} />
-      )}
     </Box>
   );
 };

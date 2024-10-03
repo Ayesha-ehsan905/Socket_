@@ -3,6 +3,10 @@ import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import { AddIcon, NotificationIcon } from "../../../components/icons";
 import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
+import { useEffect, useState } from "react";
+import { endpoint } from "../../../utilis/endpoints";
+import Alert from "../../../components/Popup";
+import { axios } from "../../../lib/axios";
 
 const UserCard = () => {
   return (
@@ -55,6 +59,9 @@ const UserCard = () => {
 
 export const UserDetailCard = () => {
   const { userData } = useAuth();
+  const [userBalance, setUserBalance] = useState(0);
+  const [apiError, setApiError] = useState("");
+
   const firstName = userData?.user?.first_name;
   const lastName = userData?.user?.last_name;
   const userName = userData?.token
@@ -62,6 +69,27 @@ export const UserDetailCard = () => {
       ? firstName + " " + lastName
       : firstName
     : "John Doe";
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const config = {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        };
+        // Fetch user balance
+        const balanceResponse = await axios.get(endpoint.userBalance, config);
+
+        setUserBalance(balanceResponse?.data?.data?.totalBalance);
+      } catch (error) {
+        //api error handling
+        setApiError((error as Error)?.message);
+        console.error("Error fetching User Balance:", error);
+      }
+    };
+
+    fetchProfileData();
+  }, [userData.token]);
+
   return (
     <Flex
       direction={"row"}
@@ -85,7 +113,7 @@ export const UserDetailCard = () => {
       >
         <AddIcon />
         <Box as="span" css={{ p: "0 20px", textAlign: "center" }}>
-          50
+          {userBalance ?? 0}
         </Box>
         <Box
           as="img"
@@ -93,6 +121,14 @@ export const UserDetailCard = () => {
           css={{ width: "25px", height: "25px", alignSelf: "baseline" }}
         />
       </Flex>
+      {apiError && (
+        <Alert
+          text={apiError}
+          open={!!apiError}
+          severity={"error"}
+          onClose={() => setApiError("")}
+        />
+      )}
     </Flex>
   );
 };
