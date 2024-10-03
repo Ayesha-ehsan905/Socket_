@@ -23,6 +23,7 @@ const Profile = () => {
   const [isCopied, setIsCopied] = useState(false);
   const { userData } = useAuth();
   const [apiError, setApiError] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const tabData = [
     {
@@ -31,13 +32,17 @@ const Profile = () => {
         <PersonalDetails
           first_name={userDetails?.user?.first_name ?? ""}
           last_name={userDetails?.user?.last_name ?? ""}
+          isApiloading={loading}
         />
       ),
     },
     {
       label: "Collectibles",
       component: (
-        <Collectibles collectibles={userCollectibles as Collectible[]} />
+        <Collectibles
+          collectibles={userCollectibles as Collectible[]}
+          isApiloading={loading}
+        />
       ),
     },
     // Add more tabs here as needed
@@ -53,6 +58,7 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchProfileData = async () => {
+      setLoading(true); // Start loading,Api fetching
       try {
         const config = {
           headers: { Authorization: `Bearer ${userData.token}` },
@@ -72,10 +78,12 @@ const Profile = () => {
           wallet: profileResponse.data.data.wallet,
         });
         setUserCollectibles(collectiblesResponse.data.data);
+        setLoading(false); // Start loading,Api fetching
       } catch (error) {
         //api error handling
         setApiError((error as Error)?.message);
         console.error("Error fetching profile or collectibles data:", error);
+        setLoading(false); // Start loading,Api fetching
       }
     };
 

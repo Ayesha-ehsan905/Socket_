@@ -4,8 +4,8 @@ import MarketPlaceCard from "./MarketPlaceCard";
 import PurchaseModal from "./PurchaseModal";
 import { Box } from "../../../components/elements";
 import { ICollectiblesProps } from "../type";
-import { Spinner } from "../../../components/Loader/Spinner";
 import { GridWrapper } from "./HandGestures";
+import APILoader from "../../../components/ApiLoader";
 
 const BackgroundOption = ({
   collectibles,
@@ -13,11 +13,7 @@ const BackgroundOption = ({
 }: ICollectiblesProps) => {
   const [showModal, setShowModal] = useState(false);
   if (isApiloading) {
-    return (
-      <Flex justify={"center"} align={"center"} css={{ marginTop: "1.5rem" }}>
-        <Spinner />
-      </Flex>
-    ); // Show loader when api is fetching
+    return <APILoader />; // Show loader when api is fetching
   }
   return (
     <>

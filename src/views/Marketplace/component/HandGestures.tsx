@@ -4,18 +4,15 @@ import MarketPlaceCard from "./MarketPlaceCard";
 import PurchaseModal from "./PurchaseModal";
 import { Box } from "../../../components/elements";
 import { ICollectiblesProps } from "../type";
-import { Spinner } from "../../../components/Loader/Spinner";
 import { styled } from "../../../styles";
+import NoItemsFind from "../../../components/NoItemsFind/NoItemsFind";
+import APILoader from "../../../components/ApiLoader";
 
 const HandGestures = ({ collectibles, isApiloading }: ICollectiblesProps) => {
   console.log(!collectibles, "collectibles");
   const [showModal, setShowModal] = useState(false);
   if (isApiloading) {
-    return (
-      <Flex justify={"center"} align={"center"} css={{ marginTop: "1.5rem" }}>
-        <Spinner />
-      </Flex>
-    ); //Show loader when api is fetching
+    return <APILoader />; //Show loader when api is fetching
   }
 
   return (
@@ -35,6 +32,9 @@ const HandGestures = ({ collectibles, isApiloading }: ICollectiblesProps) => {
               </Box>
             </React.Fragment>
           ))}
+        {collectibles && collectibles.length === 0 && (
+          <NoItemsFind text={"No Items Found"} />
+        )}
       </GridWrapper>
 
       {showModal && (

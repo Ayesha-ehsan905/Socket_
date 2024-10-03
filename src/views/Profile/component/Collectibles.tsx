@@ -9,13 +9,17 @@ import {
 } from "../../../styles/style";
 import { Divder } from "../../Marketplace/Marketplace";
 import { Collectible } from "../../../utilis/type";
+import APILoader from "../../../components/ApiLoader";
+import NoItemsFind from "../../../components/NoItemsFind/NoItemsFind";
 
 interface ICollectiblesProps {
   collectibles: Collectible[];
+  isApiloading?: boolean;
 }
 
-const Collectibles = ({ collectibles }: ICollectiblesProps) => {
+const Collectibles = ({ collectibles, isApiloading }: ICollectiblesProps) => {
   const [showModal, setShowModal] = useState(false);
+  if (isApiloading) return <APILoader />;
   return (
     <Box css={navBottomSpace}>
       <Divder />
@@ -60,6 +64,9 @@ const Collectibles = ({ collectibles }: ICollectiblesProps) => {
               </Button>
             </Flex>
           ))}
+        {collectibles && collectibles.length === 0 && (
+          <NoItemsFind text={"No Collectibles Found"} />
+        )}
       </Flex>
 
       {showModal && (
