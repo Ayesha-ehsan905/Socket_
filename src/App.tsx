@@ -25,10 +25,16 @@ import Profile from "./views/Profile";
 import { useAuth } from "./components/contexts/AuthContext/useAuth";
 import { UserDTO } from "./components/contexts/AuthContext/type";
 import { Game_Resumedprops } from "./utilis/type";
+import useNetworkStatus from "./hooks/useNetworkStatus";
+import { Overlay } from "./components/Modal/Modal";
+import { Spinner } from "./components/Loader/Spinner";
+import { Flex } from "./components/Flex/Flex";
+import { Box } from "./components/elements";
 function App() {
   globalStyles();
   const { userData } = useAuth();
-
+  const isOnline = useNetworkStatus();
+  console.log(isOnline, "isOnline");
   const [errorAlert, setErrorAlert] = useState(false);
 
   return (
@@ -61,6 +67,28 @@ function App() {
             severity="error"
             text={"socket even disconnected"}
           />
+        )}
+        {!isOnline && (
+          <Overlay>
+            <Flex
+              direction={"column"}
+              align={"center"}
+              justify={"center"}
+              css={{ background: "$white", padding: "1rem" }}
+            >
+              <Spinner />
+              <Box
+                as="p"
+                css={{
+                  fontSize: "$14",
+                  fontFamily: "$Gilmer",
+                  fontWeight: "$bold",
+                }}
+              >
+                Lost Connection
+              </Box>
+            </Flex>
+          </Overlay> // Show overlay when disconnected
         )}
       </Router>
     </>

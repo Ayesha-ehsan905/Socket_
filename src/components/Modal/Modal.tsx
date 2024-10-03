@@ -20,7 +20,7 @@ const Modal = ({ show, children }: ModalProps) => {
 
 export default Modal;
 
-const Overlay = styled("div", {
+export const Overlay = styled("div", {
   position: "fixed",
   top: 0,
   left: 0,
