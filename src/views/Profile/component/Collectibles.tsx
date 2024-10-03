@@ -123,6 +123,7 @@ const Collectibles = ({
                   setShowModal={setShowModal}
                   showModal={showModal}
                   collectibleId={collectible?.id}
+                  setRefetch={setRefetch}
                 />
               )}
             </Flex>

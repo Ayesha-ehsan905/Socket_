@@ -14,12 +14,14 @@ interface IWithdrawModalProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
   collectibleId: number;
+  setRefetch?: (value: boolean) => void;
 }
 
 const WithdrawModal = ({
   setShowModal,
   showModal,
   collectibleId,
+  setRefetch,
 }: IWithdrawModalProps) => {
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
@@ -134,6 +136,7 @@ const WithdrawModal = ({
             onClick={() => {
               if (isWithdrawn) {
                 setShowModal(false);
+                setRefetch?.(true);
               } else {
                 withdrawCollectable(collectibleId);
               }
