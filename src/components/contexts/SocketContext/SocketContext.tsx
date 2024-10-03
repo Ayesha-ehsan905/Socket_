@@ -8,18 +8,7 @@ interface SocketContextProps {
   // isSocketConnected: boolean;
   disconnectSocketEvent: (event: string) => void;
 }
-//TODO:Need to use function instead of this
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// const app = (window as any).Telegram?.WebApp;
-// let chat_Id;
-// if (app) {
-//   app.ready();
-//   chat_Id = app.initDataUnsafe?.user?.id;
-// }
 
-// // Check if initDataUnsafe and user exist
-
-// console.log(chat_Id, "id");
 const socketUrl = socket_url;
 const socket = io(socketUrl, {
   autoConnect: true,

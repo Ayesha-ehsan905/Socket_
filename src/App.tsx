@@ -24,7 +24,7 @@ import Marketplace from "./views/Marketplace";
 import Profile from "./views/Profile";
 import { useAuth } from "./components/contexts/AuthContext/useAuth";
 import { UserDTO } from "./components/contexts/AuthContext/type";
-import { RoundRecord } from "./views/OneVsOne/type";
+import { Game_Resumedprops } from "./utilis/type";
 function App() {
   globalStyles();
   const { userData } = useAuth();
@@ -105,10 +105,10 @@ const GameResumed = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleGameResumed = (data: RoundRecord) => {
+  const handleGameResumed = (data: Game_Resumedprops) => {
     console.log("handleGameResumed", data);
 
-    navigate(routes.One_one, { state: { roundData: data } });
+    navigate(routes.One_one, { state: { roomeName: data?.roomName } });
   };
   return <></>;
 };

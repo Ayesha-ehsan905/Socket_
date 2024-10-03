@@ -24,15 +24,18 @@ const OneVsOne = () => {
     console.log("socket connection from 1v1:", socket.connected);
   }, [socket]);
   const location = useLocation();
-  const gameRoomKey = location.state?.gameRoomKey;
+  //fromMatching screen
+  const game_room_key = location.state?.gameRoomKey;
   const user_chatId = location.state?.chatId;
-  const gameResumedRoundData = location.state?.roundData;
+  //from GameResumed APp Screen
+  const game_resumed_game_key = location.state?.roomeName;
   // each round record
   const [roundRecord, setRoundRecord] = useState<RoundRecord | null>(null);
   const [roundTimeLeft, setRoundTimeLeft] = useState(0);
   const [isGameOverModal, setisGameOverModal] = useState(false);
   const [opponnentWinCount, setOpponnentWinCount] = useState(0);
   const [userWinCount, setUserWinCount] = useState(0);
+  const [gameRoomKey, setGameRoomKey] = useState<string | null>(null);
   //if round is not started use cannot select the moves
   const [isRoundStarted, setIsRoundStarted] = useState(false);
 
@@ -64,13 +67,10 @@ const OneVsOne = () => {
 
   const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
 
-  //is gameResumed then set the round record again ans start the round
   useEffect(() => {
-    if (gameResumedRoundData) {
-      setRoundRecord(gameResumedRoundData);
-      setIsRoundStarted(true);
-    }
-  }, [gameResumedRoundData]);
+    if (game_room_key || game_resumed_game_key)
+      setGameRoomKey(game_room_key || game_resumed_game_key);
+  }, [game_room_key, game_resumed_game_key]);
   //timer Logic
   useEffect(() => {
     if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
@@ -161,6 +161,8 @@ const OneVsOne = () => {
   const handleRoundStart = (data: RoundRecord) => {
     console.log("inside handleRoundStart");
     setRoundTimeLeft(0); //timer reset
+    setDisconnectedUserChatId(null);
+    setReconnectedUserChatId(null);
     setTimeout(() => {
       setOpponentMoveImage(null); //rest the opponent image
       setUserMoveImage(null); //reset the usermove image
@@ -202,6 +204,7 @@ const OneVsOne = () => {
     setTimeout(() => setisGameOverModal(true), 2000); // Delay game over modal
     setGameOverResult(data);
   };
+  //opponnent reconnected flow
   const handleOpponentReconnected = (data: UserDisconnectedProps | null) => {
     console.log("user reconnected", data);
     setRoundRecord(null);

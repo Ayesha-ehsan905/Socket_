@@ -34,3 +34,6 @@ export interface ILeaderBoardStats {
 export interface ErrorResponse {
   message: string;
 }
+export type Game_Resumedprops = {
+  roomName: string;
+};
