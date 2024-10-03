@@ -41,6 +41,7 @@ const Collectibles = ({ collectibles, isApiloading }: ICollectiblesProps) => {
                       width: "100%",
                       maxHeight: "120px",
                       maxWidth: "94px",
+                      objectFit: "contain",
                     }}
                     src={collectible?.image_url}
                   />
