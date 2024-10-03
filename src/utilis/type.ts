@@ -16,3 +16,6 @@ export interface Collectible {
   created_at: string; // Use Date type if you want to parse this into a Date object
   updated_at: string; // Same here, use Date if you want to handle it as a Date
 }
+export interface ErrorResponse {
+  message: string;
+}

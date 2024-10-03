@@ -11,51 +11,63 @@ import Tabs from "./component/Tabs";
 import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { axios } from "../../lib/axios";
 import { endpoint } from "../../utilis/endpoints";
-import { Collectible } from "../../utilis/type";
+import { Collectible, ErrorResponse } from "../../utilis/type";
 import { COLLECTABLE_TYPE } from "../../utilis/enum";
 import Alert from "../../components/Popup";
+import { AxiosError } from "axios";
 
 const Marketplace = () => {
   const [tabNumber, setTabNumber] = useState(0);
   const { userData } = useAuth();
   const [apiError, setApiError] = useState("");
+  const [isApiError, setIsApiError] = useState(false);
   const [marketplaceCollectibles, setMarketplaceCollectibles] = useState<
     Collectible[] | null
   >(null);
   const [loading, setLoading] = useState(false); // Add loading state
+  const [isApiReFetched, setIsApiReFetched] = useState(false);
 
   useEffect(() => {
     // fetchMarketplaceData data only when tabNumber changes
     setMarketplaceCollectibles(null);
-    const fetchMarketplaceData = async () => {
-      setLoading(true); // Start loading
-      try {
-        const config = {
-          headers: { Authorization: `Bearer ${userData.token}` },
-        };
-        const collectiblesType =
-          tabNumber === 0
-            ? COLLECTABLE_TYPE.HAND_GESTURE
-            : COLLECTABLE_TYPE.BACKGROUND;
-        const marketplaceResponse = await axios.get(
-          `${endpoint.collectibles}?type=${collectiblesType}`,
-          config
-        );
 
-        setMarketplaceCollectibles(marketplaceResponse?.data.data);
-        setLoading(false); // End loading when data is fetched
-      } catch (error) {
-        //error handling
-        setApiError((error as Error)?.message);
-        setLoading(false); // End loading if there's an error
-
-        console.error("Error fetching profile or collectibles data:", error);
-      }
-    };
     fetchMarketplaceData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabNumber]);
+  useEffect(() => {
+    if (isApiReFetched) fetchMarketplaceData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isApiReFetched]);
 
+  //fetch marketpalce data
+  const fetchMarketplaceData = async () => {
+    setLoading(true); // Start loading
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${userData.token}` },
+      };
+      const collectiblesType =
+        tabNumber === 0
+          ? COLLECTABLE_TYPE.HAND_GESTURE
+          : COLLECTABLE_TYPE.BACKGROUND;
+      const marketplaceResponse = await axios.get(
+        `${endpoint.collectibles}?type=${collectiblesType}`,
+        config
+      );
+
+      setMarketplaceCollectibles(marketplaceResponse?.data.data);
+      setLoading(false); // End loading when data is fetched
+    } catch (error) {
+      //error handling
+      const axiosError = error as AxiosError<ErrorResponse>;
+      setApiError(
+        axiosError?.response?.data?.message || "An unexpected error occurred"
+      );
+      setLoading(false); // End loading if there's an error
+
+      console.error("Error  collectibles data:", error);
+    }
+  };
   const tabData = [
     {
       label: "Hand Gestures",
@@ -63,6 +75,8 @@ const Marketplace = () => {
         <HandGestures
           collectibles={marketplaceCollectibles as Collectible[]}
           isApiloading={loading}
+          isApiError={isApiError}
+          setIsApiReFetched={setIsApiReFetched}
         />
       ),
     },
@@ -72,6 +86,8 @@ const Marketplace = () => {
         <BackgroundOption
           collectibles={marketplaceCollectibles as Collectible[]}
           isApiloading={loading}
+          isApiError={isApiError}
+          setIsApiReFetched={setIsApiReFetched}
         />
       ),
     },
@@ -115,7 +131,12 @@ const Marketplace = () => {
           text={apiError}
           open={!!apiError}
           severity={"error"}
-          onClose={() => setApiError("")}
+          onClose={() => {
+            //error state to display no record found,
+            //if api through error
+            setIsApiError(true);
+            setApiError("");
+          }}
         />
       )}
     </>
