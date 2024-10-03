@@ -7,6 +7,7 @@ import { useTelegram } from "../../../hooks/useTelegram";
 import { SocketEvents } from "../../../utilis/enum";
 import Tooltip from "../../../components/Tooltip/Tooltip";
 import { Box } from "../../../components/elements";
+import React from "react";
 
 const NavigationMenu = () => {
   const { pathname } = useLocation();
@@ -44,7 +45,7 @@ const NavigationMenu = () => {
 
           const isActive = pathname === menu.path;
           return (
-            <>
+            <React.Fragment key={index}>
               {menu.path === "/" ? (
                 <Tooltip content="Coming Soon">
                   <Box css={{ opacity: "0.3" }}>
@@ -61,7 +62,7 @@ const NavigationMenu = () => {
                   <IconComponent active={isActive} />
                 </Flex>
               )}{" "}
-            </>
+            </React.Fragment>
           );
         })}
       </Flex>

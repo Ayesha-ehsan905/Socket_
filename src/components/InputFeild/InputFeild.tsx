@@ -3,7 +3,6 @@ import { styled } from "../../styles";
 const InputWrapper = styled("div", {
   display: "flex",
   flexDirection: "column",
-  marginBottom: "1rem",
   flex: "1",
 });
 

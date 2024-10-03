@@ -5,6 +5,7 @@ import { routes } from "../../utilis/constant";
 import { axios } from "../../lib/axios";
 import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { useTelegram } from "../../hooks/useTelegram";
+import { endpoint } from "../../utilis/endpoints";
 
 const SplashScreen = () => {
   document.body.style.overflow = "hidden";
@@ -14,13 +15,14 @@ const SplashScreen = () => {
   const navigate = useNavigate();
   const { chatId } = useTelegram();
   useEffect(() => {
-    //user profile api integration
+    //fetch user profile data
     const fetchProfileData = async () => {
       try {
-        const response = await axios.post("users/auth", {
+        const response = await axios.post(endpoint.userAuth, {
           chatId: chatId?.toString(),
         });
         if (response) {
+          //fetched then move a head
           setIsApiResponseFetched(true);
           //set the user auth context
           setUserData(response?.data?.data);

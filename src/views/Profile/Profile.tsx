@@ -14,6 +14,7 @@ import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { UserDTO } from "../../components/contexts/AuthContext/type";
 import { truncateString } from "../../utilis/function";
 import { Collectible } from "../../utilis/type";
+import Alert from "../../components/Popup";
 
 const Profile = () => {
   const [tabNumber, setTabNumber] = useState(0);
@@ -21,6 +22,8 @@ const Profile = () => {
   const [userCollectibles, setUserCollectibles] = useState<Collectible[]>();
   const [isCopied, setIsCopied] = useState(false);
   const { userData } = useAuth();
+  const [apiError, setApiError] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const tabData = [
     {
@@ -29,13 +32,17 @@ const Profile = () => {
         <PersonalDetails
           first_name={userDetails?.user?.first_name ?? ""}
           last_name={userDetails?.user?.last_name ?? ""}
+          isApiloading={loading}
         />
       ),
     },
     {
       label: "Collectibles",
       component: (
-        <Collectibles collectibles={userCollectibles as Collectible[]} />
+        <Collectibles
+          collectibles={userCollectibles as Collectible[]}
+          isApiloading={loading}
+        />
       ),
     },
     // Add more tabs here as needed
@@ -51,6 +58,7 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchProfileData = async () => {
+      setLoading(true); // Start loading,Api fetching
       try {
         const config = {
           headers: { Authorization: `Bearer ${userData.token}` },
@@ -70,8 +78,12 @@ const Profile = () => {
           wallet: profileResponse.data.data.wallet,
         });
         setUserCollectibles(collectiblesResponse.data.data);
+        setLoading(false); // Start loading,Api fetching
       } catch (error) {
+        //api error handling
+        setApiError((error as Error)?.message);
         console.error("Error fetching profile or collectibles data:", error);
+        setLoading(false); // Start loading,Api fetching
       }
     };
 
@@ -156,6 +168,16 @@ const Profile = () => {
 
         <NavigationMenu />
       </Box>
+      {/* Popup on api error */}
+
+      {apiError && (
+        <Alert
+          text={apiError}
+          open={!!apiError}
+          severity={"error"}
+          onClose={() => setApiError("")}
+        />
+      )}
     </>
   );
 };
