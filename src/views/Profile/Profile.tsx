@@ -5,7 +5,7 @@ import Collectibles from "./component/Collectibles";
 import PersonalDetails from "./component/PersonalDetails";
 import { Flex } from "../../components/Flex/Flex";
 import { styled } from "../../styles";
-import { BackgroundCardCSS } from "../../styles/style";
+import { BackgroundCardCSS, navBottomSpace } from "../../styles/style";
 import NavigationMenu from "../Dashboard/component/NavigationMenu";
 import { ClipboardIcon, TickIcon } from "../../components/icons";
 import { axios } from "../../lib/axios";
@@ -200,7 +200,7 @@ const Profile = () => {
             )}
           </Flex>
         </ProfileCardWrapper>
-        <Box css={{ margin: "24px 13px 0px 13px" }}>
+        <Box css={{ ...navBottomSpace, margin: "24px 13px 0px 13px" }}>
           <Tabs
             tabData={tabData}
             tabNumber={tabNumber}
