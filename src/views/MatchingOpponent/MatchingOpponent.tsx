@@ -88,7 +88,10 @@ const MatchingOpponent = () => {
           <Box
             as="p"
             css={{ fontSize: "$14", fontFamily: "$Baloo", fontWeight: "$bold" }}
-            onClick={() => navigate(routes.dashboard)}
+            onClick={() => {
+              socket.emit(SocketEvents.CANCEL_SEARCH_GAME, { chatId });
+              navigate(routes.dashboard);
+            }}
           >
             Cancel
           </Box>

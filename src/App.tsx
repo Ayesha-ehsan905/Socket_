@@ -78,8 +78,7 @@ function App() {
               collectible.is_applied
           );
           if (appliedBackgrounds.length > 0)
-            console.log(appliedBackgrounds, "appliedBackgrounds");
-          changeBackgroundImage(appliedBackgrounds[0]?.image_url);
+            changeBackgroundImage(appliedBackgrounds[0]?.image_url);
         } catch (error) {
           console.error("Error Applying Collectable:", error);
         }
