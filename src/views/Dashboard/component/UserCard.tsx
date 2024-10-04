@@ -1,7 +1,7 @@
 import { styled } from "@stitches/react";
 import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
-import { AddIcon, NotificationIcon } from "../../../components/icons";
+import { AddIcon } from "../../../components/icons";
 import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 import { useEffect, useState } from "react";
 import { endpoint } from "../../../utilis/endpoints";
@@ -25,33 +25,6 @@ const UserCard = () => {
           }}
         >
           Rock, Paper, Scissors
-        </Box>
-        <Box
-          css={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mr: "$2",
-          }}
-        >
-          <Box>
-            <NotificationIcon />
-          </Box>
-          <Box css={{ position: "relative" }}>
-            <Badge>
-              <Box
-                as="span"
-                css={{
-                  fontFamily: "$Inter",
-                  fontSize: "$10",
-                  color: "$white",
-                  fontWeight: "$bold",
-                }}
-              >
-                12
-              </Box>
-            </Badge>
-          </Box>
         </Box>
       </Flex>
       <UserDetailCard />
@@ -141,16 +114,4 @@ export const UserCardBox = styled(Box, {
   padding: "16px",
   borderRadius: "0px 0px 20px 20px",
   boxShadow: "0px 4px 8px -2px #1018284A",
-});
-const Badge = styled(Box, {
-  background: "$error",
-  width: "20px",
-  height: "20px",
-  borderRadius: "50%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  position: "absolute",
-  bottom: "0",
-  right: "-8px",
 });
