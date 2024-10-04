@@ -77,25 +77,32 @@ const MatchingOpponent = () => {
       }}
     >
       <MatchingOponentLayout>
-        <Box
-          css={{
-            position: "absolute",
-            right: "1rem",
-            top: "1rem",
-            zIndex: 1000,
-          }}
-        >
+        {!gameRoomInfo && (
           <Box
-            as="p"
-            css={{ fontSize: "$14", fontFamily: "$Baloo", fontWeight: "$bold" }}
-            onClick={() => {
-              socket.emit(SocketEvents.CANCEL_SEARCH_GAME, { chatId });
-              navigate(routes.dashboard);
+            css={{
+              position: "absolute",
+              right: "1rem",
+              top: "1rem",
+              zIndex: 1000,
             }}
           >
-            Cancel
+            <Box
+              as="p"
+              css={{
+                fontSize: "$14",
+                fontFamily: "$Baloo",
+                fontWeight: "$bold",
+              }}
+              onClick={() => {
+                socket.emit(SocketEvents.CANCEL_SEARCH_GAME, { chatId });
+                navigate(routes.dashboard);
+              }}
+            >
+              Cancel
+            </Box>
           </Box>
-        </Box>
+        )}
+
         <Flex
           direction={"column"}
           align={"center"}
