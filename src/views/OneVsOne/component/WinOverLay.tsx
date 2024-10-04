@@ -38,6 +38,12 @@ const WinOverLay = (props: WinOverLayProps) => {
                 : // your lost vs opponenet win
                   `${lostRounds}-${gameOverRecord?.winnerRoundWon}`)}
           </Box>
+          {gameOverRecord?.totalDraw && (
+            <Box as="p" css={{ margin: 0 }}>
+              Draws:{gameOverRecord?.totalDraw}
+            </Box>
+          )}
+
           <Flex direction={"row"} css={{ gap: "$4", margin: "40px 0" }}>
             <IconWrapper>
               <HomeBlackIcon onClick={() => navigate(routes.dashboard)} />
