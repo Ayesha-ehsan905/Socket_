@@ -78,7 +78,10 @@ const LeaderBoard = () => {
                         as="span"
                         css={{ fontSize: "$14", alignSelf: "center" }}
                       >
-                        {getFullName(leaderBoard)}
+                        {getFullName(
+                          leaderBoard.first_name,
+                          leaderBoard.last_name as string
+                        )}
                       </Box>
                     </Flex>
                     <Box>

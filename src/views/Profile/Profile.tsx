@@ -12,7 +12,7 @@ import { axios } from "../../lib/axios";
 import { endpoint } from "../../utilis/endpoints";
 import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { UserDTO } from "../../components/contexts/AuthContext/type";
-import { truncateString } from "../../utilis/function";
+import { getFullName, truncateString } from "../../utilis/function";
 import { Collectible, ErrorResponse } from "../../utilis/type";
 import Alert from "../../components/Popup";
 import { useLocation } from "react-router-dom";
@@ -153,7 +153,10 @@ const Profile = () => {
                     fontWeight: "$normal",
                   }}
                 >
-                  John Doe
+                  {getFullName(
+                    userDetails?.user?.first_name as string,
+                    userDetails?.user?.last_name as string
+                  )}
                 </Box>
               </>
             ) : (

@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { endpoint } from "../../../utilis/endpoints";
 import Alert from "../../../components/Popup";
 import { axios } from "../../../lib/axios";
+import { getFullName } from "../../../utilis/function";
+import Tooltip from "../../../components/Tooltip/Tooltip";
 
 const UserCard = () => {
   return (
@@ -62,14 +64,6 @@ export const UserDetailCard = () => {
   const [userBalance, setUserBalance] = useState(0);
   const [apiError, setApiError] = useState("");
 
-  const firstName = userData?.user?.first_name;
-  const lastName = userData?.user?.last_name;
-  const userName = userData?.token
-    ? lastName
-      ? firstName + " " + lastName
-      : firstName
-    : "John Doe";
-
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -102,7 +96,10 @@ export const UserDetailCard = () => {
       <Flex justify={"center"} css={{ columnGap: "$3" }}>
         <Box as="img" src="/images/avatar.png" />
         <Box as="span" css={{ fontSize: "$14", alignSelf: "center" }}>
-          {userName}
+          {getFullName(
+            userData?.user?.first_name as string,
+            userData?.user?.last_name as string
+          )}
         </Box>
       </Flex>
       <Flex
@@ -112,7 +109,13 @@ export const UserDetailCard = () => {
           background: "$beige",
         }}
       >
-        <AddIcon />
+        <Tooltip
+          content="Coming Soon"
+          position="bottom"
+          css={{ height: "20px" }}
+        >
+          <AddIcon />
+        </Tooltip>
         <Box as="span" css={{ p: "0 20px", textAlign: "center" }}>
           {userBalance ?? 0}
         </Box>
