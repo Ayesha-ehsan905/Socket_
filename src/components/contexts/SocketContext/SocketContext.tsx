@@ -5,7 +5,6 @@ import { returnTelegramID } from "../../../utilis/function";
 
 interface SocketContextProps {
   socket: typeof socket;
-  // isSocketConnected: boolean;
   disconnectSocketEvent: (event: string) => void;
 }
 
@@ -13,7 +12,7 @@ const socketUrl = socket_url;
 const socket = io(socketUrl, {
   autoConnect: true,
   query: { chatId: returnTelegramID() },
-  // reconnection: true, // Enable reconnection (default is true)
+  reconnection: true, // Enable reconnection (default is true)
   reconnectionAttempts: Infinity,
   reconnectionDelay: 2000, // Time between reconnection attempts (in milliseconds)
 });
@@ -24,8 +23,6 @@ export const SocketContext = createContext<SocketContextProps | undefined>(
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // const [isSocketConnected, setIsSocketConnected] = useState(false);
-
   const disconnectSocketEvent = (event: string) => {
     socket.off(event); // Remove specific event listeners
   };
@@ -34,17 +31,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!socket.connected) {
       socket.connect();
     }
-    // socket.on(SocketEvents.CONNECT, (data) => {
-    //   if (data.message) {
-    //     setIsSocketConnected(true);
-    //     console.log("Socket connected successfully", data);
-    //   } else console.log("Socket  disconnected ");
-    // });
 
-    // socket.on(SocketEvents.DISCONNECT, () => {
-    //   setIsSocketConnected(false);
-    //   console.log("Socket  disconnected ");
-    // });
     console.log("socket connection status  from status :", socket.connected);
 
     return () => {
