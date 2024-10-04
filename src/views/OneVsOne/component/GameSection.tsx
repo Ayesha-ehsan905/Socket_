@@ -29,6 +29,7 @@ const GameSection = (props: GameSectionProps) => {
     <FixedBgWrapper
       css={{
         bottom: "0px",
+        zIndex: 20,
         // move round result
         background: userMoveImage
           ? `url(${userMoveImage}) no-repeat center top`

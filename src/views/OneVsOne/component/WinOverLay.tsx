@@ -66,7 +66,7 @@ const WinOverlay = styled(Box, {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  zIndex: 10,
+  zIndex: 30,
   pointerEvents: "auto", // Ensure this layer is clickable
 });
 const OverLayBackground = styled(Box, {

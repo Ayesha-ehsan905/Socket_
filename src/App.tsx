@@ -79,7 +79,7 @@ function App() {
           );
           if (appliedBackgrounds.length > 0)
             console.log(appliedBackgrounds, "appliedBackgrounds");
-          changeBackgroundImage("/images/1v1 Round Start.png");
+          changeBackgroundImage(appliedBackgrounds[0]?.image_url);
         } catch (error) {
           console.error("Error Applying Collectable:", error);
         }

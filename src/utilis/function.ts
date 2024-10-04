@@ -56,7 +56,7 @@ export const changeBackgroundImage = (imageUrl: string) => {
   console.log(imageUrl, "imageUrl");
   document.documentElement.style.setProperty(
     "--colors-backgroundImage",
-    `url(${imageUrl})`
+    `${imageUrl}`
   );
 };
 
