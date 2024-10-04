@@ -21,7 +21,7 @@ const PersonalDetails = ({
     <>
       <Divder />
       <Box as="h1" css={HeadingCss}>
-        PersonalDetails
+        Personal Details
       </Box>
       <Flex direction={"column"} css={{ gap: "20px" }}>
         <InputField

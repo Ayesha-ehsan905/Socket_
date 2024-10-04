@@ -8,7 +8,7 @@ const InputWrapper = styled("div", {
 
 const StyledLabel = styled("label", {
   marginBottom: ".5rem",
-  fontSize: "12px",
+  fontSize: "1rem",
   color: "$primary",
   fontWeight: "$normal",
   paddingLeft: "12px",
@@ -17,20 +17,23 @@ const StyledLabel = styled("label", {
 const StyledInput = styled("input", {
   fontSize: "$14px",
   fontWeight: "$normal",
-  color: "$primary",
+  color: "$grey3",
   outline: "none",
   border: "none",
   background: "$white1",
   paddingLeft: "12px",
   width: "100%",
   fontFamily: "$Baloo",
+  "&::placeholder": {
+    color: "$grey2",
+  },
 });
 
 const InputCard = styled("div", {
   padding: "17px 12px 17px 0",
   borderRadius: "12px",
-  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-  border: "1px solid $grey2",
+  // boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+  border: "2px solid $grey2",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

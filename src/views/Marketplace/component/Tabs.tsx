@@ -18,7 +18,11 @@ const Tabs = (props: TabsProps) => {
             isActive={tabNumber === index}
             onClick={() => setTabNumber(index)}
           >
-            <TabsText>{tab.label}</TabsText>
+            <TabsText
+              css={{ color: tabNumber !== index ? "$grey3" : "$primary" }}
+            >
+              {tab.label}
+            </TabsText>
           </TabsContainer>
         ))}
       </Flex>
@@ -54,7 +58,6 @@ export const TabsText = styled("span", {
   fontFamily: "$Gilmer",
   fontWeight: "bold",
   fontSize: "1rem",
-  color: "$primary",
 });
 
 export default Tabs;

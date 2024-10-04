@@ -7,10 +7,15 @@ export type NoItemsFindProps = {
 
 const NoItemsFind = ({ text }: NoItemsFindProps) => {
   return (
-    <Flex justify={"center"} align={"center"} css={{ minHeight: "40vh" }}>
+    <Flex justify={"center"} align={"center"} css={{ minHeight: "30vh" }}>
       <Box
         as="p"
-        css={{ fontSize: "$14", fontFamily: "$Baloo", fontWeight: "$bold" }}
+        css={{
+          fontSize: "$14",
+          fontFamily: "$Baloo",
+          fontWeight: "$normal",
+          color: "$grey3",
+        }}
       >
         {text}
       </Box>
