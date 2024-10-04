@@ -2,11 +2,7 @@ import { useState } from "react";
 import { Box, Button } from "../../../components/elements";
 import { Flex } from "../../../components/Flex/Flex";
 import WithdrawModal from "./WithdrawModal";
-import {
-  CollectibleImageBoxStyles,
-  HeadingCss,
-  navBottomSpace,
-} from "../../../styles/style";
+import { CollectibleImageBoxStyles, HeadingCss } from "../../../styles/style";
 import { Divder } from "../../Marketplace/Marketplace";
 import { Collectible, ErrorResponse } from "../../../utilis/type";
 import APILoader from "../../../components/ApiLoader";
@@ -59,7 +55,7 @@ const Collectibles = ({
 
   if (isApiloading) return <APILoader />;
   return (
-    <Box css={navBottomSpace}>
+    <Box>
       <Divder />
       <Box as="h2" css={HeadingCss}>
         Items
