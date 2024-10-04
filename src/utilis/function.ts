@@ -53,7 +53,6 @@ export const getFullName = (first_name: string, last_name: string) => {
 
 // Change Background Image dynamically
 export const changeBackgroundImage = (imageUrl: string) => {
-  console.log(imageUrl, "imageUrl");
   document.documentElement.style.setProperty(
     "--colors-backgroundImage",
     `${imageUrl}`

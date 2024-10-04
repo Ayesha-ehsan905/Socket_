@@ -128,7 +128,7 @@ const MatchingOpponent = () => {
 const UserAvatar = (props: useAvatarProps) => {
   const { label, image } = props;
   return (
-    <Flex direction="column" justify="center" wrap="wrap">
+    <Flex direction="column" justify="center" wrap="wrap" align={"center"}>
       <Box as="img" src={image} css={{ width: "80px", height: "80px" }} />
       <Box
         as="span"

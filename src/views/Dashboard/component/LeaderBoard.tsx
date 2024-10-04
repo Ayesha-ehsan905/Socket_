@@ -84,17 +84,24 @@ const LeaderBoard = () => {
                         )}
                       </Box>
                     </Flex>
-                    <Box>
+                    <Flex css={{ "@max_xxs": { flexDirection: "column" } }}>
                       <Box as="span" css={{ color: "$green", mr: "4px" }}>
                         {leaderBoard?.totalWins} Wins
                       </Box>
-                      <Box as="span" css={{ mr: "4px", color: "$grey2" }}>
+                      <Box
+                        as="span"
+                        css={{
+                          mr: "4px",
+                          color: "$grey2",
+                          "@max_xxs": { display: "none" },
+                        }}
+                      >
                         |
                       </Box>
                       <Box as="span" css={{ color: "$red1" }}>
                         {leaderBoard?.totalLosses} Losses
                       </Box>
-                    </Box>
+                    </Flex>
                   </Flex>
                 </LeaderBoardCss>
               ))

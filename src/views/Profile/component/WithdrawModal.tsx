@@ -85,6 +85,7 @@ const WithdrawModal = ({
               ...textStyles,
               fontSize: "$16",
               margin: "24px 0",
+              wordBreak: "break-all",
             }}
           >
             Please enter wallet address below where you want to withdraw this

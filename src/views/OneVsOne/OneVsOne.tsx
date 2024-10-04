@@ -432,7 +432,9 @@ const TimerBar = styled(Box, {
 
 // layout to handle the dynamix background
 const OneVSOneLayout = ({ children }: { children: React.ReactNode }) => {
-  const [primaryColor, setPrimaryColor] = useState("");
+  const [dynamicImage, setDynamicImage] = useState(
+    "/images/1v1 Round Start.png"
+  );
 
   useEffect(() => {
     // Function to update the primary color from CSS variable
@@ -440,8 +442,10 @@ const OneVSOneLayout = ({ children }: { children: React.ReactNode }) => {
       const computedPrimaryColor = getComputedStyle(document.documentElement)
         .getPropertyValue("--colors-backgroundImage")
         .trim();
-      setPrimaryColor(computedPrimaryColor);
-      console.log(computedPrimaryColor, "updated");
+
+      if (computedPrimaryColor !== "undefined") {
+        setDynamicImage(computedPrimaryColor);
+      }
     };
 
     // Update the color initially when the component mounts
@@ -474,7 +478,7 @@ const OneVSOneLayout = ({ children }: { children: React.ReactNode }) => {
           width: "100vw",
           height: "100vh",
         }}
-        src={primaryColor}
+        src={dynamicImage}
         alt="Background"
       />
       <Box css={{ zIndex: 10 }}>{children}</Box>

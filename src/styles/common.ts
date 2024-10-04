@@ -180,7 +180,8 @@ export const defaultUtils = {
 const commonTheme = {
   theme: defaultTokens,
   media: {
-    xxs: "(min-width: 320px)",
+    xxxs: "(min-width: 320px)",
+    max_xxs: "(max-width: 370px)",
     xs: "(min-width: 475px)",
     sm: "(min-width: 600px)",
     bssm: "(min-width: 769px)",
