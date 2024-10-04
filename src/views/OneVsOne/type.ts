@@ -12,6 +12,7 @@ export type RoundRecord = {
   roundTimeLimit: number;
   totalRounds: number;
   roundNo: number;
+  matchId: number;
 };
 export type GameSectionProps = {
   userMoveImage: string | null;

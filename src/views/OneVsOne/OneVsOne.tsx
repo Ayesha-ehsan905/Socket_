@@ -238,6 +238,8 @@ const OneVsOne = () => {
       move: userMove,
       room: gameRoomKey,
       chatId,
+      roundNo: roundRecord?.roundNo,
+      matachId: roundRecord?.matchId,
     });
     setUserSelectedMove(userMove);
   };
