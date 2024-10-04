@@ -41,3 +41,12 @@ export enum COLLECTABLE_TYPE {
 export enum RECORD_NOT_FOUND {
   ITEM_NOT_FOUND = "No Items Found",
 }
+
+export enum MARKETPLACE_CONTENT {
+  HAND_GESTURE = "Choose your perfect hand gesture—more unique ones on the way!Unlock cool features and stand out with every gesture.",
+  BACKGROUND = "Each background adds its own vibe, making every game session more exciting—new ones dropping soon!Choose your favorite and level up your gaming experience.",
+}
+export enum TAB_NUMBER {
+  TAB_ZERO = 0,
+  TAB_ONE = 1,
+}

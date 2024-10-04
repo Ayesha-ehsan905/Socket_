@@ -18,6 +18,8 @@ export const defaultTokens = {
     grey7: "#C8C8C8",
     secondary: "#F9C034",
     black: "#000000",
+    //have to change the background image dynamically
+    backgroundImage: "url('/images/1v1 Round Start.png')",
   },
   fonts: {
     Baloo: "Baloo",

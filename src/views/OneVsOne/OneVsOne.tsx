@@ -54,6 +54,9 @@ const OneVsOne = () => {
 
   //keep track of user ready or not
   const [isReadyForGame, setIsReadyForGame] = useState(false);
+  //track if round of the game is set or not
+  const [totalRounds, setTotalRounds] = useState<number | undefined>(undefined);
+  const [isRoundSet, setIsRoundSet] = useState(false);
 
   //round move of both users
 
@@ -73,7 +76,17 @@ const OneVsOne = () => {
     (roundRecord && roundRecord.roundTimeLimit / 1000) ?? 0;
 
   const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
+  useMemo(() => {
+    // Check if roundRecord exists and totalRounds hasn't been set yet
+    if (roundRecord && !isRoundSet) {
+      // Set the totalRounds once
+      setTotalRounds(roundRecord.totalRounds);
 
+      // Mark it as set so it doesn't update again
+      setIsRoundSet(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roundRecord]);
   //timer Logic
   useEffect(() => {
     if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
@@ -104,7 +117,6 @@ const OneVsOne = () => {
         chatId: chatId,
       });
       setIsReadyForGame(true);
-      console.log("asas", gameRoomKey);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -237,7 +249,7 @@ const OneVsOne = () => {
         height: "100vh",
         position: "relative",
         pointerEvents: isGameOverModal ? "none" : "auto",
-        background: "url('/images/1v1 Round Start.png')",
+        bg: "$backgroundImage",
       }}
     >
       <FixedBgWrapper
@@ -339,9 +351,7 @@ const OneVsOne = () => {
             <AvatarImg src="/images/avatar.png" />
             {/* opponent win stake */}
             <ProgressBar
-              heightPercentage={
-                (opponnentWinCount / (roundRecord?.totalRounds ?? 0)) * 100
-              }
+              heightPercentage={(opponnentWinCount / (totalRounds ?? 0)) * 100}
               position={"top"}
             />
             <Box
@@ -351,9 +361,7 @@ const OneVsOne = () => {
             {/* user win stake */}
 
             <ProgressBar
-              heightPercentage={
-                (userWinCount / (roundRecord?.totalRounds ?? 0)) * 100
-              }
+              heightPercentage={(userWinCount / (totalRounds ?? 0)) * 100}
               position={"bottom"}
             />
 

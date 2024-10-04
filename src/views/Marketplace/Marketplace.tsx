@@ -12,9 +12,14 @@ import { useAuth } from "../../components/contexts/AuthContext/useAuth";
 import { axios } from "../../lib/axios";
 import { endpoint } from "../../utilis/endpoints";
 import { Collectible, ErrorResponse } from "../../utilis/type";
-import { COLLECTABLE_TYPE } from "../../utilis/enum";
+import {
+  COLLECTABLE_TYPE,
+  MARKETPLACE_CONTENT,
+  TAB_NUMBER,
+} from "../../utilis/enum";
 import Alert from "../../components/Popup";
 import { AxiosError } from "axios";
+import { formatContentString } from "../../utilis/function";
 
 const Marketplace = () => {
   const [tabNumber, setTabNumber] = useState(0);
@@ -47,7 +52,7 @@ const Marketplace = () => {
         headers: { Authorization: `Bearer ${userData.token}` },
       };
       const collectiblesType =
-        tabNumber === 0
+        tabNumber === TAB_NUMBER.TAB_ZERO
           ? COLLECTABLE_TYPE.HAND_GESTURE
           : COLLECTABLE_TYPE.BACKGROUND;
       const marketplaceResponse = await axios.get(
@@ -101,18 +106,20 @@ const Marketplace = () => {
         </UserCardBox>
         <Box css={{ ...navBottomSpace, padding: "24px 16px 24px 1rem" }}>
           <Flex direction={"row"} wrap={"wrap"}>
-            <Box css={HeadingCss}>Marketplace</Box>
+            <Box css={{ ...HeadingCss, mb: "1rem" }}>Marketplace</Box>
             <Box
               css={{
+                lineHeight: "24px",
                 fontSize: "$16",
                 fontWeight: "$normal",
                 fontFamily: "$Gilmer",
-                paddingTop: "1rem",
                 color: "$black",
+                whiteSpace: "pre-line",
               }}
             >
-              Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum
-              dolor sit amet .
+              {tabNumber === TAB_NUMBER.TAB_ZERO
+                ? formatContentString(MARKETPLACE_CONTENT.HAND_GESTURE)
+                : formatContentString(MARKETPLACE_CONTENT.BACKGROUND)}
             </Box>
           </Flex>
           <Divder />

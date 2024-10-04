@@ -12,8 +12,8 @@ import { routes } from "./utilis/constant";
 import "./assets/font/Baloo/font.css";
 import "./assets/font/Gilmer/font.css";
 import Alert from "./components/Popup";
-import { getCurrentPath } from "./utilis/function";
-import { SocketEvents } from "./utilis/enum";
+import { changeBackgroundImage, getCurrentPath } from "./utilis/function";
+import { COLLECTABLE_TYPE, SocketEvents } from "./utilis/enum";
 import { useTelegram } from "./hooks/useTelegram";
 import SplashScreen from "./views/SplashScreen";
 import Dashboard from "./views/Dashboard";
@@ -30,12 +30,63 @@ import { Overlay } from "./components/Modal/Modal";
 import { Spinner } from "./components/Loader/Spinner";
 import { Flex } from "./components/Flex/Flex";
 import { Box } from "./components/elements";
+import { axios } from "./lib/axios";
+import { endpoint } from "./utilis/endpoints";
 function App() {
   globalStyles();
-  const { userData } = useAuth();
+  const { userData, setUserData } = useAuth();
   const isOnline = useNetworkStatus();
-  console.log(isOnline, "isOnline");
+  const [isApiResponseFetched, setIsApiResponseFetched] = useState(false);
+
   const [errorAlert, setErrorAlert] = useState(false);
+  const { chatId } = useTelegram();
+  useEffect(() => {
+    //fetch user profile data
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.post(endpoint.userAuth, {
+          chatId: chatId?.toString(),
+        });
+        if (response) {
+          //fetched then move a head
+          setIsApiResponseFetched(true);
+          //set the user auth context
+          setUserData(response?.data?.data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchProfileData();
+  }, [chatId, setUserData]);
+
+  useEffect(() => {
+    if (userData.token) {
+      const getUserCollectibles = async () => {
+        try {
+          const config = {
+            headers: { Authorization: `Bearer ${userData.token}` },
+          };
+          const collectiblesResponse = await axios.get(
+            endpoint.userCollectables,
+            config
+          );
+          const appliedBackgrounds = collectiblesResponse.data.data.filter(
+            (collectible: { type: COLLECTABLE_TYPE; is_applied: boolean }) =>
+              collectible.type === COLLECTABLE_TYPE.BACKGROUND &&
+              collectible.is_applied
+          );
+          if (appliedBackgrounds.length > 0)
+            console.log(appliedBackgrounds, "appliedBackgrounds");
+          changeBackgroundImage("/images/1v1 Round Start.png");
+        } catch (error) {
+          console.error("Error Applying Collectable:", error);
+        }
+      };
+      getUserCollectibles();
+    }
+  }, [userData]);
 
   return (
     <>
@@ -47,7 +98,12 @@ function App() {
         <GameResumed />
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<SplashScreen />} />
+            <Route
+              index
+              element={
+                <SplashScreen isApiResponseFetched={isApiResponseFetched} />
+              }
+            />
             <Route path={routes.dashboard} element={<Dashboard />} />
             <Route
               path={routes.matching_screen}

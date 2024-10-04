@@ -50,3 +50,20 @@ export const truncateString = (str: string, start: number, end: number) => {
 export const getFullName = (first_name: string, last_name: string) => {
   return `${first_name ?? "-"} ${last_name ?? ""}`;
 };
+
+// Change Background Image dynamically
+export const changeBackgroundImage = (imageUrl: string) => {
+  console.log(imageUrl, "imageUrl");
+  document.documentElement.style.setProperty(
+    "--colors-backgroundImage",
+    `url(${imageUrl})`
+  );
+};
+
+// General function to split the content based on '!' and return the formatted string
+
+export const formatContentString = (content: string): string => {
+  const [firstPart, secondPart] = content.split("!");
+  console.log(`${firstPart}!\n${secondPart}`);
+  return `${firstPart}!\n${secondPart}`;
+};

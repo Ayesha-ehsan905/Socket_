@@ -77,6 +77,22 @@ const MatchingOpponent = () => {
       }}
     >
       <MatchingOponentLayout>
+        <Box
+          css={{
+            position: "absolute",
+            right: "1rem",
+            top: "1rem",
+            zIndex: 1000,
+          }}
+        >
+          <Box
+            as="p"
+            css={{ fontSize: "$14", fontFamily: "$Baloo", fontWeight: "$bold" }}
+            onClick={() => navigate(routes.dashboard)}
+          >
+            Cancel
+          </Box>
+        </Box>
         <Flex
           direction={"column"}
           align={"center"}
