@@ -16,6 +16,7 @@ import { axios } from "../../../lib/axios";
 import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 import Alert from "../../../components/Popup";
 import { AxiosError } from "axios";
+import { changeBackgroundImage } from "../../../utilis/function";
 
 interface ICollectiblesProps {
   collectibles: Collectible[];
@@ -32,7 +33,7 @@ const Collectibles = ({
   const [apiError, setApiError] = useState<string | null>(null);
   const { userData } = useAuth();
 
-  const applyCollectible = async (collectibleId: number) => {
+  const applyCollectible = async (collectibleId: number, image_url: string) => {
     try {
       const config = {
         headers: { Authorization: `Bearer ${userData.token}` },
@@ -43,6 +44,8 @@ const Collectibles = ({
         {},
         config
       );
+      //applied the background image on 1v1 match
+      changeBackgroundImage(image_url);
       setRefetch?.(true);
     } catch (error) {
       //api error handling
@@ -111,7 +114,9 @@ const Collectibles = ({
                       padding: "12px",
                       pointerEvents: collectible?.is_applied ? "none" : "auto",
                     }}
-                    onClick={() => applyCollectible(collectible?.id)}
+                    onClick={() =>
+                      applyCollectible(collectible?.id, collectible?.image_url)
+                    }
                   >
                     {collectible?.is_applied ? "Applied" : "Apply"}
                   </Button>

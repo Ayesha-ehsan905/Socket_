@@ -54,6 +54,9 @@ const OneVsOne = () => {
 
   //keep track of user ready or not
   const [isReadyForGame, setIsReadyForGame] = useState(false);
+  //track if round of the game is set or not
+  const [totalRounds, setTotalRounds] = useState<number | undefined>(undefined);
+  const [isRoundSet, setIsRoundSet] = useState(false);
 
   //round move of both users
 
@@ -73,7 +76,17 @@ const OneVsOne = () => {
     (roundRecord && roundRecord.roundTimeLimit / 1000) ?? 0;
 
   const heightPercentageTimeBar = (roundTimeLeft / totalTimeForRound) * 100; // Full height is 100%
+  useMemo(() => {
+    // Check if roundRecord exists and totalRounds hasn't been set yet
+    if (roundRecord && !isRoundSet) {
+      // Set the totalRounds once
+      setTotalRounds(roundRecord.totalRounds);
 
+      // Mark it as set so it doesn't update again
+      setIsRoundSet(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roundRecord]);
   //timer Logic
   useEffect(() => {
     if (isRoundStarted && roundRecord && roundRecord.roundTimeLimit > 0) {
@@ -104,7 +117,6 @@ const OneVsOne = () => {
         chatId: chatId,
       });
       setIsReadyForGame(true);
-      console.log("asas", gameRoomKey);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -237,139 +249,140 @@ const OneVsOne = () => {
         height: "100vh",
         position: "relative",
         pointerEvents: isGameOverModal ? "none" : "auto",
-        background: "url('/images/1v1 Round Start.png')",
+        bg: "$backgroundImage",
       }}
     >
-      <FixedBgWrapper
-        css={{
-          position: "fixed",
-          height: winnerRoundRecord ? "min(40vh, 35vh)" : "min(20vh,15vh)",
-          top: disconnectedUserChatId ? "33px" : 0,
-        }}
-      >
-        {opponentMoveImage && (
-          <Box
-            as="img"
-            //if we have opponnent move from round result
-            src={opponentMoveImage}
-            css={{
-              height: "100%",
-              transform: "rotate(180deg)",
-            }}
-          />
-        )}
-        {disconnectedUserChatId && (
-          <Flex justify={"center"} direction={"column"} align={"center"}>
-            <Spinner />
-            <Box as="p">
-              {disconnectedUserChatId !== user_chatId
-                ? "Opponnent  Disconnected"
-                : ""}
-            </Box>
-          </Flex>
-        )}
-        {!roundRecord && reconnectedUserChatId && (
-          <Box as="p">
-            {reconnectedUserChatId !== user_chatId
-              ? "Opponnent  reconnecting..."
-              : ""}
-          </Box>
-        )}
-      </FixedBgWrapper>
-      <Flex
-        direction={"column"}
-        align={"center"}
-        justify={"center"}
-        css={{ height: "90vh" }}
-      >
-        <Flex
-          justify={"between"}
-          direction={"row"}
-          align={"center"}
+      <OneVSOneLayout>
+        <FixedBgWrapper
           css={{
-            width: "100vw",
-            padding: "0 24px",
-            boxSizing: "border-box",
+            position: "fixed",
+            height: winnerRoundRecord ? "min(40vh, 35vh)" : "min(20vh,15vh)",
+            top: disconnectedUserChatId ? "33px" : 0,
           }}
         >
-          <Flex
-            direction={"column"}
-            css={{ height: "100%", justifyContent: "center" }}
-          >
-            <VerticalLine
+          {opponentMoveImage && (
+            <Box
+              as="img"
+              //if we have opponnent move from round result
+              src={opponentMoveImage}
               css={{
-                height: "50%",
-                position: "relative",
+                height: "100%",
+                transform: "rotate(180deg)",
               }}
-            >
-              {/* time bar  */}
-              <TimerBar css={{ height: `${heightPercentageTimeBar}%` }} />
-            </VerticalLine>
-            <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
-              {roundTimeLeft}
+            />
+          )}
+          {disconnectedUserChatId && (
+            <Flex justify={"center"} direction={"column"} align={"center"}>
+              <Spinner />
+              <Box as="p">
+                {disconnectedUserChatId !== user_chatId
+                  ? "Opponnent  Disconnected"
+                  : ""}
+              </Box>
+            </Flex>
+          )}
+          {!roundRecord && reconnectedUserChatId && (
+            <Box as="p">
+              {reconnectedUserChatId !== user_chatId
+                ? "Opponnent  reconnecting..."
+                : ""}
             </Box>
-          </Flex>
-          <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>
-            {
-              !disconnectedUserChatId &&
-                (roundRecord ? (
-                  `Round ${roundRecord?.roundNo}` // Check if roundRecord exists, show the round number
-                ) : winnerRoundRecord ? ( //check if round record
-                  winnerRoundRecord.isDraw ? (
-                    "Draw" // If the game was a draw
-                  ) : winnerRoundRecord.winnerChatId === user_chatId ? (
-                    "You Won" // If the user won the round
-                  ) : (
-                    "You Lost"
-                  ) // If the user lost the round
-                ) : (
-                  <Countdown />
-                )) // If no round record, indicate that the game is starting
-            }
-          </Box>
+          )}
+        </FixedBgWrapper>
+        <Flex
+          direction={"column"}
+          align={"center"}
+          justify={"center"}
+          css={{ height: "90vh" }}
+        >
           <Flex
-            direction={"column"}
+            justify={"between"}
+            direction={"row"}
             align={"center"}
             css={{
-              background: "$grey4",
-              width: "10px",
-              borderRadius: "20px",
+              zIndex: 10,
+              width: "100vw",
+              padding: "0 24px",
+              boxSizing: "border-box",
             }}
           >
-            <AvatarImg src="/images/avatar.png" />
-            {/* opponent win stake */}
-            <ProgressBar
-              heightPercentage={
-                (opponnentWinCount / (roundRecord?.totalRounds ?? 0)) * 100
+            <Flex
+              direction={"column"}
+              css={{ height: "100%", justifyContent: "center" }}
+            >
+              <VerticalLine
+                css={{
+                  height: "50%",
+                  position: "relative",
+                }}
+              >
+                {/* time bar  */}
+                <TimerBar css={{ height: `${heightPercentageTimeBar}%` }} />
+              </VerticalLine>
+              <Box as="span" css={{ marginTop: "16px", width: "20px" }}>
+                {roundTimeLeft}
+              </Box>
+            </Flex>
+            <Box as="h3" css={{ fontSize: "clamp(24px, 5vw, 40px)" }}>
+              {
+                !disconnectedUserChatId &&
+                  (roundRecord ? (
+                    `Round ${roundRecord?.roundNo}` // Check if roundRecord exists, show the round number
+                  ) : winnerRoundRecord ? ( //check if round record
+                    winnerRoundRecord.isDraw ? (
+                      "Draw" // If the game was a draw
+                    ) : winnerRoundRecord.winnerChatId === user_chatId ? (
+                      "You Won" // If the user won the round
+                    ) : (
+                      "You Lost"
+                    ) // If the user lost the round
+                  ) : (
+                    <Countdown />
+                  )) // If no round record, indicate that the game is starting
               }
-              position={"top"}
-            />
-            <Box
-              as="span"
-              css={{ borderTop: "2px solid black", width: "20px" }}
-            />
-            {/* user win stake */}
+            </Box>
+            <Flex
+              direction={"column"}
+              align={"center"}
+              css={{
+                background: "$grey4",
+                width: "10px",
+                borderRadius: "20px",
+              }}
+            >
+              <AvatarImg src="/images/avatar.png" />
+              {/* opponent win stake */}
+              <ProgressBar
+                heightPercentage={
+                  (opponnentWinCount / (totalRounds ?? 0)) * 100
+                }
+                position={"top"}
+              />
+              <Box
+                as="span"
+                css={{ borderTop: "2px solid black", width: "20px" }}
+              />
+              {/* user win stake */}
 
-            <ProgressBar
-              heightPercentage={
-                (userWinCount / (roundRecord?.totalRounds ?? 0)) * 100
-              }
-              position={"bottom"}
-            />
+              <ProgressBar
+                heightPercentage={(userWinCount / (totalRounds ?? 0)) * 100}
+                position={"bottom"}
+              />
 
-            <AvatarImg src="/images/avatar.png" />
+              <AvatarImg src="/images/avatar.png" />
+            </Flex>
           </Flex>
         </Flex>
-      </Flex>
 
-      {/* Game Section */}
-      <GameSection
-        userSelectedMove={userSelectedMove}
-        handleUserMove={handleUserMove}
-        userMoveImage={userMoveImage}
-        isWinnerRoundRecordExist={!!winnerRoundRecord}
-        isRoundStarted={isRoundStarted}
-      />
+        {/* Game Section */}
+        <GameSection
+          userSelectedMove={userSelectedMove}
+          handleUserMove={handleUserMove}
+          userMoveImage={userMoveImage}
+          isWinnerRoundRecordExist={!!winnerRoundRecord}
+          isRoundStarted={isRoundStarted}
+        />
+      </OneVSOneLayout>
       {isGameOverModal && chatId && (
         <WinOverLay gameOverRecord={gameOverResult} userChatId={chatId} />
       )}
@@ -416,5 +429,57 @@ const TimerBar = styled(Box, {
   transition: "height 0.5s ease",
   width: "100%",
 });
+
+// layout to handle the dynamix background
+const OneVSOneLayout = ({ children }: { children: React.ReactNode }) => {
+  const [primaryColor, setPrimaryColor] = useState("");
+
+  useEffect(() => {
+    // Function to update the primary color from CSS variable
+    const updatePrimaryColor = () => {
+      const computedPrimaryColor = getComputedStyle(document.documentElement)
+        .getPropertyValue("--colors-backgroundImage")
+        .trim();
+      setPrimaryColor(computedPrimaryColor);
+      console.log(computedPrimaryColor, "updated");
+    };
+
+    // Update the color initially when the component mounts
+    updatePrimaryColor();
+
+    // Observe for changes in the document styles (to detect updates)
+    const observer = new MutationObserver(() => {
+      updatePrimaryColor(); // Call function when mutation detected
+    });
+
+    // Observe changes to the style attribute on the document element
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["style"],
+    });
+
+    // Cleanup observer on component unmount
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <Box css={{ position: "relative" }}>
+      <Box
+        as="img"
+        css={{
+          zIndex: 0,
+          position: "absolute",
+          width: "100vw",
+          height: "100vh",
+        }}
+        src={primaryColor}
+        alt="Background"
+      />
+      <Box css={{ zIndex: 10 }}>{children}</Box>
+    </Box>
+  );
+};
 
 export default OneVsOne;

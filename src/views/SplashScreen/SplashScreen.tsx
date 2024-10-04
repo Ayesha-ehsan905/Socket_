@@ -2,37 +2,15 @@ import { useEffect, useState } from "react";
 import { Box } from "../../components/elements/Box";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../utilis/constant";
-import { axios } from "../../lib/axios";
-import { useAuth } from "../../components/contexts/AuthContext/useAuth";
-import { useTelegram } from "../../hooks/useTelegram";
-import { endpoint } from "../../utilis/endpoints";
 
-const SplashScreen = () => {
+const SplashScreen = ({
+  isApiResponseFetched,
+}: {
+  isApiResponseFetched: boolean;
+}) => {
   document.body.style.overflow = "hidden";
-  const { setUserData } = useAuth();
   const [fade, setFade] = useState(true);
-  const [isApiResponseFetched, setIsApiResponseFetched] = useState(false);
   const navigate = useNavigate();
-  const { chatId } = useTelegram();
-  useEffect(() => {
-    //fetch user profile data
-    const fetchProfileData = async () => {
-      try {
-        const response = await axios.post(endpoint.userAuth, {
-          chatId: chatId?.toString(),
-        });
-        if (response) {
-          //fetched then move a head
-          setIsApiResponseFetched(true);
-          //set the user auth context
-          setUserData(response?.data?.data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchProfileData();
-  }, [chatId, setUserData]);
 
   useEffect(() => {
     if (isApiResponseFetched) {

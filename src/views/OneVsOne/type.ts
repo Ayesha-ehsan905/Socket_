@@ -25,6 +25,7 @@ export type GameOverDTO = {
   winnerRoundWon: number;
   totalRounds: number;
   totalDraw: number;
+  isMatchDraw: boolean;
 };
 export type WinOverLayProps = {
   gameOverRecord: GameOverDTO | null;

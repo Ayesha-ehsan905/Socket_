@@ -15,47 +15,28 @@ const WinOverLay = (props: WinOverLayProps) => {
   const totalRounds =
     (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.totalDraw ?? 0);
   const lostRounds = totalRounds - (gameOverRecord?.winnerRoundWon ?? 0);
-  const isMatchDraw = gameOverRecord?.totalDraw === gameOverRecord?.totalRounds;
   const navigate = useNavigate();
   return (
     <WinOverlay>
       <OverLayBackground>
         <Flex direction={"column"} align={"center"} justify={"center"}>
           <Box as="img" src="/images/avatar_1.png" />
-          <Flex
-            justify={"evenly"}
-            css={{
-              borderRadius: "24px",
-              height: "fit-content",
-              background: "$beige",
-              margin: "25px 0",
-              padding: "8px 6px",
-              width: "110px",
-            }}
-          >
-            <Box
-              as="img"
-              src="/images/Vector.png"
-              css={{ width: "25px", height: "25px", alignSelf: "baseline" }}
-            />
-            <Box>
-              <Box as="span">+</Box>
-              <Box as="span"> 150</Box>
-            </Box>
-          </Flex>
-          <Box as="span" css={{ fontSize: "24px" }}>
-            {gameOverRecord && isMatchDraw
+
+          <Box as="span" css={{ fontSize: "24px", mt: "1rem" }}>
+            {gameOverRecord && gameOverRecord?.isMatchDraw
               ? "Match Draw"
               : gameOverRecord?.winner === userChatId
               ? "You Win"
               : "You Loss"}
           </Box>
           <Box as="span" css={{ fontSize: "64px" }}>
-            {gameOverRecord?.winner === userChatId
-              ? //  you win vs opponenet lost count
-                `${gameOverRecord?.winnerRoundWon}- ${lostRounds}`
-              : // your lost vs opponenet win
-                `${lostRounds}-${gameOverRecord?.winnerRoundWon}`}
+            {gameOverRecord &&
+              !gameOverRecord?.isMatchDraw &&
+              (gameOverRecord?.winner === userChatId
+                ? //  you win vs opponenet lost count
+                  `${gameOverRecord?.winnerRoundWon}- ${lostRounds}`
+                : // your lost vs opponenet win
+                  `${lostRounds}-${gameOverRecord?.winnerRoundWon}`)}
           </Box>
           <Flex direction={"row"} css={{ gap: "$4", margin: "40px 0" }}>
             <IconWrapper>
@@ -85,7 +66,7 @@ const WinOverlay = styled(Box, {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  zIndex: 10,
+  zIndex: 30,
   pointerEvents: "auto", // Ensure this layer is clickable
 });
 const OverLayBackground = styled(Box, {
