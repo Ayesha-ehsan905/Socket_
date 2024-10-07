@@ -40,10 +40,24 @@ const BackgroundOption = ({
                     imageUrl={collectible.image_url}
                     name={collectible.name}
                     price={collectible.price}
+                    isBackgroundCollectibles={true}
                   />
                 </Box>
               </React.Fragment>
             ))}
+          {/* Coming Soon tile */}
+          {collectibles && collectibles.length > 0 && (
+            <Box>
+              <MarketPlaceCard
+                imageUrl="" // Replace with the actual image URL or placeholder
+                name="Coming Soon"
+                price={""} // or "TBD" if you prefer
+                isPadding={true}
+                isComingSoon={true}
+              />
+            </Box>
+          )}
+
           {((collectibles && collectibles.length === 0) || isApiError) && (
             <NoItemsFind text={RECORD_NOT_FOUND.ITEM_NOT_FOUND} />
           )}

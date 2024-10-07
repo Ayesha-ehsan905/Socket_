@@ -63,6 +63,24 @@ export const changeBackgroundImage = (imageUrl: string) => {
 
 export const formatContentString = (content: string): string => {
   const [firstPart, secondPart] = content.split("!");
-  console.log(`${firstPart}!\n${secondPart}`);
   return `${firstPart}!\n${secondPart}`;
 };
+
+// astric btw name
+export function obscureName(firstName: string, lastName: string) {
+  const name = `${firstName} ${lastName ?? ""}`;
+
+  // Helper function to obscure each word
+  const obscureWord = (word: string | string[]) => {
+    if (word.length <= 2) {
+      return word; // If word has 2 or fewer letters, return it as is
+    }
+    return word[0] + "*".repeat(word.length - 2) + word[word.length - 1];
+  };
+
+  // Apply obscuring to both first and last name
+  const obscuredFirstName = obscureWord(name.trim());
+  // const obscuredLastName = obscureWord(lastName);
+
+  return `${obscuredFirstName} `;
+}

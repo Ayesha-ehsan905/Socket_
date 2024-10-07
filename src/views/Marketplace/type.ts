@@ -1,10 +1,12 @@
 import { Collectible } from "../../utilis/type";
 
 export type MarketplaceCardProp = {
-  imageUrl: string;
+  imageUrl?: string;
   isPadding?: boolean;
   name: string;
   price: string;
+  isBackgroundCollectibles?: boolean;
+  isComingSoon?: boolean;
 };
 export type TabItem = {
   label: string;

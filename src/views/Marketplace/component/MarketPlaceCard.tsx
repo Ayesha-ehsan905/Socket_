@@ -2,7 +2,14 @@ import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
 import { MarketplaceCardProp } from "../type";
 const MarketPlaceCard = (props: MarketplaceCardProp) => {
-  const { imageUrl, isPadding, name, price } = props;
+  const {
+    imageUrl,
+    isPadding,
+    name,
+    price,
+    isBackgroundCollectibles, //styling of background collectibles
+    isComingSoon,
+  } = props;
   return (
     <Flex
       direction={"column"}
@@ -21,17 +28,31 @@ const MarketPlaceCard = (props: MarketplaceCardProp) => {
           border: "1px solid #D9D9D9",
         }}
       >
-        <Box
-          as="img"
-          css={{
-            height: "100%",
-            width: "100%",
-            maxHeight: "156px",
-            maxWidth: "122px",
-            objectFit: "contain",
-          }}
-          src={imageUrl}
-        />
+        {isComingSoon ? (
+          <Box
+            as="span"
+            css={{
+              fontFamily: "$Gilmer",
+              fontWeight: "14px",
+              textAlign: "center",
+            }}
+          >
+            More Coming Soon!
+          </Box>
+        ) : (
+          <Box
+            as="img"
+            css={{
+              height: "100%",
+              width: "100%",
+              maxHeight: "156px",
+              maxWidth: isBackgroundCollectibles ? "100%" : "122px",
+              objectFit: isBackgroundCollectibles ? "fill" : "contain",
+              borderRadius: isBackgroundCollectibles ? "8px" : "0px",
+            }}
+            src={imageUrl}
+          />
+        )}
       </Flex>
       <Flex direction={"column"} justify={"center"} align={"center"}>
         <Box
@@ -46,27 +67,29 @@ const MarketPlaceCard = (props: MarketplaceCardProp) => {
           {name}
         </Box>
 
-        <Flex css={{ gap: "4px", marginTop: "0.5rem" }} align={"center"}>
-          <Box
-            as="img"
-            src="/images/Vector.png"
-            css={{
-              width: "25px",
-              height: "25px",
-              alignSelf: "baseline",
-            }}
-          />
-          <Box
-            as="span"
-            css={{
-              fontSize: "$14",
-              fontFamily: "$Baloo",
-              color: "$primary",
-            }}
-          >
-            {price}
-          </Box>
-        </Flex>
+        {!isComingSoon && (
+          <Flex css={{ gap: "4px", marginTop: "0.5rem" }} align={"center"}>
+            <Box
+              as="img"
+              src="/images/Vector.png"
+              css={{
+                width: "25px",
+                height: "25px",
+                alignSelf: "baseline",
+              }}
+            />
+            <Box
+              as="span"
+              css={{
+                fontSize: "$14",
+                fontFamily: "$Baloo",
+                color: "$primary",
+              }}
+            >
+              {price}
+            </Box>
+          </Flex>
+        )}
       </Flex>
     </Flex>
   );

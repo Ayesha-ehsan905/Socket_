@@ -88,6 +88,7 @@ const WithdrawModal = ({
                 ...textStyles,
                 fontSize: "$16",
                 margin: "24px 0",
+                wordBreak: "break-all",
               }}
             >
               You have successfully withdrawn your collectable to{" "}
