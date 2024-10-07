@@ -75,11 +75,14 @@ const PurchaseModal = ({
               imageUrl={userSelectedCollectible?.image_url}
               name={userSelectedCollectible?.name}
               price={userSelectedCollectible?.price}
-              isPadding={true}
+              isBackgroundCollectibles={true}
+              isPadding={false}
             />
           )
         )}
-        <Box css={{ textAlign: "center" }}>
+        <Box
+          css={{ textAlign: "center", fontFamily: "$Gilmer", fontSize: "16px" }}
+        >
           {isPurchased ? (
             "Purchase Successfull!"
           ) : (
@@ -116,7 +119,9 @@ const PurchaseModal = ({
           {/*Note: If is purchased flex is row reversed */}
           {/*Todo: Implement navigation and navigation check */}
           <Button
-            variant={isApiLoading ? "disabled" : "filled"}
+            variant={
+              isApiLoading ? "disabled" : isPurchased ? "outlined" : "filled"
+            }
             css={{ flex: 1 }}
             onClick={() => {
               if (!isPurchased) {
@@ -129,7 +134,7 @@ const PurchaseModal = ({
             {isPurchased ? "Inventory" : "Confirm"}
           </Button>
           <Button
-            variant="outlined"
+            variant={isPurchased ? "filled" : "outlined"}
             css={{ flex: 1 }}
             onClick={() => {
               if (isPurchased) {

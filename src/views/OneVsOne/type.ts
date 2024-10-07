@@ -31,6 +31,7 @@ export type GameOverDTO = {
 export type WinOverLayProps = {
   gameOverRecord: GameOverDTO | null;
   userChatId?: number | string; //current user chat id
+  isPlayerTimeout?: boolean;
 };
 export type UserDisconnectedProps = {
   userChatId: string;

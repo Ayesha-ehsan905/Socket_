@@ -71,6 +71,9 @@ const OneVsOne = () => {
   const [reconnectedUserChatId, setReconnectedUserChatId] =
     useState<UserDisconnectedProps | null>(null);
 
+  // isPlayerTimeout then opponnent win
+  const [isPlayerTimeout, setIsPlayerTimeout] = useState(false);
+
   //milliseconds->sec
   const totalTimeForRound =
     (roundRecord && roundRecord.roundTimeLimit / 1000) ?? 0;
@@ -222,6 +225,7 @@ const OneVsOne = () => {
     console.log("playerTimeout console", data);
     setTimeout(() => setisGameOverModal(true), 2000); // Delay game over modal
     setGameOverResult(data);
+    setIsPlayerTimeout(true);
   };
   //opponnent reconnected flow
   const handleOpponentReconnected = (data: UserDisconnectedProps | null) => {
@@ -386,7 +390,11 @@ const OneVsOne = () => {
         />
       </OneVSOneLayout>
       {isGameOverModal && chatId && (
-        <WinOverLay gameOverRecord={gameOverResult} userChatId={chatId} />
+        <WinOverLay
+          gameOverRecord={gameOverResult}
+          userChatId={chatId}
+          isPlayerTimeout={isPlayerTimeout}
+        />
       )}
     </Box>
   );

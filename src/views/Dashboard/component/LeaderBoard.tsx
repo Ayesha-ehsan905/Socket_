@@ -10,7 +10,7 @@ import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 import { endpoint } from "../../../utilis/endpoints";
 import NoItemsFind from "../../../components/NoItemsFind/NoItemsFind";
 import { ILeaderBoardStats } from "../../../utilis/type";
-import { getFullName } from "../../../utilis/function";
+import { obscureName } from "../../../utilis/function";
 import APILoader from "../../../components/ApiLoader";
 
 const LeaderBoard = () => {
@@ -73,14 +73,18 @@ const LeaderBoard = () => {
                 <LeaderBoardCss key={index} css={{ mt: "8px" }}>
                   <Flex direction={"row"} justify={"between"} align={"center"}>
                     <Flex justify={"center"} css={{ columnGap: "$3" }}>
-                      <Box as="img" src="/images/avatar.png" />
+                      <Box
+                        as="img"
+                        src="/images/avatar_1.png"
+                        css={{ width: "40px", height: "40px" }}
+                      />
                       <Box
                         as="span"
                         css={{ fontSize: "$14", alignSelf: "center" }}
                       >
-                        {getFullName(
+                        {obscureName(
                           leaderBoard.first_name,
-                          leaderBoard.last_name as string
+                          leaderBoard.last_name ?? ""
                         )}
                       </Box>
                     </Flex>

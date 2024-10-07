@@ -9,13 +9,14 @@ import { WinOverLayProps } from "../type";
 import { useSocket } from "../../../components/contexts/SocketContext/useSocket";
 
 const WinOverLay = (props: WinOverLayProps) => {
-  const { gameOverRecord, userChatId } = props;
+  const { gameOverRecord, userChatId, isPlayerTimeout } = props;
   const { socket } = useSocket();
 
   const totalRounds =
     (gameOverRecord?.totalRounds ?? 0) - (gameOverRecord?.totalDraw ?? 0);
   const lostRounds = totalRounds - (gameOverRecord?.winnerRoundWon ?? 0);
   const navigate = useNavigate();
+
   return (
     <WinOverlay>
       <OverLayBackground>
@@ -30,15 +31,22 @@ const WinOverLay = (props: WinOverLayProps) => {
               : "You Loss"}
           </Box>
           <Box as="span" css={{ fontSize: "64px" }}>
+            {/* player time out mean, the opponent disconnected so you won */}
             {gameOverRecord &&
-              !gameOverRecord?.isMatchDraw &&
-              (gameOverRecord?.winner === userChatId
-                ? //  you win vs opponenet lost count
-                  `${gameOverRecord?.winnerRoundWon}- ${lostRounds}`
-                : // your lost vs opponenet win
-                  `${lostRounds}-${gameOverRecord?.winnerRoundWon}`)}
+            !gameOverRecord?.isMatchDraw &&
+            isPlayerTimeout ? (
+              <Box as="p" css={{ margin: 0, fontSize: "14px" }}>
+                Opponnent Disconnected{" "}
+              </Box>
+            ) : gameOverRecord?.winner === userChatId ? (
+              //  you win vs opponenet lost count
+              `${gameOverRecord?.winnerRoundWon}- ${lostRounds}`
+            ) : (
+              // your lost vs opponenet win
+              `${lostRounds}-${gameOverRecord?.winnerRoundWon}`
+            )}
           </Box>
-          {gameOverRecord?.totalDraw && (
+          {gameOverRecord && gameOverRecord?.totalDraw > 0 && (
             <Box as="p" css={{ margin: 0 }}>
               Draws:{gameOverRecord?.totalDraw}
             </Box>

@@ -67,7 +67,11 @@ export const UserDetailCard = () => {
       css={{ background: "$white", height: "100%", margin: "auto 0" }}
     >
       <Flex justify={"center"} css={{ columnGap: "$3" }}>
-        <Box as="img" src="/images/avatar.png" />
+        <Box
+          as="img"
+          src="/images/avatar_1.png"
+          css={{ width: "56px", height: "56px" }}
+        />
         <Box as="span" css={{ fontSize: "$14", alignSelf: "center" }}>
           {getFullName(
             userData?.user?.first_name as string,
@@ -114,4 +118,5 @@ export const UserCardBox = styled(Box, {
   padding: "16px",
   borderRadius: "0px 0px 20px 20px",
   boxShadow: "0px 4px 8px -2px #1018284A",
+  margin: "0px 5px",
 });

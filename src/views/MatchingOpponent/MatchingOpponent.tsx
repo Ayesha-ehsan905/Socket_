@@ -90,8 +90,9 @@ const MatchingOpponent = () => {
               as="p"
               css={{
                 fontSize: "$14",
-                fontFamily: "$Baloo",
-                fontWeight: "$bold",
+                fontFamily: "$Gilmer",
+                fontWeight: "$semibold",
+                color: "$primary",
               }}
               onClick={() => {
                 socket.emit(SocketEvents.CANCEL_SEARCH_GAME, { chatId });
