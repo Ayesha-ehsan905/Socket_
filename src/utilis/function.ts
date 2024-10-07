@@ -65,6 +65,8 @@ export const formatContentString = (content: string): string => {
   const [firstPart, secondPart] = content.split("!");
   return `${firstPart}!\n${secondPart}`;
 };
+
+// astric btw name
 export function obscureName(firstName: string, lastName: string) {
   const name = `${firstName} ${lastName ?? ""}`;
 
