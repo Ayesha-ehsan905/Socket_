@@ -41,7 +41,5 @@ export const CollectibleImageBoxStyles = {
   borderRadius: "8px",
   height: "120px",
   background: "$white",
-  padding: "8px 8px 0",
-  width: "76px",
   border: "1px solid $grey6",
 };

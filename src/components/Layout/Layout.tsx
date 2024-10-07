@@ -1,16 +1,13 @@
 import { Outlet } from "react-router-dom";
 import { ErrorScreen } from "../../views/Error";
+import { useOrientation } from "../../hooks/useOrientation";
 
-const useIsMobile = () => {
-  const mobileWidth = 500;
-  return window.matchMedia(`(max-width: ${mobileWidth}px)`).matches;
-};
 export function Layout() {
-  const isMobile = useIsMobile();
+  const isPortraitAndSmallScreen = useOrientation();
 
   return (
     <>
-      {isMobile ? (
+      {isPortraitAndSmallScreen ? (
         <>
           <Outlet />
         </>

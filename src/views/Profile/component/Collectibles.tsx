@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Button } from "../../../components/elements";
 import { Flex } from "../../../components/Flex/Flex";
 import WithdrawModal from "./WithdrawModal";
-import { CollectibleImageBoxStyles, HeadingCss } from "../../../styles/style";
+import { HeadingCss } from "../../../styles/style";
 import { Divder } from "../../Marketplace/Marketplace";
 import { Collectible, ErrorResponse } from "../../../utilis/type";
 import APILoader from "../../../components/ApiLoader";
@@ -13,6 +13,7 @@ import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 import Alert from "../../../components/Popup";
 import { AxiosError } from "axios";
 import { changeBackgroundImage } from "../../../utilis/function";
+import CollectableImage from "./CollectableImage";
 
 interface ICollectiblesProps {
   collectibles: Collectible[];
@@ -26,6 +27,9 @@ const Collectibles = ({
   setRefetch,
 }: ICollectiblesProps) => {
   const [showModal, setShowModal] = useState(false);
+  // State to store the selected collectible
+  const [userSelectedCollectible, setUserSelectedCollectible] =
+    useState<Collectible | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const { userData } = useAuth();
 
@@ -70,21 +74,7 @@ const Collectibles = ({
               css={{ gap: "16px", width: "100%" }}
               key={index}
             >
-              <Flex align={"center"}>
-                <Box css={CollectibleImageBoxStyles}>
-                  <Box
-                    as="img"
-                    css={{
-                      height: "100%",
-                      width: "100%",
-                      maxHeight: "120px",
-                      maxWidth: "94px",
-                      objectFit: "contain",
-                    }}
-                    src={collectible?.image_url}
-                  />
-                </Box>
-              </Flex>
+              <CollectableImage collectable={collectible} />
               <Box>
                 <Box
                   as="h2"
@@ -99,7 +89,10 @@ const Collectibles = ({
                 <Flex css={{ gap: "16px" }}>
                   <Button
                     css={{ fontSize: "$16", padding: "12px" }}
-                    onClick={() => setShowModal(true)}
+                    onClick={() => {
+                      setUserSelectedCollectible(collectible);
+                      setShowModal(true);
+                    }}
                   >
                     Withdraw
                   </Button>
@@ -118,19 +111,19 @@ const Collectibles = ({
                   </Button>
                 </Flex>
               </Box>
-
-              {showModal && (
-                <WithdrawModal
-                  setShowModal={setShowModal}
-                  showModal={showModal}
-                  collectable={collectible}
-                  setRefetch={setRefetch}
-                />
-              )}
             </Flex>
           ))}
         {collectibles && collectibles.length === 0 && (
           <NoItemsFind text={"No Collectibles Found"} />
+        )}
+        {/* Collectable withdraw modal */}
+        {showModal && userSelectedCollectible && (
+          <WithdrawModal
+            setShowModal={setShowModal}
+            showModal={showModal}
+            collectable={userSelectedCollectible}
+            setRefetch={setRefetch}
+          />
         )}
         {apiError && (
           <Alert

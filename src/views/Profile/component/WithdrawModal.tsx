@@ -2,13 +2,13 @@ import { useState } from "react";
 import Modal from "../../../components/Modal/Modal";
 import { Flex } from "../../../components/Flex/Flex";
 import { Box, Button } from "../../../components/elements";
-import { CollectibleImageBoxStyles } from "../../../styles/style";
 import InputField from "../../../components/InputFeild/InputFeild";
 import { endpoint } from "../../../utilis/endpoints";
 import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 import { axios } from "../../../lib/axios";
 import { AxiosError } from "axios";
 import { Collectible, ErrorResponse } from "../../../utilis/type";
+import CollectableImage from "./CollectableImage";
 
 interface IWithdrawModalProps {
   showModal: boolean;
@@ -54,19 +54,7 @@ const WithdrawModal = ({
     <Modal show={showModal}>
       <Flex justify={"center"} align={"center"} direction={"column"}>
         <Flex align={"center"} direction={"column"}>
-          <Box css={CollectibleImageBoxStyles}>
-            <Box
-              as="img"
-              css={{
-                height: "100%",
-                width: "100%",
-                maxHeight: "120px",
-                maxWidth: "94px",
-                objectFit: "contain",
-              }}
-              src={collectable?.image_url}
-            />
-          </Box>
+          <CollectableImage collectable={collectable} />
           <Box
             as="p"
             css={{
@@ -102,7 +90,7 @@ const WithdrawModal = ({
                 margin: "24px 0",
               }}
             >
-              You have successfully withdrawn your collectible to{" "}
+              You have successfully withdrawn your collectable to{" "}
               <Box as="span" css={{ fontWeight: "$bold" }}>
                 {walletAddress}
               </Box>
