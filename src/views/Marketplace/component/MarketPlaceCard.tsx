@@ -57,8 +57,8 @@ const MarketPlaceCard = (props: MarketplaceCardProp) => {
       <Flex direction={"column"} justify={"center"} align={"center"}>
         <Box
           css={{
-            fontSize: "$16",
-            fontWeight: "$bold",
+            fontSize: "14px",
+            fontWeight: "$semibold",
             fontFamily: "$Gilmer",
             color: "$primary",
             margin: "13px 0 0px",
