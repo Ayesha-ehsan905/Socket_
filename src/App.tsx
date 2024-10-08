@@ -41,6 +41,17 @@ function App() {
   const [errorAlert, setErrorAlert] = useState(false);
   const { chatId } = useTelegram();
   useEffect(() => {
+    // Ensure Telegram WebApp is available and ready
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const app = (window as any).Telegram?.WebApp;
+    if (app) {
+      app.ready();
+
+      // Restrict the orientation to portrait
+      app.setPreferredOrientation("portrait");
+    }
+  }, []);
+  useEffect(() => {
     //fetch user profile data
     const fetchProfileData = async () => {
       try {
