@@ -3,12 +3,18 @@ import { keyframes, styled } from "../../../styles";
 
 const LoadingDots = () => {
   return (
+    <>
     <Box as="span" css={{ textAlign: "center", mt: "1rem", fontSize: "$20px" }}>
-      Searching
+      Sharpening your scissors
       <Dot className="dot-one">.</Dot>
       <Dot className="dot-two">.</Dot>
       <Dot className="dot-three">.</Dot>
+     
     </Box>
+    <Box as="p" css={{ textAlign: "center", mt: "1rem", fontSize: "$20px" ,margin:0}}>
+      stay ready!
+    </Box>
+    </>
   );
 };
 const dotOneAnimation = keyframes({
