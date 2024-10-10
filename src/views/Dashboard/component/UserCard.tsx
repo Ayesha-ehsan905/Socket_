@@ -9,11 +9,21 @@ import Alert from "../../../components/Popup";
 import { axios } from "../../../lib/axios";
 import { getFullName } from "../../../utilis/function";
 import Tooltip from "../../../components/Tooltip/Tooltip";
+import { useSocket } from "../../../components/contexts/SocketContext/useSocket";
+import { useTelegram } from "../../../hooks/useTelegram";
+import { SocketEvents } from "../../../utilis/enum";
+import { routes } from "../../../utilis/constant";
+import { useNavigate } from "react-router-dom";
 
 const UserCard = () => {
+  const { socket } = useSocket();
+  const { chatId } = useTelegram();
+  const navigate = useNavigate();
+
+
   return (
     <UserCardBox>
-      <Flex direction={"row"} justify={"between"} wrap={"wrap"}>
+      <Flex direction={"row"} justify={"between"} wrap={"wrap"} css={{columnGap:'.5rem'}}>
         <Box
           as="h4"
           css={{
@@ -26,6 +36,15 @@ const UserCard = () => {
         >
           Rock, Paper, Scissors
         </Box>
+        {/* play button will start the matching process */}
+        <Flex justify={"center"} align={"center"}  css={{ "@xxxs": { mb:'2rem' }}}>
+          <Box as="span" css={{background:'$secondary',padding:'0.5rem 2rem' ,borderRadius:'8px'}} onClick={
+            () => {
+              socket.emit(SocketEvents.SEARCH_GAME, { chatId });
+              navigate(routes.matching_screen);
+            }
+          }>Play</Box>
+        </Flex>
       </Flex>
       <UserDetailCard />
     </UserCardBox>

@@ -180,18 +180,9 @@ export const defaultUtils = {
 const commonTheme = {
   theme: defaultTokens,
   media: {
-    xxxs: "(min-width: 320px)",
+    xxxs: "(max-width: 354px)",
     max_xxs: "(max-width: 370px)",
-    xs: "(min-width: 475px)",
-    sm: "(min-width: 600px)",
-    bssm: "(min-width: 769px)",
-    md: "(min-width: 991px)",
-    lg: "(min-width: 1199px)",
-    xl: "(min-width: 1399px)",
-    motion: "(prefers-reduced-motion)",
-    hover: "(any-hover: hover)",
-    dark: "(prefers-color-scheme: dark)",
-    light: "(prefers-color-scheme: light)",
+    
   },
   utils: defaultUtils,
 };
