@@ -28,7 +28,8 @@ const OneVsOne = () => {
   const location = useLocation();
   //fromMatching screen
   const game_room_key = location.state?.gameRoomKey;
-  const user_chatId = location.state?.chatId;
+  //user chat id
+  const user_chatId = chatId;
   //from GameResumed APp Screen
   const game_resumed_game_key = location.state?.roomeName;
   // each round record
@@ -148,7 +149,7 @@ const OneVsOne = () => {
   // Check round results
   useEffect(() => {
     if (winnerRoundRecord && !winnerRoundRecord?.isDraw) {
-      if (winnerRoundRecord?.winnerChatId === user_chatId)
+      if (winnerRoundRecord?.winnerChatId === user_chatId?.toString())
         setUserWinCount((prev) => prev + 1);
       else setOpponnentWinCount((prev) => prev + 1);
     }
@@ -161,7 +162,7 @@ const OneVsOne = () => {
       let userMove = "";
 
       // Check if you are player1 then pick player 2's move and vice versa
-      if (winnerRoundRecord?.player1?.chatId === user_chatId) {
+      if (winnerRoundRecord?.player1?.chatId.toString() === user_chatId?.toString()) {
         opponentMove = winnerRoundRecord?.player2?.move as UserMove;
         userMove = winnerRoundRecord?.player1?.move as UserMove;
       } else {
@@ -281,7 +282,7 @@ const OneVsOne = () => {
             <Flex justify={"center"} direction={"column"} align={"center"}>
               <Spinner />
               <Box as="p">
-                {disconnectedUserChatId !== user_chatId
+                {disconnectedUserChatId?.toString() !== user_chatId?.toString()
                   ? "Opponnent  Disconnected"
                   : ""}
               </Box>
@@ -289,7 +290,7 @@ const OneVsOne = () => {
           )}
           {!roundRecord && reconnectedUserChatId && (
             <Box as="p">
-              {reconnectedUserChatId !== user_chatId
+              {reconnectedUserChatId?.toString() !== user_chatId?.toString()
                 ? "Opponnent  reconnecting..."
                 : ""}
             </Box>
@@ -337,7 +338,7 @@ const OneVsOne = () => {
                   ) : winnerRoundRecord ? ( //check if round record
                     winnerRoundRecord.isDraw ? (
                       "Draw" // If the game was a draw
-                    ) : winnerRoundRecord.winnerChatId === user_chatId ? (
+                    ) : winnerRoundRecord.winnerChatId?.toString() === user_chatId?.toString() ? (
                       "You Won" // If the user won the round
                     ) : (
                       "You Lost"
