@@ -13,3 +13,4 @@ export { default as Replaycon } from "./Replay";
 export { default as MarketplaceIcon } from "./Marketplace";
 export { default as ClipboardIcon } from "./Clipboard";
 export { default as TickIcon } from "./Tick";
+export { default as PlayIcon } from "./Play";

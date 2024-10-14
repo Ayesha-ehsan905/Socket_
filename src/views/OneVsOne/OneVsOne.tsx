@@ -149,7 +149,7 @@ const OneVsOne = () => {
   // Check round results
   useEffect(() => {
     if (winnerRoundRecord && !winnerRoundRecord?.isDraw) {
-      if (winnerRoundRecord?.winnerChatId === user_chatId?.toString())
+      if (winnerRoundRecord?.winnerChatId?.toString() === user_chatId?.toString())
         setUserWinCount((prev) => prev + 1);
       else setOpponnentWinCount((prev) => prev + 1);
     }

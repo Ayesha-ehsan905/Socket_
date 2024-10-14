@@ -88,7 +88,8 @@ const Collectibles = ({
                 </Box>
                 <Flex css={{ gap: "16px" }}>
                   <Button
-                    css={{ fontSize: "$16", padding: "12px" }}
+
+                    css={{ fontSize: "$16", padding: "12px" ,width:'105px'}}
                     onClick={() => {
                       setUserSelectedCollectible(collectible);
                       setShowModal(true);
@@ -101,6 +102,7 @@ const Collectibles = ({
                     css={{
                       fontSize: "$16",
                       padding: "12px",
+                      width:'105px',
                       pointerEvents: collectible?.is_applied ? "none" : "auto",
                     }}
                     onClick={() =>

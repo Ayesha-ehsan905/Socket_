@@ -22,7 +22,7 @@ const MarketPlaceCard = (props: MarketplaceCardProp) => {
         align={"center"}
         css={{
           borderRadius: "8px",
-          height: "156px",
+          height: isComingSoon?'140px':"156px",
           p: isPadding ? "$4 $4 0 " : "",
           background: "$white",
           border: "1px solid #D9D9D9",

@@ -1,7 +1,7 @@
 import { styled } from "@stitches/react";
 import { Box } from "../../../components/elements/Box";
 import { Flex } from "../../../components/Flex/Flex";
-import { AddIcon } from "../../../components/icons";
+import { AddIcon, PlayIcon } from "../../../components/icons";
 import { useAuth } from "../../../components/contexts/AuthContext/useAuth";
 import { useEffect, useState } from "react";
 import { endpoint } from "../../../utilis/endpoints";
@@ -37,13 +37,19 @@ const UserCard = () => {
           Rock, Paper, Scissors
         </Box>
         {/* play button will start the matching process */}
-        <Flex justify={"center"} align={"center"}  css={{ "@xxxs": { mb:'2rem' }}}>
-          <Box as="span" css={{background:'$secondary',padding:'0.5rem 2rem' ,borderRadius:'8px'}} onClick={
+        <Flex justify={"end"} align={"center"}  css={{ "@xxxs": { mb:'2rem' }}}>
+        <Flex css={{background:'$secondary',padding:'0.2rem 1rem' ,borderRadius:'8px',gap:'7px'}} align={'center'}>
+        <Flex>
+            <PlayIcon/>
+          </Flex>
+          <Box as="span"  onClick={
             () => {
               socket.emit(SocketEvents.SEARCH_GAME, { chatId });
               navigate(routes.matching_screen);
             }
           }>Play</Box>
+         
+          </Flex>
         </Flex>
       </Flex>
       <UserDetailCard />
